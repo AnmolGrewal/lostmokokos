@@ -5,6 +5,7 @@
 :root {
   --primary-background-color: #161719;
   --secondary-background-color: #202226;
+  --tertiary-background-color: #595a5a;
   --primary-text-color: #ffffff;
   --primary-text-label-color: #d7d7d9;
 }
@@ -19,7 +20,7 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: var(--primary-background-color); /* thumb color */
+  background-color: var(--tertiary-background-color); /* thumb color */
   border-radius: 10px; /* roundness of the thumb */
   border: 3px solid var(--secondary-background-color); /* creates padding around the thumb */
 }
