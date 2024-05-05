@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment-timezone';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCalendarWeek, faSun } from '@fortawesome/free-solid-svg-icons';
 
 const ClockBar = () => {
   const [times, setTimes] = useState({
@@ -48,11 +50,13 @@ const ClockBar = () => {
 
       {/* Second Column */}
       <div className="text-center text-sm md:text-base">
+        <FontAwesomeIcon icon={faSun} className="text-image-sun-color text-xs md:text-sm mr-1" />
         <span className='text-primary-text-label-color'>Daily Reset: <span className="font-semibold text-primary-text-label-color">{times.dailyReset}</span></span>
       </div>
 
       {/* Third Column */}
       <div className="text-center text-sm md:text-base">
+        <FontAwesomeIcon icon={faCalendarWeek} className="text-image-calendar-color text-xs md:text-sm mr-1" />
         <span className='text-primary-text-label-color'>Weekly Reset: <span className="font-semibold text-primary-text-label-color">{times.weeklyReset}</span></span>
       </div>
     </div>
