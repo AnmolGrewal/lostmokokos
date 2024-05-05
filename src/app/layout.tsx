@@ -24,7 +24,7 @@ export default function RootLayout({
         <title>{metadata.title?.toString() ?? "Default Title"}</title>
         <meta name="description" content={metadata.description ?? ""} />
       </head>
-      <body className={`size-full ${inter.className}`}>
+      <body className={`size-full ${inter.className} bg-primary-background-color`}>
         <div id="root">{children}</div>
       </body>
     </html>
