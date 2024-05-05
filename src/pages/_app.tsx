@@ -17,11 +17,11 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="">
+      <header className="sticky top-0 z-50">
         <ClockBar />
         <NavigationBar currentPath={router.pathname} />
       </header>
-      <main className="flex-grow">
+      <main className="flex-grow content-below-header">
         <Component {...pageProps} />
       </main>
     </div>
