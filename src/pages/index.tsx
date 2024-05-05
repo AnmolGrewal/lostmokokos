@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <main className="min-h-screen bg-primary-background-color">
+    <main className="main-content bg-primary-background-color">
     </main>
   );
 }
