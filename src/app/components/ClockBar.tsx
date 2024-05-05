@@ -40,19 +40,19 @@ const ClockBar = () => {
   }, []);
 
   return (
-    <div className="grid grid-cols-3 h-7 items-center justify-center gap-3 transition bg-primary-background-color">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 h-7 items-center justify-center transition bg-primary-background-color">
       {/* First Column */}
-      <div className="text-center">
+      <div className="text-center text-sm md:text-base">
         <span className='text-primary-text-label-color'>Ladon Release Date: <span className="font-semibold text-primary-text-label-color">{times.nextUpdate}</span></span>
       </div>
 
       {/* Second Column */}
-      <div className="text-center">
+      <div className="text-center text-sm md:text-base">
         <span className='text-primary-text-label-color'>Daily Reset: <span className="font-semibold text-primary-text-label-color">{times.dailyReset}</span></span>
       </div>
 
       {/* Third Column */}
-      <div className="text-center">
+      <div className="text-center text-sm md:text-base">
         <span className='text-primary-text-label-color'>Weekly Reset: <span className="font-semibold text-primary-text-label-color">{times.weeklyReset}</span></span>
       </div>
     </div>
