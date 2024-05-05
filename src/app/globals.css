@@ -1,3 +1,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --primary-background-color: #161719;
+  --secondary-background-color: #202226;
+  --primary-text-color: #ffffff;
+  --primary-text-label-color: #d7d7d9;
+}
+
+*::-webkit-scrollbar {
+  width: 12px; /* width of the entire scrollbar */
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--secondary-background-color); /* color of the track. It can be transparent or match the page background */
+  /* border-radius: 10px; optional: roundness of the track */
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--primary-background-color); /* thumb color */
+  border-radius: 10px; /* roundness of the thumb */
+  border: 3px solid var(--secondary-background-color); /* creates padding around the thumb */
+}
+
+/* Styles for other parts of the scrollbar in webkit browsers */
+*::-webkit-scrollbar-button {
+  display: none; /* Optional: hides the buttons at the top and bottom of the scrollbar */
+}
+
+*::-webkit-scrollbar-corner {
+  background: var(--secondary-background-color); /* Optional: color of the corner where both scrollbars meet */
+}
