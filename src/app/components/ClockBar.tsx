@@ -17,7 +17,7 @@ const ClockBar = () => {
     const nextUpdateDate = moment.tz("2024-06-13 03:00", "America/Los_Angeles");
     const daysUntilUpdate = nextUpdateDate.diff(now, 'days');
     const hoursUntilUpdate = nextUpdateDate.subtract(daysUntilUpdate, 'days').diff(now, 'hours');
-    const nextUpdate = `${daysUntilUpdate}d ${hoursUntilUpdate}h`;
+    const nextUpdate = `${daysUntilUpdate > 0 ? daysUntilUpdate + 'd ' : ''}${hoursUntilUpdate > 0 ? hoursUntilUpdate + 'h' : ''}`;
 
     // Daily Reset at 3:00 AM PDT
     const nextDailyReset = moment().tz("America/Los_Angeles").startOf('day').add(3, 'hours');
@@ -30,7 +30,7 @@ const ClockBar = () => {
     const daysUntilWeeklyReset = nextWeeklyReset.diff(now, 'days');
     const hoursUntilWeeklyReset = nextWeeklyReset.subtract(daysUntilWeeklyReset, 'days').diff(now, 'hours');
     const minutesUntilWeeklyReset = nextWeeklyReset.subtract(hoursUntilWeeklyReset, 'hours').diff(now, 'minutes');
-    const weeklyReset = `${daysUntilWeeklyReset}d ${hoursUntilWeeklyReset}h ${minutesUntilWeeklyReset}m`;
+    const weeklyReset = `${daysUntilWeeklyReset > 0 ? daysUntilWeeklyReset + 'd ' : ''}${hoursUntilWeeklyReset > 0 ? hoursUntilWeeklyReset + 'h ' : ''}${minutesUntilWeeklyReset}m`;
 
     setTimes({ nextUpdate, dailyReset, weeklyReset });
   };
