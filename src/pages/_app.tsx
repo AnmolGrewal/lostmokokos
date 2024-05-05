@@ -21,7 +21,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <ClockBar />
         <NavigationBar currentPath={router.pathname} />
       </header>
-      <main className="flex-grow content-below-header">
+      <main className="flex-grow">
         <Component {...pageProps} />
       </main>
     </div>

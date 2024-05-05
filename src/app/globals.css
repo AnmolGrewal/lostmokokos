@@ -8,7 +8,6 @@
   --tertiary-background-color: #595a5a;
   --primary-text-color: #ffffff;
   --primary-text-label-color: #d7d7d9;
-  --header-height: 84px;
 }
 
 *::-webkit-scrollbar {
@@ -37,8 +36,4 @@
 
 :root {
   --header-height: 4rem; /* Adjust based on actual height of your header */
-}
-
-.content-below-header {
-  padding-top: var(--header-height);
 }
