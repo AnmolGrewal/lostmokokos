@@ -52,26 +52,20 @@ const ContentSelector = ({ currentPath, setCurrentPath }) => {
       <div className="flex justify-center space-x-4 overflow-x-auto scroll-smooth snap-x snap-mandatory p-4"
         ref={scrollContainerRef}
         style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
-        {/* Padding applied to the entire scroll container */}
         {contentItems.map((item, index) => (
           <div key={index} className="snap-center shrink-0">
-            <Link
-              href={item.path}
-              onClick={(e) => {
-                e.preventDefault();
-                setCurrentPath(item.path);
-              }}
-              className={clsx(
+            <Link href={item.path} >
+              <a className={clsx(
                 "block p-2 rounded-lg transition duration-300 ease-in-out transform",
                 currentPath === item.path ? 'bg-primary-background-selection-color scale-105' : 'bg-chip-background-color',
                 "hover:bg-primary-background-hover-color"
               )}>
-
-              <div className="w-24 h-24 md:w-32 md:h-32 bg-gray-200 flex items-center justify-center mb-2">
-                {/* Placeholder for images */}
-                <span>{item.label}</span>
-              </div>
-              <span className="text-center block text-sm font-bold text-chip-text-color">{item.label}</span>
+                <div className="w-24 h-24 md:w-32 md:h-32 bg-gray-200 flex items-center justify-center mb-2">
+                  {/* Placeholder for images */}
+                  <span>{item.label}</span>
+                </div>
+                <span className="text-center block text-sm font-bold text-chip-text-color">{item.label}</span>
+              </a>
             </Link>
           </div>
         ))}
