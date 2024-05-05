@@ -14,21 +14,23 @@ const NavigationBar = ({ currentPath }: NavigationBarProps) => {
   ];
 
   return (
-    <div className="bg-secondary-background-color w-full h-12 flex justify-center items-center">
+    <div className="bg-secondary-background-color w-full h-14 flex justify-center items-center">
       <div className="flex gap-4 items-center">
         {navItems.map(item => (
-          <Link href={item.path} key={item.label} passHref>
-            <a className={clsx(
+          (<Link
+            href={item.path}
+            key={item.label}
+            passHref
+            className={clsx(
               "flex items-center px-3 py-1 rounded-full transition-all duration-300 ease-in-out cursor-pointer",
-              currentPath === item.path ? 'bg-blue-500' : 'bg-[#282B2F]',
-              "hover:bg-blue-600 hover:scale-105"
+              currentPath === item.path ? 'bg-primary-background-selection-color' : 'bg-chip-background-color',
+              currentPath === item.path ? '' : "hover:bg-primary-background-hovor-color hover:scale-105"
             )}>
-              <div className="text-primary-text-color bg-[#393342] rounded-full p-2">
-                <FontAwesomeIcon icon={item.icon} className="text-xl" />
-              </div>
-              <span className="ml-2 text-lg text-primary-text-color">{item.label}</span>
-            </a>
-          </Link>
+            <div className="text-chip-text-color bg-image-background-color rounded-full p-2">
+              <FontAwesomeIcon icon={item.icon} className="text-xl" />
+            </div>
+            <span className="ml-2 text-lg text-chip-text-color font-bold">{item.label}</span>
+          </Link>)
         ))}
       </div>
     </div>
