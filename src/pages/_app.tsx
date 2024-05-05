@@ -16,11 +16,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   return (
-    <>
-      <ClockBar />
-      <NavigationBar currentPath={router.pathname}/>
-      <Component {...pageProps} />
-    </>
+    <div className="flex flex-col min-h-screen">
+      <header className="">
+        <ClockBar />
+        <NavigationBar currentPath={router.pathname} />
+      </header>
+      <main className="flex-grow">
+        <Component {...pageProps} />
+      </main>
+    </div>
   );
 }
 
