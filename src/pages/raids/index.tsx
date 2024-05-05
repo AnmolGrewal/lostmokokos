@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ContentSelector from '../../app/components/ContentSelector'; // Adjust the import path as necessary
+import ContentSelector from '../../app/components/ContentSelector';
 
 const RaidsPage = () => {
   const [currentPath, setCurrentPath] = useState('/');

@@ -12,14 +12,21 @@ const ContentSelector = ({ currentPath, setCurrentPath }) => {
   const contentItems = [
     { path: "/akkan", label: "Akkan" },
     { path: "/argos", label: "Argos" },
-    // Add more items as needed
+    { path: "/brelshaza", label: "Brelshaza" },
+    { path: "/clown", label: "Clown" },
+    { path: "/kayangel", label: "Kayangel" },
+    { path: "/oreha", label: "Oreha" },
+    { path: "/thaemine", label: "Thaemine" },
+    { path: "/valtan", label: "Valtan" },
+    { path: "/voldis", label: "Voldis" },
+    { path: "/vykas", label: "Vykas" }
   ];
 
   const checkScrollPosition = () => {
     if (!scrollContainerRef.current) return;
     const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
     setIsAtStart(scrollLeft === 0);
-    setIsAtEnd(scrollLeft + clientWidth === scrollWidth);
+    setIsAtEnd(scrollLeft + clientWidth >= scrollWidth);
   };
 
   useEffect(() => {
@@ -27,15 +34,15 @@ const ContentSelector = ({ currentPath, setCurrentPath }) => {
     container.addEventListener('scroll', checkScrollPosition);
     container.addEventListener('wheel', (e) => {
       e.preventDefault();
-      container.scrollLeft += e.deltaY;
+      container.scrollLeft += e.deltaY * 3;
     });
-    checkScrollPosition(); // Initial check
+    checkScrollPosition();
 
     return () => {
       container.removeEventListener('scroll', checkScrollPosition);
       container.removeEventListener('wheel', (e) => {
         e.preventDefault();
-        container.scrollLeft += e.deltaY;
+        container.scrollLeft += e.deltaY * 3;
       });
     };
   }, []);
@@ -43,11 +50,14 @@ const ContentSelector = ({ currentPath, setCurrentPath }) => {
   return (
     <div className="relative w-full overflow-hidden">
       <div className="flex justify-center space-x-4 overflow-x-auto scroll-smooth snap-x snap-mandatory p-4"
-        ref={scrollContainerRef}>
+        ref={scrollContainerRef}
+        style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
+        {/* Padding applied to the entire scroll container */}
         {contentItems.map((item, index) => (
           <div key={index} className="snap-center shrink-0">
-            <Link href={item.path}>
-              <a onClick={(e) => {
+            <Link
+              href={item.path}
+              onClick={(e) => {
                 e.preventDefault();
                 setCurrentPath(item.path);
               }}
@@ -56,12 +66,12 @@ const ContentSelector = ({ currentPath, setCurrentPath }) => {
                 currentPath === item.path ? 'bg-primary-background-selection-color scale-105' : 'bg-chip-background-color',
                 "hover:bg-primary-background-hover-color"
               )}>
-                <div className="w-24 h-24 md:w-32 md:h-32 bg-gray-200 flex items-center justify-center mb-2">
-                  {/* Placeholder for images */}
-                  <span>{item.label}</span>
-                </div>
-                <span className="text-center block text-sm font-bold text-chip-text-color">{item.label}</span>
-              </a>
+
+              <div className="w-24 h-24 md:w-32 md:h-32 bg-gray-200 flex items-center justify-center mb-2">
+                {/* Placeholder for images */}
+                <span>{item.label}</span>
+              </div>
+              <span className="text-center block text-sm font-bold text-chip-text-color">{item.label}</span>
             </Link>
           </div>
         ))}
@@ -69,7 +79,7 @@ const ContentSelector = ({ currentPath, setCurrentPath }) => {
       {!isAtStart && (
         <button
           className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white bg-black p-2"
-          onClick={() => scrollContainerRef.current.scrollBy({ left: -200, behavior: 'smooth' })}
+          onClick={() => scrollContainerRef.current.scrollBy({ left: -300, behavior: 'smooth' })}
         >
           <FontAwesomeIcon icon={faChevronLeft} />
         </button>
@@ -77,7 +87,7 @@ const ContentSelector = ({ currentPath, setCurrentPath }) => {
       {!isAtEnd && (
         <button
           className="absolute right-0 top-1/2 transform -translate-y-1/2 text-white bg-black p-2"
-          onClick={() => scrollContainerRef.current.scrollBy({ left: 200, behavior: 'smooth' })}
+          onClick={() => scrollContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' })}
         >
           <FontAwesomeIcon icon={faChevronRight} />
         </button>
