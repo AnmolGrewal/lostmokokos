@@ -10,16 +10,16 @@ const ContentSelector = ({ currentPath, setCurrentPath }) => {
   const scrollContainerRef = useRef(null);
 
   const contentItems = [
-    { path: "/akkan", label: "Akkan" },
-    { path: "/argos", label: "Argos" },
-    { path: "/brelshaza", label: "Brelshaza" },
-    { path: "/clown", label: "Clown" },
-    { path: "/kayangel", label: "Kayangel" },
-    { path: "/oreha", label: "Oreha" },
-    { path: "/thaemine", label: "Thaemine" },
-    { path: "/valtan", label: "Valtan" },
-    { path: "/voldis", label: "Voldis" },
-    { path: "/vykas", label: "Vykas" }
+    { path: "akkan", label: "Akkan" },
+    { path: "argos", label: "Argos" },
+    { path: "brelshaza", label: "Brelshaza" },
+    { path: "clown", label: "Clown" },
+    { path: "kayangel", label: "Kayangel" },
+    { path: "oreha", label: "Oreha" },
+    { path: "thaemine", label: "Thaemine" },
+    { path: "valtan", label: "Valtan" },
+    { path: "voldis", label: "Voldis" },
+    { path: "vykas", label: "Vykas" }
   ];
 
   const checkScrollPosition = () => {
@@ -32,18 +32,10 @@ const ContentSelector = ({ currentPath, setCurrentPath }) => {
   useEffect(() => {
     const container = scrollContainerRef.current;
     container.addEventListener('scroll', checkScrollPosition);
-    container.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      container.scrollLeft += e.deltaY * 3;
-    });
-    checkScrollPosition();
+    checkScrollPosition(); // Initial check
 
     return () => {
       container.removeEventListener('scroll', checkScrollPosition);
-      container.removeEventListener('wheel', (e) => {
-        e.preventDefault();
-        container.scrollLeft += e.deltaY * 3;
-      });
     };
   }, []);
 
@@ -54,18 +46,22 @@ const ContentSelector = ({ currentPath, setCurrentPath }) => {
         style={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
         {contentItems.map((item, index) => (
           <div key={index} className="snap-center shrink-0">
-            <Link href={item.path} >
-              <a className={clsx(
+            <Link
+              href={`${currentPath}/${item.path}`} // Dynamically generate the path
+              onClick={(e) => {
+                e.preventDefault();
+                setCurrentPath(`${currentPath}/${item.path}`);
+              }}
+              className={clsx(
                 "block p-2 rounded-lg transition duration-300 ease-in-out transform",
-                currentPath === item.path ? 'bg-primary-background-selection-color scale-105' : 'bg-chip-background-color',
+                currentPath === `${currentPath}/${item.path}` ? 'bg-primary-background-selection-color scale-105' : 'bg-chip-background-color',
                 "hover:bg-primary-background-hover-color"
               )}>
-                <div className="w-24 h-24 md:w-32 md:h-32 bg-gray-200 flex items-center justify-center mb-2">
-                  {/* Placeholder for images */}
-                  <span>{item.label}</span>
-                </div>
-                <span className="text-center block text-sm font-bold text-chip-text-color">{item.label}</span>
-              </a>
+              <div className="w-24 h-24 md:w-32 md:h-32 bg-gray-200 flex items-center justify-center mb-2">
+                {/* Placeholder for images */}
+                <span>{item.label}</span>
+              </div>
+              <span className="text-center block text-sm font-bold text-chip-text-color">{item.label}</span>
             </Link>
           </div>
         ))}
