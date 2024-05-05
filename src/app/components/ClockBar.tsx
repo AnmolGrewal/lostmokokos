@@ -19,25 +19,24 @@ const ClockBar = () => {
 
     // Daily Reset at 3:00 AM PDT
     const nextDailyReset = moment().tz("America/Los_Angeles").startOf('day').add(3, 'hours');
-    if (now.hour() >= 3) nextDailyReset.add(1, 'days'); // Move to the next day if past 3 AM
+    if (now.hour() >= 3) nextDailyReset.add(1, 'days');
     const dailyReset = nextDailyReset.diff(now, 'hours') + 'h ' + (nextDailyReset.diff(now, 'minutes') % 60) + 'm';
 
     // Weekly Reset at 12:00 AM PDT Wednesday
-    const nextWeeklyReset = moment().tz("America/Los_Angeles").startOf('week').add(3, 'days'); // Starts on Sunday, add 3 days to get to Wednesday
-    if (now.isAfter(nextWeeklyReset)) nextWeeklyReset.add(1, 'week'); // Move to the next week if we're past this week's Wednesday
-    const weeklyReset = nextWeeklyReset.diff(now, 'hours') + 'h ' + (nextWeeklyReset.diff(now, 'minutes') % 60) + 'm';
+    const nextWeeklyReset = moment().tz("America/Los_Angeles").startOf('week').add(3, 'days');
+    if (now.isAfter(nextWeeklyReset)) nextWeeklyReset.add(1, 'week');
+    const daysUntilWeeklyReset = nextWeeklyReset.diff(now, 'days');
+    const hoursUntilWeeklyReset = nextWeeklyReset.subtract(daysUntilWeeklyReset, 'days').diff(now, 'hours');
+    const minutesUntilWeeklyReset = nextWeeklyReset.subtract(hoursUntilWeeklyReset, 'hours').diff(now, 'minutes');
+    const weeklyReset = `${daysUntilWeeklyReset}d ${hoursUntilWeeklyReset}h ${minutesUntilWeeklyReset}m`;
 
     setTimes({ nextUpdate, dailyReset, weeklyReset });
   };
 
   useEffect(() => {
-    console.log("ClockBar is mounted");
     calculateCountdowns(); // Initial calculation
     const intervalId = setInterval(calculateCountdowns, 60000); // Update every minute
-    return () => {
-      console.log("Cleaning up ClockBar");
-      clearInterval(intervalId); // Clean up the interval on component unmount
-    };
+    return () => clearInterval(intervalId); // Clean up the interval on component unmount
   }, []);
 
   return (
