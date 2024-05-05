@@ -12,14 +12,7 @@ const ContentSelector = ({ currentPath, setCurrentPath }) => {
   const contentItems = [
     { path: "/akkan", label: "Akkan" },
     { path: "/argos", label: "Argos" },
-    { path: "/brelshaza", label: "Brelshaza" },
-    { path: "/clown", label: "Clown" },
-    { path: "/kayangel", label: "Kayangel" },
-    { path: "/oreha", label: "Oreha" },
-    { path: "/thaemine", label: "Thaemine" },
-    { path: "/valtan", label: "Valtan" },
-    { path: "/voldis", label: "Voldis" },
-    { path: "/vykas", label: "Vykas" }
+    // Add more items as needed
   ];
 
   const checkScrollPosition = () => {
@@ -32,28 +25,40 @@ const ContentSelector = ({ currentPath, setCurrentPath }) => {
   useEffect(() => {
     const container = scrollContainerRef.current;
     container.addEventListener('scroll', checkScrollPosition);
+    container.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      container.scrollLeft += e.deltaY;
+    });
     checkScrollPosition(); // Initial check
 
-    return () => container.removeEventListener('scroll', checkScrollPosition);
+    return () => {
+      container.removeEventListener('scroll', checkScrollPosition);
+      container.removeEventListener('wheel', (e) => {
+        e.preventDefault();
+        container.scrollLeft += e.deltaY;
+      });
+    };
   }, []);
 
   return (
     <div className="relative w-full overflow-hidden">
-      <div className="flex space-x-4 overflow-x-auto scroll-smooth snap-x snap-mandatory p-4" ref={scrollContainerRef}>
+      <div className="flex justify-center space-x-4 overflow-x-auto scroll-smooth snap-x snap-mandatory p-4"
+        ref={scrollContainerRef}>
         {contentItems.map((item, index) => (
-          <div key={index} className="snap-start shrink-0">
-            <Link href={item.path} passHref>
+          <div key={index} className="snap-center shrink-0">
+            <Link href={item.path}>
               <a onClick={(e) => {
                 e.preventDefault();
                 setCurrentPath(item.path);
-              }} className={clsx(
+              }}
+              className={clsx(
                 "block p-2 rounded-lg transition duration-300 ease-in-out transform",
                 currentPath === item.path ? 'bg-primary-background-selection-color scale-105' : 'bg-chip-background-color',
                 "hover:bg-primary-background-hover-color"
               )}>
-                <div className="w-32 h-32 bg-gray-200 flex items-center justify-center mb-2">
+                <div className="w-24 h-24 md:w-32 md:h-32 bg-gray-200 flex items-center justify-center mb-2">
                   {/* Placeholder for images */}
-                  <span>{item.label}</span> {/* Temporary placeholder */}
+                  <span>{item.label}</span>
                 </div>
                 <span className="text-center block text-sm font-bold text-chip-text-color">{item.label}</span>
               </a>
@@ -61,16 +66,16 @@ const ContentSelector = ({ currentPath, setCurrentPath }) => {
           </div>
         ))}
       </div>
-      { !isAtStart && (
-        <button 
+      {!isAtStart && (
+        <button
           className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white bg-black p-2"
           onClick={() => scrollContainerRef.current.scrollBy({ left: -200, behavior: 'smooth' })}
         >
           <FontAwesomeIcon icon={faChevronLeft} />
         </button>
       )}
-      { !isAtEnd && (
-        <button 
+      {!isAtEnd && (
+        <button
           className="absolute right-0 top-1/2 transform -translate-y-1/2 text-white bg-black p-2"
           onClick={() => scrollContainerRef.current.scrollBy({ left: 200, behavior: 'smooth' })}
         >
