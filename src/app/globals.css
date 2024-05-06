@@ -5,10 +5,16 @@
 :root {
   --primary-background-color: #161719;
   --secondary-background-color: #202226;
-  --tertiary-background-color: #595a5a;
   --primary-text-color: #ffffff;
   --primary-text-label-color: #d7d7d9;
   --header-height: 84px;
+  --primary-background-selection-color: #794244;
+  --primary-background-hover-color: #43464a;
+  --chip-background-color: #282B2F;
+  --image-background-color: #393342;
+  --chip-text-color: #fafdf7;
+  --image-sun-color: #FFEE58;
+  --image-calendar-color: #FF7043;
 }
 
 @media (max-width: 600px) {
@@ -27,7 +33,7 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: var(--tertiary-background-color); /* thumb color */
+  background-color: var(--primary-background-color); /* thumb color */
   border-radius: 10px; /* roundness of the thumb */
   border: 3px solid var(--secondary-background-color); /* creates padding around the thumb */
 }

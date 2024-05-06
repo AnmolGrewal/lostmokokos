@@ -1,62 +1,67 @@
-/* eslint-disable @next/next/no-img-element */
 import React from 'react';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
-interface RaidGridProps {
-  raid: {
-    path: string;
-    label: string;
-    imgSrc: string;
-    gateData: {
-      gold: number[];
-      rewards: string[];
-      boxRewards: string[];
-      boxCost: number[];
-    };
-  };
-}
-
-const RaidGrid: React.FC<RaidGridProps> = ({ raid }) => {
+const RaidGrid = ({ raid }) => {
   const totalGold = raid.gateData.gold.reduce((acc, curr) => acc + curr, 0);
   const totalBoxCost = raid.gateData.boxCost.reduce((acc, curr) => acc + curr, 0);
 
+  // Convert gate data into rows for MUI Table
+  const rows = [
+    { category: 'Gold', values: raid.gateData.gold, total: totalGold },
+    { category: 'Rewards', values: raid.gateData.rewards },
+    { category: 'Box Rewards', values: raid.gateData.boxRewards },
+    { category: 'Box Cost', values: raid.gateData.boxCost, total: totalBoxCost }
+  ];
+
   return (
-    <div className="flex flex-col items-center w-full">
+    <div className="flex flex-col items-center w-full px-4">
       <div className="flex flex-col items-center w-full">
         <img src={raid.imgSrc} alt={`${raid.label} Raid`} className="rounded-full w-48 h-48" />
         <h2 className="text-primary-text-label-color text-2xl mt-2">{raid.label} Raid</h2>
       </div>
-      <div>Item Level:</div>
-      <table className="m-auto">
-        <thead>
-          <tr>
-            <th>Gate</th>
-            {raid.gateData.gold.map((_, index) => <th key={index}>Gate {index + 1}</th>)}
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Gold</td>
-            {raid.gateData.gold.map((gold, index) => <td key={index}>{gold}</td>)}
-            <td>{totalGold}</td>
-          </tr>
-          <tr>
-            <td>Rewards</td>
-            {raid.gateData.rewards.map((reward, index) => <td key={index}>{reward}</td>)}
-            <td></td> {/* Placeholder for total rewards calculation */}
-          </tr>
-          <tr>
-            <td>Box Rewards</td>
-            {raid.gateData.boxRewards.map((boxReward, index) => <td key={index}>{boxReward}</td>)}
-            <td></td> {/* Placeholder for total box rewards calculation */}
-          </tr>
-          <tr>
-            <td>Box Cost</td>
-            {raid.gateData.boxCost.map((cost, index) => <td key={index}>{cost}</td>)}
-            <td>{totalBoxCost}</td>
-          </tr>
-        </tbody>
-      </table>
+      <TableContainer component={Paper} sx={{
+        width: '100%',
+        backgroundColor: 'var(--chip-background-color)',
+        color: 'var(--primary-text-color)',
+        '.MuiTableCell-root': {
+          color: 'var(--primary-text-color) !important',
+          borderBottom: '2px solid var(--primary-text-label-color)',
+          paddingLeft: 2,
+          paddingRight: 2
+        }
+      }}>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ fontWeight: 'bold', fontSize: '24px' }}>Category</TableCell>
+              {raid.gateData.gold.map((_, index) => (
+                <TableCell key={index} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>Gate {index + 1}</TableCell>
+              ))}
+              <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>Total</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row, index) => (
+              <TableRow key={index}>
+                <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>{row.category}</TableCell>
+                {row.values.map((value, i) => (
+                  <TableCell key={i} align="center">{value || '—'}</TableCell>  // Ensuring non-empty cells
+                ))}
+                {/* Ensure border is applied even for empty cells */}
+                <TableCell align="center" sx={{ borderBottom: '2px solid var(--primary-text-label-color)' }}>
+                  {row.total !== undefined ? row.total : '-'}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
 };
