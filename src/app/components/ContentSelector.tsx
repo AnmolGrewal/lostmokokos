@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,17 +11,17 @@ const ContentSelector = ({ currentPath }) => {
   const scrollContainerRef = useRef(null);
 
   const contentItems = [
-    { path: "/raids/oreha", label: "Oreha" },
-    { path: "/raids/argos", label: "Argos" },
-    { path: "/raids/valtan", label: "Valtan" },
-    { path: "/raids/vykas", label: "Vykas" },
-    { path: "/raids/clown", label: "Clown" },
-    { path: "/raids/brelshaza", label: "Brelshaza" },
-    { path: "/raids/kayangel", label: "Kayangel" },
-    { path: "/raids/akkan", label: "Akkan" },
-    { path: "/raids/voldis", label: "Voldis" },
-    { path: "/raids/thaemine", label: "Thaemine" },
-    { path: "/raids/ladon", label: "Ladon" },
+    { path: "/raids/oreha", label: "Oreha", imgSrc: "https://i.imgur.com/WcAVFsZ.png"  },
+    { path: "/raids/argos", label: "Argos", imgSrc: "https://i.imgur.com/8sBbqnQ.png" },
+    { path: "/raids/valtan", label: "Valtan", imgSrc: "https://i.imgur.com/ApCDeQb.png"  },
+    { path: "/raids/vykas", label: "Vykas", imgSrc: "https://i.imgur.com/5VoXEOB.png"  },
+    { path: "/raids/clown", label: "Clown", imgSrc: "https://i.imgur.com/hOOSdDm.png"  },
+    { path: "/raids/brelshaza", label: "Brelshaza", imgSrc: "https://i.imgur.com/bL9k49k.png"  },
+    { path: "/raids/kayangel", label: "Kayangel", imgSrc: "https://i.imgur.com/2P9urFh.png"  },
+    { path: "/raids/akkan", label: "Akkan", imgSrc: "https://i.imgur.com/W4ekupW.png"  },
+    { path: "/raids/voldis", label: "Voldis", imgSrc: "https://i.imgur.com/sSdCEIA.png"  },
+    { path: "/raids/thaemine", label: "Thaemine", imgSrc: "https://i.imgur.com/464OcZx.png"  },
+    { path: "/raids/ladon", label: "Ladon", imgSrc: "https://i.imgur.com/tju1uI1.png"  },
   ];
 
   useEffect(() => {
@@ -84,9 +85,7 @@ const ContentSelector = ({ currentPath }) => {
               index !== 0 && "ml-4" // Add margin to all items except the first one
             )}
           >
-            <div className="w-24 h-24 md:w-32 md:h-32 text-chip-text-color flex items-center justify-center mb-2">
-              {item.label}
-            </div>
+            <img src={item.imgSrc} alt={item.label} className="w-24 h-24 md:w-32 md:h-32 mb-2" style={{ objectFit: 'cover', maxWidth: '100%', maxHeight: '100%' }} />
             <span className="text-center block text-sm font-bold text-chip-text-color">{item.label}</span>
           </Link>
         ))}
