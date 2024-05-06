@@ -38,7 +38,7 @@ const ContentSelector = ({ currentPath }) => {
   }, []);
 
   return (
-    <div className="relative w-full overflow-hidden">
+    <div className="relative w-full overflow-hidden bg-primary-background-color">
       <div className="flex justify-center space-x-4 overflow-x-auto scroll-smooth snap-x snap-mandatory p-4" ref={scrollContainerRef}>
         {contentItems.map((item, index) => (
           (<Link
