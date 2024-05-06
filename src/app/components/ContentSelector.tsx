@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,7 +15,8 @@ const ContentSelector = ({ currentPath }: { currentPath: string }) => {
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (container) {
-      const selectedItem = container.querySelector(`a[href='${currentPath}']`) as HTMLAnchorElement;
+      const adjustedPath = currentPath.endsWith('-hard') ? currentPath.replace('-hard', '') : currentPath;
+      const selectedItem = container.querySelector(`a[href='${adjustedPath}']`) as HTMLAnchorElement;
       if (selectedItem) {
         container.scrollTo({
           left: selectedItem.offsetLeft - container.offsetWidth / 2 + selectedItem.offsetWidth / 2,
@@ -73,8 +73,8 @@ const ContentSelector = ({ currentPath }: { currentPath: string }) => {
             href={item.path}
             className={clsx(
               "block p-2 rounded-lg transition duration-300 ease-in-out transform shrink-0",
-              currentPath === item.path ? 'bg-primary-background-selection-color scale-105' : 'bg-chip-background-color',
-              currentPath !== item.path && "hover:bg-primary-background-hover-color hover:scale-105",
+              (currentPath === item.path || currentPath === `${item.path}-hard`) ? 'bg-primary-background-selection-color scale-105' : 'bg-chip-background-color',
+              (currentPath !== item.path && currentPath !== `${item.path}-hard`) && "hover:bg-primary-background-hover-color hover:scale-105",
               index !== 0 && "ml-4"
             )}
           >
