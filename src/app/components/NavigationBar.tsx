@@ -13,24 +13,29 @@ const NavigationBar = ({ currentPath }: NavigationBarProps) => {
     { path: "/raids", label: "Raids", icon: faDungeon }
   ];
 
+  const isActive = (path: string) => {
+    return path === "/" ? currentPath === path : currentPath.startsWith(path);
+  };
+
   return (
     <div className="bg-secondary-background-color w-full h-14 flex justify-center items-center">
       <div className="flex gap-4 items-center">
         {navItems.map(item => (
-          (<Link
+          <Link
             href={item.path}
             key={item.label}
             passHref
             className={clsx(
               "flex items-center px-3 py-1 rounded-full transition-all duration-300 ease-in-out cursor-pointer",
-              currentPath === item.path ? 'bg-primary-background-selection-color' : 'bg-chip-background-color',
-              currentPath === item.path ? '' : "hover:bg-primary-background-hovor-color hover:scale-105"
-            )}>
+              isActive(item.path) ? 'bg-primary-background-selection-color' : 'bg-chip-background-color',
+              !isActive(item.path) && "hover:bg-primary-background-hover-color hover:scale-105"
+            )}
+          >
             <div className="text-chip-text-color bg-image-background-color rounded-full p-2">
               <FontAwesomeIcon icon={item.icon} className="text-xl" />
             </div>
             <span className="ml-2 text-lg text-chip-text-color font-bold">{item.label}</span>
-          </Link>)
+          </Link>
         ))}
       </div>
     </div>
