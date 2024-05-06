@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import raidsInfo, { Raid } from '../../pages/raids/raidsInfo';
 import clsx from 'clsx';
 
 const ContentSelector = ({ currentPath }: { currentPath: string }) => {
@@ -10,19 +11,7 @@ const ContentSelector = ({ currentPath }: { currentPath: string }) => {
   const [isAtEnd, setIsAtEnd] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const contentItems = [
-    { path: "/raids/oreha", label: "Oreha", imgSrc: "https://i.imgur.com/WcAVFsZ.png"  },
-    { path: "/raids/argos", label: "Argos", imgSrc: "https://i.imgur.com/8sBbqnQ.png" },
-    { path: "/raids/valtan", label: "Valtan", imgSrc: "https://i.imgur.com/ApCDeQb.png"  },
-    { path: "/raids/vykas", label: "Vykas", imgSrc: "https://i.imgur.com/5VoXEOB.png"  },
-    { path: "/raids/clown", label: "Clown", imgSrc: "https://i.imgur.com/hOOSdDm.png"  },
-    { path: "/raids/brelshaza", label: "Brelshaza", imgSrc: "https://i.imgur.com/bL9k49k.png"  },
-    { path: "/raids/kayangel", label: "Kayangel", imgSrc: "https://i.imgur.com/2P9urFh.png"  },
-    { path: "/raids/akkan", label: "Akkan", imgSrc: "https://i.imgur.com/W4ekupW.png"  },
-    { path: "/raids/voldis", label: "Voldis", imgSrc: "https://i.imgur.com/sSdCEIA.png"  },
-    { path: "/raids/thaemine", label: "Thaemine", imgSrc: "https://i.imgur.com/464OcZx.png"  },
-    { path: "/raids/ladon", label: "Ladon", imgSrc: "https://i.imgur.com/tju1uI1.png"  },
-  ];
+  const contentItems: Raid[] = raidsInfo.filter((raid) => !raid.path.endsWith('-hard'));
 
   useEffect(() => {
     const container = scrollContainerRef.current;
