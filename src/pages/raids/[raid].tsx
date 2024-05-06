@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import DynamicContent from '../../app/components/DynamicContent';
 import RaidGrid from '../../app/components/RaidGrid'; // Import the RaidGrid component
 import utilities from '@/utils/utilities';
 
