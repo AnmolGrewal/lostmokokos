@@ -41,16 +41,20 @@ const ContentSelector = ({ currentPath }) => {
     <div className="relative w-full overflow-hidden">
       <div className="flex justify-center space-x-4 overflow-x-auto scroll-smooth snap-x snap-mandatory p-4" ref={scrollContainerRef}>
         {contentItems.map((item, index) => (
-          <Link key={index} href={item.path} passHref>
-            <a className={clsx(
+          (<Link
+            key={index}
+            href={item.path}
+            passHref
+            className={clsx(
               "block p-2 rounded-lg transition duration-300 ease-in-out transform snap-center shrink-0",
               currentPath === item.path ? 'bg-primary-background-selection-color scale-105' : 'bg-chip-background-color',
               "hover:bg-primary-background-hover-color"
             )}>
-              <div className="w-24 h-24 md:w-32 md:h-32 bg-gray-200 flex items-center justify-center mb-2">{item.label}</div>
-              <span className="text-center block text-sm font-bold text-chip-text-color">{item.label}</span>
-            </a>
-          </Link>
+
+            <div className="w-24 h-24 md:w-32 md:h-32 bg-gray-200 flex items-center justify-center mb-2">{item.label}</div>
+            <span className="text-center block text-sm font-bold text-chip-text-color">{item.label}</span>
+
+          </Link>)
         ))}
       </div>
       {!isAtStart && (
