@@ -33,22 +33,25 @@ const ContentSelector = ({ currentPath }) => {
     const container = scrollContainerRef.current;
     container.addEventListener('scroll', checkScrollPosition);
 
-    // Handle resize
-    const handleResize = () => {
-      checkScrollPosition();
+    // Handle wheel event for horizontal scrolling
+    const handleWheel = (event) => {
+      if (event.deltaY === 0) return;
+      event.preventDefault();
+      container.scrollBy({ left: event.deltaY * 2, behavior: 'smooth' });
     };
-    window.addEventListener('resize', handleResize);
+    container.addEventListener('wheel', handleWheel);
+
     checkScrollPosition(); // Initial check
 
     return () => {
       container.removeEventListener('scroll', checkScrollPosition);
-      window.removeEventListener('resize', handleResize);
+      container.removeEventListener('wheel', handleWheel);
     };
   }, []);
 
   return (
-    <div className="relative w-full overflow-hidden bg-primary-background-color flex-shrink-0">
-      <div className="flex justify-center space-x-4 overflow-x-auto scroll-smooth snap-x snap-mandatory p-4 flex-shrink-0" ref={scrollContainerRef}>
+    <div className="relative bg-primary-background-color">
+      <div className="flex justify-center space-x-4 overflow-x-auto scroll-smooth p-4" ref={scrollContainerRef}>
         {contentItems.map((item, index) => (
           <Link
             key={index}
@@ -57,7 +60,7 @@ const ContentSelector = ({ currentPath }) => {
             className={clsx(
               "block p-2 rounded-lg transition duration-300 ease-in-out transform snap-center shrink-0",
               currentPath === item.path ? 'bg-primary-background-selection-color scale-105' : 'bg-chip-background-color',
-              currentPath !== item.path && "hover:bg-primary-background-hover-color hover:scale-105"
+              currentPath !== item.path && "hover:bg-primary-background-hovor-color hover:scale-105"
             )}
           >
             <div className="w-24 h-24 md:w-32 md:h-32 text-chip-text-color flex items-center justify-center mb-2">

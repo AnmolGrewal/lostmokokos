@@ -25,7 +25,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <NavigationBar currentPath={router.pathname} />
       </header>
       <main className="flex-grow">
-        {isRaidPage && <ContentSelector currentPath={router.asPath} />}
+        {isRaidPage && <div className="min-w-full overflow-hidden">
+          <ContentSelector currentPath={router.asPath} />
+        </div>}
         <Component {...pageProps} />
       </main>
     </div>
