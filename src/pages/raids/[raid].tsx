@@ -8,7 +8,7 @@ const RaidPage = () => {
   const { raid } = router.query;
 
   return (
-    <div>
+    <div className='bg-primary-background-color .main-content'>
       <Head>
         <title>{raid} - Raid Details</title>
         <meta name="description" content={`Learn more about the ${raid} raid`} />

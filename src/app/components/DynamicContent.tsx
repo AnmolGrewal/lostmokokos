@@ -1,33 +1,21 @@
 import React from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 
-interface DynamicContentProps {
-  currentPath: string;
-}
+const DynamicContent = () => {
+  const router = useRouter();
+  const { raid } = router.query;
 
-const raidItems = [
-  { path: "/raids/akkan", label: "Akkan" },
-  { path: "/raids/argos", label: "Argos" },
-  { path: "/raids/brelshaza", label: "Brelshaza" },
-  { path: "/raids/clown", label: "Clown" },
-  { path: "/raids/kayangel", label: "Kayangel" },
-  { path: "/raids/oreha", label: "Oreha" },
-  { path: "/raids/thaemine", label: "Thaemine" },
-  { path: "/raids/valtan", label: "Valtan" },
-  { path: "/raids/voldis", label: "Voldis" },
-  { path: "/raids/vykas", label: "Vykas" }
-];
+  // Ensure the router is ready and the `raid` parameter is available
+  if (!router.isReady || !raid) {
+    return <div>Loading raid details...</div>; // Or any other placeholder content
+  }
 
-const DynamicContent: React.FC<DynamicContentProps> = ({ currentPath }) => {
+  // Display content based on `raid`
   return (
     <div>
-      {raidItems.map((item) => (
-        <Link key={item.label} href={item.path}>
-          <a className={`p-4 block text-center ${currentPath === item.path ? 'text-blue-500' : 'text-gray-500'}`}>
-            {item.label}
-          </a>
-        </Link>
-      ))}
+      <h1>Details for {raid}</h1>
+      {/* Load and display raid-specific content here */}
+      {/* Example: You might want to fetch data based on `raid` or display different components */}
     </div>
   );
 };
