@@ -37,7 +37,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
     { category: 'Gold', values: raid.gateData.gold, total: totalGold },
     { category: 'Box Cost', values: raid.gateData.boxCost, total: totalBoxCost }
   ];
-  
+
   return (
     <div className="flex flex-col items-center w-full px-4">
       <div className="flex flex-col items-center w-full">
