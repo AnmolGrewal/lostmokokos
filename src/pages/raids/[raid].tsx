@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import RaidGrid from '../../app/components/RaidGrid';
-import raidsInfo, { Raid } from '../../pages/raids/raidsInfo';  // Import the data and types
+import raidsInfo, { Raid } from '../../data/raidsInfo';  // Import the data and types
 import utilities from '@/utils/utilities';  // Import utility functions
 
 const RaidPage: React.FC = () => {

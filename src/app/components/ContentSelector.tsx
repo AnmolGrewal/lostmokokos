@@ -1,8 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import raidsInfo, { Raid } from '../../pages/raids/raidsInfo';
+import raidsInfo, { Raid } from '../../data/raidsInfo';
 import clsx from 'clsx';
 
 const ContentSelector = ({ currentPath }: { currentPath: string }) => {
