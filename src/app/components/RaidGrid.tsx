@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React from 'react';
+import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { Raid } from '../../pages/raids/raidsInfo'; // Adjust the import path as necessary
 
@@ -8,8 +8,25 @@ interface RaidGridProps {
 }
 
 const RaidGrid: React.FC<RaidGridProps> = ({ raid }) => {
-  const totalGold = raid.gateData.gold.reduce((acc, curr) => acc + curr, 0);
-  const totalBoxCost = raid.gateData.boxCost.reduce((acc, curr) => acc + curr, 0);
+  const [dimmed, setDimmed] = useState<boolean[][]>(
+    Array.from({ length: 2 }, () => Array(raid.gateData.gold.length).fill(false))
+  );
+
+  const totalGold = raid.gateData.gold.map((_, index) => 
+    dimmed[0][index] ? 0 : raid.gateData.gold[index]
+  ).reduce((acc, curr) => acc + curr, 0);
+
+  const totalBoxCost = raid.gateData.boxCost.map((_, index) => 
+    dimmed[1][index] ? 0 : raid.gateData.boxCost[index]
+  ).reduce((acc, curr) => acc + curr, 0);
+
+  const goldEarned = totalGold - totalBoxCost;
+
+  const handleCellClick = (rowIndex: number, columnIndex: number) => {
+    const updatedDimmed = [...dimmed];
+    updatedDimmed[rowIndex][columnIndex] = !updatedDimmed[rowIndex][columnIndex];
+    setDimmed(updatedDimmed);
+  };
 
   const rows = [
     { category: 'Gold', values: raid.gateData.gold, total: totalGold },
@@ -44,17 +61,49 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, index) => (
-              <TableRow key={index}>
+            {rows.map((row, rowIndex) => (
+              <TableRow key={rowIndex}>
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>{row.category}</TableCell>
-                {row.values.map((value, i) => (
-                  <TableCell key={i} align="center">{value || '—'}</TableCell>
+                {row.values.map((value, columnIndex) => (
+                  <TableCell key={columnIndex} align="center">
+                    <div 
+                      style={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center',
+                        position: 'relative',
+                        opacity: dimmed[rowIndex][columnIndex] ? 0.5 : 1,
+                        cursor: 'pointer',
+                        transition: 'opacity 0.3s ease'
+                      }} 
+                      onClick={() => handleCellClick(rowIndex, columnIndex)}
+                    >
+                      <img 
+                        src="https://i.imgur.com/DI98qp1.png" 
+                        alt="Gold Icon" 
+                        style={{ 
+                          width: '20px', 
+                          marginRight: '5px'
+                        }} 
+                      />
+                      {value}
+                    </div>
+                  </TableCell>
                 ))}
                 <TableCell align="center" sx={{ borderBottom: '2px solid var(--primary-text-label-color)' }}>
-                  {row.total !== undefined ? row.total : '-'}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" style={{ width: '20px', marginRight: '5px' }} />
+                    {row.total}
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
+            {/* Gold Earned row */}
+            <TableRow>
+              <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
+                Gold Earnable: {goldEarned}
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
