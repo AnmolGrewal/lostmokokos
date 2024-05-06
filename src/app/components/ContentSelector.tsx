@@ -32,7 +32,7 @@ const ContentSelector = ({ currentPath }) => {
   useEffect(() => {
     const container = scrollContainerRef.current;
     container.addEventListener('scroll', checkScrollPosition);
-    checkScrollPosition(); // Initial check
+    checkScrollPosition();
 
     return () => {
       container.removeEventListener('scroll', checkScrollPosition);
