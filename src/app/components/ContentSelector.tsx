@@ -23,6 +23,19 @@ const ContentSelector = ({ currentPath }) => {
     { path: "/raids/ladon", label: "Ladon" },
   ];
 
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      const selectedItem = container.querySelector(`a[href='${currentPath}']`);
+      if (selectedItem) {
+        container.scrollTo({
+          left: selectedItem.offsetLeft - container.offsetWidth / 2 + selectedItem.offsetWidth / 2,
+          behavior: 'smooth'
+        });
+      }
+    }
+  }, [currentPath]);
+
   const checkScrollPosition = () => {
     if (!scrollContainerRef.current) return;
     const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
