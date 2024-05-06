@@ -57,26 +57,25 @@ const ContentSelector = ({ currentPath }) => {
   }, []);
 
   return (
-    <div className="relative w-full overflow-hidden bg-primary-background-color">
-      <div className="flex flex-shrink-0">
-        <div className="flex justify-center space-x-4 overflow-x-auto scroll-smooth p-4" ref={scrollContainerRef}>
-          {contentItems.map((item, index) => (
-            <Link
-              key={index}
-              href={item.path}
-              className={clsx(
-                "block p-2 rounded-lg transition duration-300 ease-in-out transform shrink-0",
-                currentPath === item.path ? 'bg-primary-background-selection-color scale-105' : 'bg-chip-background-color',
-                currentPath !== item.path && "hover:bg-primary-background-hover-color hover:scale-105"
-              )}
-            >
-              <div className="w-24 h-24 md:w-32 md:h-32 text-chip-text-color flex items-center justify-center mb-2">
-                {item.label}
-              </div>
-              <span className="text-center block text-sm font-bold text-chip-text-color">{item.label}</span>
-            </Link>
-          ))}
-        </div>
+    <div className="relative w-full bg-primary-background-color">
+      <div className="flex flex-shrink-0 overflow-x-auto scroll-smooth p-4 pl-8" ref={scrollContainerRef}>
+        {contentItems.map((item, index) => (
+          <Link
+            key={index}
+            href={item.path}
+            className={clsx(
+              "block p-2 rounded-lg transition duration-300 ease-in-out transform shrink-0",
+              currentPath === item.path ? 'bg-primary-background-selection-color scale-105' : 'bg-chip-background-color',
+              currentPath !== item.path && "hover:bg-primary-background-hover-color hover:scale-105",
+              index !== 0 && "ml-4" // Add margin to all items except the first one
+            )}
+          >
+            <div className="w-24 h-24 md:w-32 md:h-32 text-chip-text-color flex items-center justify-center mb-2">
+              {item.label}
+            </div>
+            <span className="text-center block text-sm font-bold text-chip-text-color">{item.label}</span>
+          </Link>
+        ))}
       </div>
       {!isAtStart && (
         <button className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white bg-black p-2" onClick={() => scrollContainerRef.current.scrollBy({ left: -300, behavior: 'smooth' })}>
