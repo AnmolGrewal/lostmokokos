@@ -3,7 +3,7 @@ const colors = {
   'secondary-background-color': '#202226',
   
   'primary-background-selection-color': '#794244',
-  'primary-background-hovor-color': '#43464a',
+  'primary-background-hover-color': '#43464a',
   'chip-background-color': '#282B2F',
   'image-background-color': '#393342',
   'chip-text-color': '#fafdf7',

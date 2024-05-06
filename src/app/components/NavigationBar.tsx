@@ -28,7 +28,7 @@ const NavigationBar = ({ currentPath }: NavigationBarProps) => {
             className={clsx(
               "flex items-center px-3 py-1 rounded-full transition-all duration-300 ease-in-out cursor-pointer",
               isActive(item.path) ? 'bg-primary-background-selection-color' : 'bg-chip-background-color',
-              !isActive(item.path) && "hover:bg-primary-background-hovor-color hover:scale-105"
+              !isActive(item.path) && "hover:bg-primary-background-hover-color hover:scale-105"
             )}
           >
             <div className="text-chip-text-color bg-image-background-color rounded-full p-2">
