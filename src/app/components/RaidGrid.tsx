@@ -57,7 +57,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
             <Link href={raid.path.endsWith('-hard') ? raid.path.replace('-hard', '') : `${raid.path}-hard`}>
               <FontAwesomeIcon
                 icon={faSkull}
-                className={clsx("text-red-500", "ml-2", { "opacity-25": !raid.path.endsWith('-hard') })}
+                className={clsx("text-red-500", "ml-2", { "opacity-25": !raid.path.endsWith('-hard') }, "skull-icon")}
               />
             </Link>
           )}

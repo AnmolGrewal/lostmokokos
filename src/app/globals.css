@@ -64,3 +64,8 @@ html, body {
 .box-cost-cell {
   color: var(--primary-text-red-color) !important;
 }
+
+.skull-icon:hover {
+  transform: scale(1.3); /* Example hover effect: increase size */
+  transition: transform 0.3s ease; /* Smooth transition */
+}
