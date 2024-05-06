@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import RaidGrid from '../../app/components/RaidGrid';  // Adjust the import path as necessary
+import RaidGrid from '../../app/components/RaidGrid';
 import raidsInfo from '../../pages/raids/raidsInfo';  // Import the data and types
 import utilities from '@/utils/utilities';  // Import utility functions
 
