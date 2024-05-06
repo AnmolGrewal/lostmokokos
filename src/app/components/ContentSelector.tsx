@@ -71,8 +71,8 @@ const ContentSelector = ({ currentPath }) => {
   }, []);
 
   return (
-    <div className="relative w-full bg-primary-background-color">
-      <div className="flex flex-shrink-0 overflow-x-auto scroll-smooth p-4 pl-8" ref={scrollContainerRef}>
+    <div className="relative size-full bg-primary-background-color">
+      <div className="flex flex-shrink-0 overflow-x-auto scroll-smooth p-4 pl-8 justify-evenly" ref={scrollContainerRef}>
         {contentItems.map((item, index) => (
           <Link
             key={index}
