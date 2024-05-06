@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { Raid } from '../../pages/raids/raidsInfo';
 import { faSkull } from '@fortawesome/free-solid-svg-icons';
@@ -13,9 +13,18 @@ interface RaidGridProps {
 }
 
 const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
-  const [dimmed, setDimmed] = useState<boolean[][]>(
-    Array.from({ length: 2 }, (_, i) => Array(raid.gateData.gold.length).fill(i === 1))
-  );
+  const [dimmed, setDimmed] = useState<boolean[][]>([]);
+
+  useEffect(() => {
+    // Initialize the dimmed state based on the number of gates
+    if (raid.gateData) {
+      setDimmed(Array.from({ length: 2 }, (_, i) => Array(raid.gateData.gold.length).fill(i === 1)));
+    }
+  }, [raid]); // Update dimmed state when raid prop changes
+
+  if (!raid.gateData || !dimmed.length) {
+    return null; // Return null if raid.gateData or dimmed is undefined or empty
+  }
 
   const totalGold = raid.gateData.gold.map((_, index) =>
     dimmed[0][index] ? 0 : raid.gateData.gold[index]
