@@ -1,22 +1,25 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import { Raid } from '../../pages/raids/raidsInfo'; // Adjust the import path as necessary
+import { Raid } from '../../pages/raids/raidsInfo';
+import { faSkull } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface RaidGridProps {
   raid: Raid;
+  hasHardVersion: boolean; // Add hasHardVersion prop
 }
 
-const RaidGrid: React.FC<RaidGridProps> = ({ raid }) => {
+const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
   const [dimmed, setDimmed] = useState<boolean[][]>(
-    Array.from({ length: 2 }, () => Array(raid.gateData.gold.length).fill(false))
+    Array.from({ length: 2 }, (_, i) => Array(raid.gateData.gold.length).fill(i === 1))
   );
 
-  const totalGold = raid.gateData.gold.map((_, index) => 
+  const totalGold = raid.gateData.gold.map((_, index) =>
     dimmed[0][index] ? 0 : raid.gateData.gold[index]
   ).reduce((acc, curr) => acc + curr, 0);
 
-  const totalBoxCost = raid.gateData.boxCost.map((_, index) => 
+  const totalBoxCost = raid.gateData.boxCost.map((_, index) =>
     dimmed[1][index] ? 0 : raid.gateData.boxCost[index]
   ).reduce((acc, curr) => acc + curr, 0);
 
@@ -37,14 +40,19 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid }) => {
     <div className="flex flex-col items-center w-full px-4">
       <div className="flex flex-col items-center w-full">
         <img src={raid.imgSrc} alt={`${raid.label} Raid`} className="rounded-full w-48 h-48" />
-        <h2 className="text-primary-text-label-color text-2xl mt-2">{raid.label} Raid</h2>
+        <h2 className="text-primary-text-label-color text-2xl mt-2">
+          {raid.label} Raid{' '}
+          {hasHardVersion && ( // Conditionally render skull icon if hasHardVersion is true
+            <FontAwesomeIcon icon={faSkull} className="text-red-500 ml-2" />
+          )}
+        </h2>
       </div>
       <TableContainer component={Paper} sx={{
         width: '100%',
         backgroundColor: 'var(--chip-background-color)',
         color: 'var(--primary-text-color)',
         '.MuiTableCell-root': {
-          color: 'var(--primary-text-color) !important',
+          color: 'var(--primary-text-color)',
           borderBottom: '2px solid var(--primary-text-label-color)',
           paddingLeft: 2,
           paddingRight: 2
@@ -62,35 +70,38 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid }) => {
           </TableHead>
           <TableBody>
             {rows.map((row, rowIndex) => (
-              <TableRow key={rowIndex}>
+              <TableRow key={rowIndex} className={rowIndex % 2 === 0 ? 'even-row' : ''}>
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>{row.category}</TableCell>
                 {row.values.map((value, columnIndex) => (
-                  <TableCell key={columnIndex} align="center">
-                    <div 
-                      style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
+                  <TableCell key={columnIndex} align="center" className={row.category === 'Box Cost' && columnIndex >= 0 ? 'box-cost-cell' : ''}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
                         justifyContent: 'center',
                         position: 'relative',
                         opacity: dimmed[rowIndex][columnIndex] ? 0.5 : 1,
                         cursor: 'pointer',
                         transition: 'opacity 0.3s ease'
-                      }} 
+                      }}
                       onClick={() => handleCellClick(rowIndex, columnIndex)}
                     >
-                      <img 
-                        src="https://i.imgur.com/DI98qp1.png" 
-                        alt="Gold Icon" 
-                        style={{ 
-                          width: '20px', 
-                          marginRight: '5px'
-                        }} 
+                      <img
+                        src="https://i.imgur.com/DI98qp1.png"
+                        alt="Gold Icon"
+                        style={{
+                          width: '20px',
+                          marginRight: '5px',
+                          transition: 'width 0.3s ease'
+                        }}
+                        onMouseEnter={(e) => { e.currentTarget.style.width = '30px'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.width = '20px'; }}
                       />
                       {value}
                     </div>
                   </TableCell>
                 ))}
-                <TableCell align="center" sx={{ borderBottom: '2px solid var(--primary-text-label-color)' }}>
+                <TableCell align="center" className={row.category === 'Box Cost' ? 'box-cost-cell' : ''} sx={{ borderBottom: '2px solid var(--primary-text-label-color)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" style={{ width: '20px', marginRight: '5px' }} />
                     {row.total}
@@ -98,8 +109,8 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid }) => {
                 </TableCell>
               </TableRow>
             ))}
-            {/* Gold Earned row */}
-            <TableRow>
+            {/* Gold Earnable row */}
+            <TableRow className={rows.length % 2 === 0 ? 'even-row' : ''}>
               <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
                 Gold Earnable: {goldEarned}
               </TableCell>
@@ -112,3 +123,4 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid }) => {
 };
 
 export default RaidGrid;
+

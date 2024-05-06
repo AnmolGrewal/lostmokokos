@@ -15,6 +15,7 @@
   --chip-text-color: #fafdf7;
   --image-sun-color: #FFEE58;
   --image-calendar-color: #FF7043;
+  --primary-text-red-color: #FF474C;
 }
 
 @media (max-width: 600px) {
@@ -54,4 +55,12 @@
 html, body {
   padding: 0;
   margin: 0;
+}
+
+.even-row {
+  background-color: var(--secondary-background-color);
+}
+
+.box-cost-cell {
+  color: var(--primary-text-red-color) !important;
 }

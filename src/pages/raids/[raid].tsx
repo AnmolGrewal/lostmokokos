@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import RaidGrid from '../../app/components/RaidGrid';
-import raidsInfo from '../../pages/raids/raidsInfo';  // Import the data and types
+import raidsInfo, { Raid } from '../../pages/raids/raidsInfo';  // Import the data and types
 import utilities from '@/utils/utilities';  // Import utility functions
 
 const RaidPage: React.FC = () => {
@@ -26,8 +26,11 @@ const RaidPage: React.FC = () => {
   }
 
   const raidString = Array.isArray(raid) ? raid[0] : raid;
-  const currentRaidData = raidsInfo.find(r => r.path === `/raids/${raidString}`);
+  const currentRaidData = raidsInfo.find((r: Raid) => r.path === `/raids/${raidString}`);
   const raidLabel = raidString ? utilities.capitalize(raidString) : "Raid";
+
+  // Check if the raid has a corresponding "-hard" version
+  const hasHardVersion = raidsInfo.some((r: Raid) => r.label === `${raidLabel} (Hard)`);
 
   return (
     <div className='bg-primary-background-color'>
@@ -35,7 +38,8 @@ const RaidPage: React.FC = () => {
         <title>{raidLabel} - Raid Details</title>
         <meta name="description" content={`Learn more about the ${raidLabel} raid`} />
       </Head>
-      {currentRaidData && <RaidGrid raid={currentRaidData} />}
+      {/* Pass hasHardVersion to RaidGrid component */}
+      {currentRaidData && <RaidGrid raid={currentRaidData} hasHardVersion={hasHardVersion} />}
     </div>
   );
 };
