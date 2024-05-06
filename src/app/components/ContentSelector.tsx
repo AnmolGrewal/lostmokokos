@@ -10,16 +10,17 @@ const ContentSelector = ({ currentPath }) => {
   const scrollContainerRef = useRef(null);
 
   const contentItems = [
-    { path: "/raids/akkan", label: "Akkan" },
-    { path: "/raids/argos", label: "Argos" },
-    { path: "/raids/brelshaza", label: "Brelshaza" },
-    { path: "/raids/clown", label: "Clown" },
-    { path: "/raids/kayangel", label: "Kayangel" },
     { path: "/raids/oreha", label: "Oreha" },
-    { path: "/raids/thaemine", label: "Thaemine" },
+    { path: "/raids/argos", label: "Argos" },
     { path: "/raids/valtan", label: "Valtan" },
+    { path: "/raids/vykas", label: "Vykas" },
+    { path: "/raids/clown", label: "Clown" },
+    { path: "/raids/brelshaza", label: "Brelshaza" },
+    { path: "/raids/kayangel", label: "Kayangel" },
+    { path: "/raids/akkan", label: "Akkan" },
     { path: "/raids/voldis", label: "Voldis" },
-    { path: "/raids/vykas", label: "Vykas" }
+    { path: "/raids/thaemine", label: "Thaemine" },
+    { path: "/raids/ladon", label: "Ladon" },
   ];
 
   const checkScrollPosition = () => {
