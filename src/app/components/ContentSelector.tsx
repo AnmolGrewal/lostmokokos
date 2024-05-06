@@ -32,16 +32,23 @@ const ContentSelector = ({ currentPath }) => {
   useEffect(() => {
     const container = scrollContainerRef.current;
     container.addEventListener('scroll', checkScrollPosition);
-    checkScrollPosition();
+
+    // Handle resize
+    const handleResize = () => {
+      checkScrollPosition();
+    };
+    window.addEventListener('resize', handleResize);
+    checkScrollPosition(); // Initial check
 
     return () => {
       container.removeEventListener('scroll', checkScrollPosition);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
   return (
-    <div className="relative w-full overflow-hidden bg-primary-background-color">
-      <div className="flex justify-center space-x-4 overflow-x-auto scroll-smooth snap-x snap-mandatory p-4" ref={scrollContainerRef}>
+    <div className="relative w-full overflow-hidden bg-primary-background-color flex-shrink-0">
+      <div className="flex justify-center space-x-4 overflow-x-auto scroll-smooth snap-x snap-mandatory p-4 flex-shrink-0" ref={scrollContainerRef}>
         {contentItems.map((item, index) => (
           <Link
             key={index}
