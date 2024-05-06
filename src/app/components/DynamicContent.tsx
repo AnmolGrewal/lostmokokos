@@ -1,21 +1,16 @@
 import React from 'react';
-import { useRouter } from 'next/router';
 
-const DynamicContent = () => {
-  const router = useRouter();
-  const { raid } = router.query;
+interface DynamicContentProps {
+  currentRaid: string;
+}
 
-  // Ensure the router is ready and the `raid` parameter is available
-  if (!router.isReady || !raid) {
-    return <div>Loading raid details...</div>; // Or any other placeholder content
-  }
-
-  // Display content based on `raid`
+const DynamicContent: React.FC<DynamicContentProps> = ({ currentRaid }) => {
+  // Since you're passing currentRaid as a prop now, you don't need to use useRouter here.
   return (
     <div>
-      <h1>Details for {raid}</h1>
+      <h1>Details for {currentRaid}</h1>
       {/* Load and display raid-specific content here */}
-      {/* Example: You might want to fetch data based on `raid` or display different components */}
+      {/* This can include fetching data based on `currentRaid` or displaying different components */}
     </div>
   );
 };

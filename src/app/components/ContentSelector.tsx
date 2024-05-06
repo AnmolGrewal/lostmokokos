@@ -22,39 +22,42 @@ const ContentSelector = ({ currentPath }) => {
     { path: "/raids/vykas", label: "Vykas" }
   ];
 
+  const checkScrollPosition = () => {
+    if (!scrollContainerRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+    setIsAtStart(scrollLeft === 0);
+    setIsAtEnd(scrollLeft + clientWidth >= scrollWidth);
+  };
+
   useEffect(() => {
     const container = scrollContainerRef.current;
-    const checkScrollPosition = () => {
-      if (!container) return;
-      const { scrollLeft, scrollWidth, clientWidth } = container;
-      setIsAtStart(scrollLeft === 0);
-      setIsAtEnd(scrollLeft + clientWidth >= scrollWidth);
-    };
-
     container.addEventListener('scroll', checkScrollPosition);
     checkScrollPosition(); // Initial check
 
-    return () => container.removeEventListener('scroll', checkScrollPosition);
+    return () => {
+      container.removeEventListener('scroll', checkScrollPosition);
+    };
   }, []);
 
   return (
     <div className="relative w-full overflow-hidden bg-primary-background-color">
       <div className="flex justify-center space-x-4 overflow-x-auto scroll-smooth snap-x snap-mandatory p-4" ref={scrollContainerRef}>
         {contentItems.map((item, index) => (
-          (<Link
+          <Link
             key={index}
             href={item.path}
             passHref
             className={clsx(
               "block p-2 rounded-lg transition duration-300 ease-in-out transform snap-center shrink-0",
               currentPath === item.path ? 'bg-primary-background-selection-color scale-105' : 'bg-chip-background-color',
-              "hover:bg-primary-background-hover-color"
-            )}>
-
-            <div className="w-24 h-24 md:w-32 md:h-32 bg-gray-200 flex items-center justify-center mb-2">{item.label}</div>
+              currentPath !== item.path && "hover:bg-primary-background-hover-color hover:scale-105"
+            )}
+          >
+            <div className="w-24 h-24 md:w-32 md:h-32 text-chip-text-color flex items-center justify-center mb-2">
+              {item.label}
+            </div>
             <span className="text-center block text-sm font-bold text-chip-text-color">{item.label}</span>
-
-          </Link>)
+          </Link>
         ))}
       </div>
       {!isAtStart && (

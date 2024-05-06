@@ -7,6 +7,11 @@ const RaidPage = () => {
   const router = useRouter();
   const { raid } = router.query;
 
+  // Ensure that the router has finished and the `raid` query is available
+  if (!router.isReady || !raid) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className='bg-primary-background-color .main-content'>
       <Head>
