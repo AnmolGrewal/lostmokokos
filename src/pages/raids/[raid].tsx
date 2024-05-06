@@ -1,39 +1,57 @@
+// [raid].tsx
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
 import Head from 'next/head';
 import DynamicContent from '../../app/components/DynamicContent';
+import RaidGrid from '../../app/components/RaidGrid'; // Import the RaidGrid component
+import utilities from '@/utils/utilities';
+
+const raidsInfo = [
+  {
+    path: "/raids/oreha",
+    label: "Oreha",
+    imgSrc: "https://i.imgur.com/WcAVFsZ.png",
+    gateData: {
+      gold: [500, 700], // Example data
+      rewards: ["x1 x3", "x2 x3"],
+      boxRewards: ["x1 x3", "x2 x3"],
+      boxCost: [300, 400]
+    }
+  },
+  // Add other raids with their respective data
+];
 
 const RaidPage = () => {
   const router = useRouter();
   const { raid } = router.query;
 
   useEffect(() => {
-    // This sets the default raid or the last visited raid
-    const defaultRaid = '/raids/thaemine'; // Default to the Thaemine raid
+    const defaultRaid = '/raids/thaemine';
     const savedPath = typeof window !== 'undefined' ? localStorage.getItem('currentRaidPath') : null;
     const currentRaid = savedPath || defaultRaid;
 
     if (raid && typeof raid === 'string') {
-      // Update local storage when the raid changes
       localStorage.setItem('currentRaidPath', `/raids/${raid}`);
     } else {
       router.push(currentRaid);
     }
   }, [raid, router]);
 
-  // Ensure that the router has finished and the `raid` query is available
   if (!router.isReady || !raid) {
     return <div>Loading...</div>;
   }
 
+  // Find the current raid data from raidsInfo based on the raid path
+  const currentRaidData = raidsInfo.find(r => r.path === `/raids/${raid}`);
+  const raidLabel = raid ? utilities.capitalize(raid) : "Raid"; // Capitalize raid name for display
+
   return (
-    <div className='bg-primary-background-color .main-content'>
+    <div className='bg-primary-background-color main-content'>
       <Head>
-        <title>{raid} - Raid Details</title>
-        <meta name="description" content={`Learn more about the ${raid} raid`} />
+        <title>{raidLabel} - Raid Details</title>
+        <meta name="description" content={`Learn more about the ${raidLabel} raid`} />
       </Head>
-      <h1>{raid} Raid</h1>
-      <DynamicContent currentRaid={raid as string} />
+      {currentRaidData && <RaidGrid raid={currentRaidData} />}
     </div>
   );
 };
