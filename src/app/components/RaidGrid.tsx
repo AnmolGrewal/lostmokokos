@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,7 +8,24 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-const RaidGrid = ({ raid }) => {
+// Define the structure of the raid object and its props
+interface RaidType {
+  path: string;
+  label: string;
+  imgSrc: string;
+  gateData: {
+    gold: number[];
+    rewards: string[];
+    boxRewards: string[];
+    boxCost: number[];
+  };
+}
+
+interface RaidGridProps {
+  raid: RaidType;
+}
+
+const RaidGrid: React.FC<RaidGridProps> = ({ raid }) => {
   const totalGold = raid.gateData.gold.reduce((acc, curr) => acc + curr, 0);
   const totalBoxCost = raid.gateData.boxCost.reduce((acc, curr) => acc + curr, 0);
 
@@ -53,7 +71,6 @@ const RaidGrid = ({ raid }) => {
                 {row.values.map((value, i) => (
                   <TableCell key={i} align="center">{value || '—'}</TableCell>  // Ensuring non-empty cells
                 ))}
-                {/* Ensure border is applied even for empty cells */}
                 <TableCell align="center" sx={{ borderBottom: '2px solid var(--primary-text-label-color)' }}>
                   {row.total !== undefined ? row.total : '-'}
                 </TableCell>
