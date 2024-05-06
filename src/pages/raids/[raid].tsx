@@ -16,7 +16,7 @@ const raidsInfo = [
       boxCost: [300, 400]
     }
   },
-  // Add other raids with their respective data
+  // Additional raids data
 ];
 
 const RaidPage = () => {
@@ -28,6 +28,7 @@ const RaidPage = () => {
     const savedPath = typeof window !== 'undefined' ? localStorage.getItem('currentRaidPath') : null;
     const currentRaid = savedPath || defaultRaid;
 
+    // Ensure raid is a string before saving or navigating
     if (raid && typeof raid === 'string') {
       localStorage.setItem('currentRaidPath', `/raids/${raid}`);
     } else {
@@ -39,9 +40,9 @@ const RaidPage = () => {
     return <div>Loading...</div>;
   }
 
-  // Find the current raid data from raidsInfo based on the raid path
-  const currentRaidData = raidsInfo.find(r => r.path === `/raids/${raid}`);
-  const raidLabel = raid ? utilities.capitalize(raid) : "Raid"; // Capitalize raid name for display
+  const raidString = Array.isArray(raid) ? raid[0] : raid; // Ensure raid is treated as a string
+  const currentRaidData = raidsInfo.find(r => r.path === `/raids/${raidString}`);
+  const raidLabel = raidString ? utilities.capitalize(raidString) : "Raid"; // Capitalize raid name for display
 
   return (
     <div className='bg-primary-background-color main-content'>
