@@ -5,10 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import clsx from 'clsx';
 
-const ContentSelector = ({ currentPath }) => {
+const ContentSelector = ({ currentPath }: { currentPath: string }) => {
   const [isAtStart, setIsAtStart] = useState(true);
   const [isAtEnd, setIsAtEnd] = useState(false);
-  const scrollContainerRef = useRef(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const contentItems = [
     { path: "/raids/oreha", label: "Oreha", imgSrc: "https://i.imgur.com/WcAVFsZ.png"  },
@@ -27,7 +27,7 @@ const ContentSelector = ({ currentPath }) => {
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (container) {
-      const selectedItem = container.querySelector(`a[href='${currentPath}']`);
+      const selectedItem = container.querySelector(`a[href='${currentPath}']`) as HTMLAnchorElement;
       if (selectedItem) {
         container.scrollTo({
           left: selectedItem.offsetLeft - container.offsetWidth / 2 + selectedItem.offsetWidth / 2,
@@ -38,37 +38,41 @@ const ContentSelector = ({ currentPath }) => {
   }, [currentPath]);
 
   const checkScrollPosition = () => {
-    if (!scrollContainerRef.current) return;
-    const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
-    setIsAtStart(scrollLeft === 0);
-    setIsAtEnd(scrollLeft + clientWidth >= scrollWidth);
+    const container = scrollContainerRef.current;
+    if (container) {
+      const { scrollLeft, scrollWidth, clientWidth } = container;
+      setIsAtStart(scrollLeft === 0);
+      setIsAtEnd(scrollLeft + clientWidth >= scrollWidth);
+    }
   };
 
   useEffect(() => {
     const container = scrollContainerRef.current;
-    container.addEventListener('scroll', checkScrollPosition);
+    if (container) {
+      container.addEventListener('scroll', checkScrollPosition);
 
-    // Handle mouse wheel for horizontal scrolling
-    const handleWheel = (e) => {
-      if (e.deltaY === 0) return;
-      e.preventDefault();
-      container.scrollLeft += e.deltaY + (e.deltaX * 0.25); // Adjust multi-directional scrolls
-    };
+      // Define event type and prevent default behavior
+      const handleWheel = (e: WheelEvent) => {
+        if (e.deltaY === 0) return;
+        e.preventDefault();
+        container.scrollLeft += e.deltaY + (e.deltaX * 0.25);
+      };
 
-    container.addEventListener('wheel', handleWheel, { passive: false });
+      container.addEventListener('wheel', handleWheel, { passive: false });
 
-    // Handle resize
-    const handleResize = () => {
-      checkScrollPosition();
-    };
-    window.addEventListener('resize', handleResize);
-    checkScrollPosition(); // Initial check
+      // Handle resize
+      const handleResize = () => {
+        checkScrollPosition();
+      };
+      window.addEventListener('resize', handleResize);
+      checkScrollPosition(); // Initial check
 
-    return () => {
-      container.removeEventListener('scroll', checkScrollPosition);
-      container.removeEventListener('wheel', handleWheel);
-      window.removeEventListener('resize', handleResize);
-    };
+      return () => {
+        container.removeEventListener('scroll', checkScrollPosition);
+        container.removeEventListener('wheel', handleWheel);
+        window.removeEventListener('resize', handleResize);
+      };
+    }
   }, []);
 
   return (
@@ -82,7 +86,7 @@ const ContentSelector = ({ currentPath }) => {
               "block p-2 rounded-lg transition duration-300 ease-in-out transform shrink-0",
               currentPath === item.path ? 'bg-primary-background-selection-color scale-105' : 'bg-chip-background-color',
               currentPath !== item.path && "hover:bg-primary-background-hover-color hover:scale-105",
-              index !== 0 && "ml-4" // Add margin to all items except the first one
+              index !== 0 && "ml-4"
             )}
           >
             <img src={item.imgSrc} alt={item.label} className="w-24 h-24 md:w-32 md:h-32 mb-2" style={{ objectFit: 'cover', maxWidth: '100%', maxHeight: '100%' }} />
@@ -91,12 +95,12 @@ const ContentSelector = ({ currentPath }) => {
         ))}
       </div>
       {!isAtStart && (
-        <button className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white bg-black p-2" onClick={() => scrollContainerRef.current.scrollBy({ left: -300, behavior: 'smooth' })}>
+        <button className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white bg-black p-2" onClick={() => scrollContainerRef.current?.scrollBy({ left: -300, behavior: 'smooth' })}>
           <FontAwesomeIcon icon={faChevronLeft} />
         </button>
       )}
       {!isAtEnd && (
-        <button className="absolute right-0 top-1/2 transform -translate-y-1/2 text-white bg-black p-2" onClick={() => scrollContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' })}>
+        <button className="absolute right-0 top-1/2 transform -translate-y-1/2 text-white bg-black p-2" onClick={() => scrollContainerRef.current?.scrollBy({ left: 300, behavior: 'smooth' })}>
           <FontAwesomeIcon icon={faChevronRight} />
         </button>
       )}
