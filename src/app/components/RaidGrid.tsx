@@ -48,7 +48,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
   ];
 
   return (
-    <div className="flex flex-col items-center w-full px-4">
+    <div className="flex flex-col items-center w-full sm:px-4">
       <div className="flex flex-col items-center w-full">
         <img src={raid.imgSrc} alt={`${raid.label} Raid`} className="rounded-full w-48 h-48" />
         <h2 className="text-primary-text-label-color text-2xl mt-2">
