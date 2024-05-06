@@ -4,10 +4,12 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { Raid } from '../../pages/raids/raidsInfo';
 import { faSkull } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import clsx from 'clsx'; // Import clsx for conditional class names
+import Link from 'next/link'; // Import Link from next.js for client-side routing
 
 interface RaidGridProps {
   raid: Raid;
-  hasHardVersion: boolean; // Add hasHardVersion prop
+  hasHardVersion: boolean;
 }
 
 const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
@@ -42,8 +44,15 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
         <img src={raid.imgSrc} alt={`${raid.label} Raid`} className="rounded-full w-48 h-48" />
         <h2 className="text-primary-text-label-color text-2xl mt-2">
           {raid.label} Raid{' '}
-          {hasHardVersion && ( // Conditionally render skull icon if hasHardVersion is true
-            <FontAwesomeIcon icon={faSkull} className="text-red-500 ml-2" />
+          {hasHardVersion && !raid.path.includes('-hard') && ( // Check if hasHardVersion and path doesn't include "-hard"
+            <Link href={`${raid.path}-hard`}>
+              <a>
+                <FontAwesomeIcon
+                  icon={faSkull}
+                  className={clsx("text-red-500", "ml-2")}
+                />
+              </a>
+            </Link>
           )}
         </h2>
       </div>
@@ -123,4 +132,3 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
 };
 
 export default RaidGrid;
-
