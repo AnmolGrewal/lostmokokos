@@ -1,4 +1,3 @@
-// RaidPage.tsx
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
