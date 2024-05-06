@@ -1,39 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-
-// Define the structure of the raid object and its props
-interface RaidType {
-  path: string;
-  label: string;
-  imgSrc: string;
-  gateData: {
-    gold: number[];
-    rewards: string[];
-    boxRewards: string[];
-    boxCost: number[];
-  };
-}
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Raid } from '../../pages/raids/raidsInfo'; // Adjust the import path to where your `raidsInfo.ts` file is located
 
 interface RaidGridProps {
-  raid: RaidType;
+  raid: Raid;
 }
 
 const RaidGrid: React.FC<RaidGridProps> = ({ raid }) => {
   const totalGold = raid.gateData.gold.reduce((acc, curr) => acc + curr, 0);
   const totalBoxCost = raid.gateData.boxCost.reduce((acc, curr) => acc + curr, 0);
 
-  // Convert gate data into rows for MUI Table
   const rows = [
     { category: 'Gold', values: raid.gateData.gold, total: totalGold },
-    { category: 'Rewards', values: raid.gateData.rewards },
-    { category: 'Box Rewards', values: raid.gateData.boxRewards },
     { category: 'Box Cost', values: raid.gateData.boxCost, total: totalBoxCost }
   ];
 
@@ -69,7 +48,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid }) => {
               <TableRow key={index}>
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>{row.category}</TableCell>
                 {row.values.map((value, i) => (
-                  <TableCell key={i} align="center">{value || '—'}</TableCell>  // Ensuring non-empty cells
+                  <TableCell key={i} align="center">{value || '—'}</TableCell>
                 ))}
                 <TableCell align="center" sx={{ borderBottom: '2px solid var(--primary-text-label-color)' }}>
                   {row.total !== undefined ? row.total : '-'}
