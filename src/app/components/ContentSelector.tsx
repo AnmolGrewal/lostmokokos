@@ -44,7 +44,7 @@ const ContentSelector = ({ currentPath }: { currentPath: string }) => {
       const handleWheel = (e: WheelEvent) => {
         if (e.deltaY === 0) return;
         e.preventDefault();
-        container.scrollLeft += e.deltaY + (e.deltaX * 0.25);
+        container.scrollLeft += (e.deltaY + (e.deltaX * 0.25)) * 4; // Increase scroll speed by multiplying by 4
       };
 
       container.addEventListener('wheel', handleWheel, { passive: false });
