@@ -30,7 +30,7 @@ const RaidPage: React.FC = () => {
   const raidLabel = raidString ? utilities.capitalize(raidString) : "Raid";
 
   return (
-    <div className='bg-primary-background-color main-content'>
+    <div className='bg-primary-background-color'>
       <Head>
         <title>{raidLabel} - Raid Details</title>
         <meta name="description" content={`Learn more about the ${raidLabel} raid`} />

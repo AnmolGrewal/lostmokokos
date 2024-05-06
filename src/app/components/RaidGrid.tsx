@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import { Raid } from '../../pages/raids/raidsInfo'; // Adjust the import path to where your `raidsInfo.ts` file is located
+import { Raid } from '../../pages/raids/raidsInfo'; // Adjust the import path as necessary
 
 interface RaidGridProps {
   raid: Raid;
@@ -36,11 +36,11 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid }) => {
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell sx={{ fontWeight: 'bold', fontSize: '24px' }}>Category</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', fontSize: '24px', width: '10%' }}>Category</TableCell>
               {raid.gateData.gold.map((_, index) => (
-                <TableCell key={index} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>Gate {index + 1}</TableCell>
+                <TableCell key={index} align="center" sx={{ fontWeight: 'bold', fontSize: '24px', width: `${80 / (raid.gateData.gold.length + 1)}%` }}>Gate {index + 1}</TableCell>
               ))}
-              <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>Total</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '24px', width: `${80 / (raid.gateData.gold.length + 1)}%` }}>Total</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const isRaidPage = router.pathname.startsWith('/raids/');
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-primary-background-color">
       <header className="sticky top-0 z-50">
         <ClockBar />
         <NavigationBar currentPath={router.pathname} />
