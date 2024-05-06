@@ -29,8 +29,8 @@ const RaidPage: React.FC = () => {
   const currentRaidData = raidsInfo.find((r: Raid) => r.path === `/raids/${raidString}`);
   const raidLabel = raidString ? utilities.capitalize(raidString) : "Raid";
 
-  // Check if the raid has a corresponding "-hard" version
-  const hasHardVersion = raidsInfo.some((r: Raid) => r.label === `${raidLabel} (Hard)`);
+  // Check if the raid has a separate path ending with "-hard"
+  const hasHardVersion = raidsInfo.some((r: Raid) => r.path === `/raids/${raidString}-hard`);
 
   return (
     <div className='bg-primary-background-color'>

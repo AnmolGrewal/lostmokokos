@@ -37,21 +37,19 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
     { category: 'Gold', values: raid.gateData.gold, total: totalGold },
     { category: 'Box Cost', values: raid.gateData.boxCost, total: totalBoxCost }
   ];
-
+  
   return (
     <div className="flex flex-col items-center w-full px-4">
       <div className="flex flex-col items-center w-full">
         <img src={raid.imgSrc} alt={`${raid.label} Raid`} className="rounded-full w-48 h-48" />
         <h2 className="text-primary-text-label-color text-2xl mt-2">
           {raid.label} Raid{' '}
-          {hasHardVersion && !raid.path.includes('-hard') && ( // Check if hasHardVersion and path doesn't include "-hard"
-            <Link href={`${raid.path}-hard`}>
-              <a>
-                <FontAwesomeIcon
-                  icon={faSkull}
-                  className={clsx("text-red-500", "ml-2")}
-                />
-              </a>
+          {(hasHardVersion || raid.path.endsWith('-hard')) && ( // Check if hasHardVersion or raid path ends with '-hard'
+            <Link href={raid.path.endsWith('-hard') ? raid.path.replace('-hard', '') : `${raid.path}-hard`}>
+              <FontAwesomeIcon
+                icon={faSkull}
+                className={clsx("text-red-500", "ml-2", { "opacity-25": !raid.path.endsWith('-hard') })}
+              />
             </Link>
           )}
         </h2>

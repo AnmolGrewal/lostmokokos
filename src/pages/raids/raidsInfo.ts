@@ -22,7 +22,7 @@ const raidsInfo: Raid[] = [
   },
   {
     path: "/raids/oreha-hard",
-    label: "Oreha (Hard)",
+    label: "Oreha",
     imgSrc: "https://i.imgur.com/WcAVFsZ.png",
     gateData: {
       gold: [300, 400],
@@ -49,7 +49,7 @@ const raidsInfo: Raid[] = [
   },
   {
     path: "/raids/valtan-hard",
-    label: "Valtan (Hard)",
+    label: "Valtan",
     imgSrc: "https://i.imgur.com/ApCDeQb.png",
     gateData: {
       gold: [700, 1100],
@@ -67,7 +67,7 @@ const raidsInfo: Raid[] = [
   },
   {
     path: "/raids/vykas-hard",
-    label: "Vykas (Hard)",
+    label: "Vykas",
     imgSrc: "https://i.imgur.com/5VoXEOB.png",
     gateData: {
       gold: [900, 1500],
@@ -94,7 +94,7 @@ const raidsInfo: Raid[] = [
   },
   {
     path: "/raids/brelshaza-hard",
-    label: "Brelshaza (Hard)",
+    label: "Brelshaza",
     imgSrc: "https://i.imgur.com/bL9k49k.png",
     gateData: {
       gold: [2500, 3000, 2000, 3000],
@@ -112,7 +112,7 @@ const raidsInfo: Raid[] = [
   },
   {
     path: "/raids/kayangel-hard",
-    label: "Kayangel (Hard)",
+    label: "Kayangel",
     imgSrc: "https://i.imgur.com/2P9urFh.png",
     gateData: {
       gold: [1500, 2000, 3000],
@@ -130,7 +130,7 @@ const raidsInfo: Raid[] = [
   },
   {
     path: "/raids/akkan-hard",
-    label: "Akkan (Hard)",
+    label: "Akkan",
     imgSrc: "https://i.imgur.com/W4ekupW.png",
     gateData: {
       gold: [1750, 2500, 5750],
@@ -148,7 +148,7 @@ const raidsInfo: Raid[] = [
   },
   {
     path: "/raids/voldis-hard",
-    label: "Voldis (Hard)",
+    label: "Voldis",
     imgSrc: "https://i.imgur.com/sSdCEIA.png",
     gateData: {
       gold: [2000, 2500, 4000, 6000],
@@ -166,7 +166,7 @@ const raidsInfo: Raid[] = [
   },
   {
     path: "/raids/thaemine-hard",
-    label: "Thaemine (Hard)",
+    label: "Thaemine",
     imgSrc: "https://i.imgur.com/464OcZx.png",
     gateData: {
       gold: [5000, 6000, 9000, 21000],
