@@ -339,7 +339,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
             ))}
             <TableRow key={`total-gold-row`}>
               <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
-                Character Total Gold
+                Gold Per Character
               </TableCell>
               {[...Array(characterCount)].map((_, index) => (
                 <TableCell key={`character-total-gold-${index}`} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
