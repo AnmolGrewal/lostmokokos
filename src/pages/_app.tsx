@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import ContentSelector from '../app/components/ContentSelector';
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/react"
 
 // Dynamically import a component, disabling server-side rendering for it
 const ClockBar = dynamic(() => import('../app/components/ClockBar'), {
@@ -30,6 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <ContentSelector currentPath={router.asPath} />
         </div>}
         <Component {...pageProps} />
+        <Analytics />
         <SpeedInsights />
       </main>
     </div>
