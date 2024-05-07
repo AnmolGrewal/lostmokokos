@@ -159,6 +159,14 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
+              <TableCell colSpan={1 + characterCount} align="center" sx={{ fontWeight: 'bold', fontSize: '24px', borderBottom: '2px solid var(--primary-text-label-color)' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                  Total Gold: {calculateTotalGold()}
+                  <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" style={{ width: '20px', marginLeft: '5px' }} />
+                </span>
+              </TableCell>
+            </TableRow>
+            <TableRow>
               <TableCell sx={{ fontWeight: 'bold', fontSize: '24px' }}></TableCell>
               {[...Array(characterCount)].map((_, index) => (
                 <TableCell key={index} sx={{ fontWeight: 'bold', fontSize: '24px', textAlign: 'center' }}>Character {index + 1}</TableCell>
@@ -232,14 +240,12 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
               </TableCell>
               {[...Array(characterCount)].map((_, index) => (
                 <TableCell key={`character-total-gold-${index}`} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
-                  {calculateCharacterTotalGold(index)}
+                  <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                    {calculateCharacterTotalGold(index)}
+                    <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" style={{ width: '20px', marginLeft: '5px' }} />
+                  </span>
                 </TableCell>
               ))}
-            </TableRow>
-            <TableRow>
-              <TableCell colSpan={1 + characterCount} align="center" sx={{ fontWeight: 'bold', fontSize: '24px', borderBottom: '2px solid var(--primary-text-label-color)' }}>
-                Total Gold: {calculateTotalGold()}
-              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
