@@ -142,15 +142,6 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
       if (index === columnIndex) {
         let updatedState = { ...state };
         updatedState[fullPath] = updatedState[fullPath].map(() => !allChecked);
-  
-        // Check for 'normal' mode and if 'hard' mode data exists in the current state
-        if (mode === 'normal' && state[raidPath + 'hard']) {
-          const raid = raids.find(r => r.path === raidPath);
-          const gateCount = raid?.gateData.gold.length || 0;
-          const gateStates = new Array(gateCount).fill(!allChecked);
-          updatedState[raidPath + 'hard'] = new Array(gateCount).fill(!allChecked);
-          updatedState[fullPath] = gateStates;
-        }
         return updatedState;
       }
       return state;
