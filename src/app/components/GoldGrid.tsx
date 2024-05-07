@@ -276,58 +276,64 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
           </TableHead>
           <TableBody>
             {Object.entries(raidGroups).map(([label, groupedRaids], index) => (
-              groupedRaids.filter(raid => raidVisibility[raid.path]).map((raid) => {
-                // Assuming the path somehow contains the mode directly
-                const mode = raid.path.includes('-hard') ? 'hard' : 'normal';
-                return (
-                  <TableRow key={raid.path} className={index % 2 === 0 ? 'even-row' : ''}>
-                    <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px', position: 'relative', width: 'fit-content' }}>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <img src={raid.imgSrc} alt={raid.label} style={{ width: '40px', height: '40px' }} />
-                        {raid.label}
-                      </div>
-                    </TableCell>
-                    {[...Array(characterCount)].map((_, characterIndex) => (
-                      <TableCell key={`${raid.path}-${characterIndex}`} sx={{ textAlign: 'center' }}>
-                        <FormGroup row className='justify-center'>
-                          <div className='min-w-36 text-left'>
+              <TableRow key={index} className={index % 2 === 0 ? 'even-row' : ''}>
+                <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px', position: 'relative', width: 'fit-content' }}>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <img
+                      key={groupedRaids[0].path}
+                      src={groupedRaids[0].imgSrc}
+                      alt={groupedRaids[0].label}
+                      style={{ width: '40px', height: '40px' }}
+                    />
+                    {label}
+                  </div>
+                </TableCell>
+                {[...Array(characterCount)].map((_, characterIndex) => (
+                  <TableCell key={characterIndex} sx={{ textAlign: 'center' }}>
+                    <FormGroup row className='justify-center'>
+                      {groupedRaids.map((raid: Raid) => {
+                        const mode = raid.path.includes('-hard') ? 'hard' : 'normal';
+                        return (
+                          <div key={raid.path} className='min-w-36 text-left'>
                             <IconButton onClick={() => handleToggle(raid.path, mode)} size="small">
                               <ExpandMoreIcon />
                             </IconButton>
                             <FormControlLabel
                               control={
                                 <Checkbox
-                                  checked={checkedStates[characterIndex]?.[raid.path]?.every(Boolean) || false}
-                                  indeterminate={checkedStates[characterIndex]?.[raid.path]?.some(Boolean) && !checkedStates[characterIndex]?.[raid.path]?.every(Boolean)}
+                                  checked={checkedStates[characterIndex]?.[raid.path + mode]?.every(Boolean) || false}
+                                  indeterminate={checkedStates[characterIndex]?.[raid.path + mode]?.some(Boolean) && !checkedStates[characterIndex]?.[raid.path + mode]?.every(Boolean)}
                                   onChange={() => handleMainCheckboxChange(raid.path, mode, characterIndex)}
                                 />
                               }
                               label={mode.charAt(0).toUpperCase() + mode.slice(1)}
                               sx={{ textAlign: 'center' }} // Center the labels
                             />
-                            <Collapse in={open[raid.path]} timeout="auto" unmountOnExit>
+                            <Collapse in={open[raid.path + mode]} timeout="auto" unmountOnExit>
                               <div style={{ marginLeft: '40px' }}>
                                 {raid.gateData.gold.map((_, gateIndex: number) => (
-                                  <FormControlLabel
+                                  <FormControlLabel className='flex justify-center items-center'
                                     key={`${raid.path}-gate-${gateIndex}`}
                                     control={
                                       <Checkbox
-                                        checked={checkedStates[characterIndex]?.[raid.path]?.[gateIndex] || false}
+                                        checked={checkedStates[characterIndex]?.[raid.path + mode]?.[gateIndex] || false}
                                         onChange={() => handleGateCheckboxChange(raid.path, mode, characterIndex, gateIndex)}
+                                        className='flex justify-center items-center'
                                       />
                                     }
                                     label={`Gate ${gateIndex + 1}`}
+                                    style={{ display: 'flex'}}
                                   />
                                 ))}
                               </div>
                             </Collapse>
                           </div>
-                        </FormGroup>
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                );
-              })
+                        );
+                      })}
+                    </FormGroup>
+                  </TableCell>
+                ))}
+              </TableRow>
             ))}
             <TableRow key={`total-gold-row`}>
               <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
