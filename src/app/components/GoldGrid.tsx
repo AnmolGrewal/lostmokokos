@@ -40,12 +40,10 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const [editingCharacterIndex, setEditingCharacterIndex] = useState<number>(-1);
   const [tempName, setTempName] = useState<string>('');
   const [settingsDialogOpen, setSettingsDialogOpen] = useState<boolean>(false);
-  const [raidVisibility, setRaidVisibility] = useState<{ [key: string]: boolean }>(
-    raids.reduce((acc, raid) => ({ ...acc, [raid.path]: true }), {})
-  );
+  const [raidVisibility, setRaidVisibility] = useState<boolean[]>(raids.map(() => true));
 
-  const toggleRaidVisibility = (raidPath: string) => {
-    setRaidVisibility(prev => ({ ...prev, [raidPath]: !prev[raidPath] }));
+  const toggleRaidVisibility = (index: number) => {
+    setRaidVisibility(prev => prev.map((visible, i) => i === index ? !visible : visible));
   };
 
   useEffect(() => {
@@ -210,14 +208,14 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
         <DialogTitle sx={{ color: 'var(--primary-text-label-color)' }}>Manage Raids</DialogTitle>
         <DialogContent>
           <div>
-            {raids.map((raid) => (
+            {raids.map((raid, index) => (
               <Chip
                 key={raid.path}
                 label={raid.label}
-                onClick={() => toggleRaidVisibility(raid.path)}
+                onClick={() => toggleRaidVisibility(index)}
                 color="primary"
                 sx={{
-                  bgcolor: raidVisibility[raid.path] ? '#794244' : undefined,
+                  bgcolor: raidVisibility[index] ? '#794244' : undefined,
                   color: '#fff',
                   margin: '5px',
                   '&:hover': {
