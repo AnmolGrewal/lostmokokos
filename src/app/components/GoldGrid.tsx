@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Checkbox, Collapse, FormControlLabel, FormGroup } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddIcon from '@mui/icons-material/Add';
@@ -19,13 +19,55 @@ interface CharacterState {
 }
 
 const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
+  const initializeNewCharacterState = useCallback((): CharacterState => {
+    let newState: CharacterState = {};
+    raids.forEach(raid => {
+      ['normal', 'hard'].forEach(mode => {
+        const fullPath = `${raid.path}${mode}`;
+        newState[fullPath] = new Array(raid.gateData.gold.length).fill(false);
+      });
+    });
+    return newState;
+  }, [raids]);
+
   const [open, setOpen] = useState<{ [key: string]: boolean }>({});
-  const [checkedStates, setCheckedStates] = useState<CharacterState[]>([]);
+  const [checkedStates, setCheckedStates] = useState<CharacterState[]>([initializeNewCharacterState()]);
   const [characterCount, setCharacterCount] = useState<number>(1);
-  const [characterNames, setCharacterNames] = useState<string[]>(Array(characterCount).fill('Character'));
+  const [characterNames, setCharacterNames] = useState<string[]>(['Character 1']);
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
   const [editingCharacterIndex, setEditingCharacterIndex] = useState<number>(-1);
   const [tempName, setTempName] = useState<string>('');
+
+  useEffect(() => {
+    const savedCharacterCount = parseInt(localStorage.getItem('characterCount') || '0', 10);
+    const savedCharacterNames = JSON.parse(localStorage.getItem('characterNames') || '[]');
+    const savedCheckedStates = JSON.parse(localStorage.getItem('checkedStates') || '[]');
+
+    setCharacterCount(savedCharacterCount);
+    setCharacterNames(savedCharacterNames.length ? savedCharacterNames : Array(savedCharacterCount).fill('Character'));
+    setCheckedStates(savedCheckedStates.length ? savedCheckedStates : Array.from({ length: savedCharacterCount }, () => initializeNewCharacterState()));
+  }, [initializeNewCharacterState]);
+
+  useEffect(() => {
+    localStorage.setItem('characterCount', characterCount.toString());
+    localStorage.setItem('characterNames', JSON.stringify(characterNames));
+    localStorage.setItem('checkedStates', JSON.stringify(checkedStates));
+  }, [characterCount, characterNames, checkedStates]);
+
+  const handleAddCharacter = () => {
+    const newCharacterName = `Character ${characterCount + 1}`;
+    setCharacterCount(prev => prev + 1);
+    setCharacterNames(prev => [...prev, newCharacterName]);
+    setCheckedStates(prev => [...prev, initializeNewCharacterState()]);
+  };
+
+  const handleRemoveCharacter = () => {
+    if (characterCount > 1) {
+      setCharacterCount(prev => prev - 1);
+      setCharacterNames(prev => prev.slice(0, -1));
+      setCheckedStates(prev => prev.slice(0, -1));
+    }
+  };
 
   const handleOpenEditDialog = (index: number) => {
     setEditingCharacterIndex(index);
@@ -44,49 +86,49 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
     handleCloseEditDialog();
   };
 
-  useEffect(() => {
-    // Initialize character names array when character count changes
-    setCharacterNames(prevNames => {
-      const updatedNames = [...prevNames];
-      // If characterCount increased, add new characters with default names
-      for (let i = prevNames.length; i < characterCount; i++) {
-        updatedNames.push(`Character ${i + 1}`);
-      }
-      // If characterCount decreased, remove extra characters
-      return updatedNames.slice(0, characterCount);
-    });
-  }, [characterCount]);
+  // useEffect(() => {
+  //   // Initialize character names array when character count changes
+  //   setCharacterNames(prevNames => {
+  //     const updatedNames = [...prevNames];
+  //     // If characterCount increased, add new characters with default names
+  //     for (let i = prevNames.length; i < characterCount; i++) {
+  //       updatedNames.push(`Character ${i + 1}`);
+  //     }
+  //     // If characterCount decreased, remove extra characters
+  //     return updatedNames.slice(0, characterCount);
+  //   });
+  // }, [characterCount]);
 
-  useEffect(() => {
-    const initializeCheckedStates = () => {
-      setCheckedStates(prevStates => {
-        const initialCheckedStates = Array.from({ length: characterCount }, (_, index) => {
-          if (prevStates[index]) {
-            return { ...prevStates[index] };
-          } else {
-            return {};
-          }
-        });
+  // useEffect(() => {
+  //   const initializeCheckedStates = () => {
+  //     setCheckedStates(prevStates => {
+  //       const initialCheckedStates = Array.from({ length: characterCount }, (_, index) => {
+  //         if (prevStates[index]) {
+  //           return { ...prevStates[index] };
+  //         } else {
+  //           return {};
+  //         }
+  //       });
         
-        raids.forEach(raid => {
-          ['normal', 'hard'].forEach(mode => {
-            const fullPath = raid.path + mode;
-            if (raid.path.includes(mode)) {
-              initialCheckedStates.forEach((state) => {
-                if (!state[fullPath]) {
-                  state[fullPath] = new Array(raid.gateData.gold.length).fill(false);
-                }
-              });
-            }
-          });
-        });
+  //       raids.forEach(raid => {
+  //         ['normal', 'hard'].forEach(mode => {
+  //           const fullPath = raid.path + mode;
+  //           if (raid.path.includes(mode)) {
+  //             initialCheckedStates.forEach((state) => {
+  //               if (!state[fullPath]) {
+  //                 state[fullPath] = new Array(raid.gateData.gold.length).fill(false);
+  //               }
+  //             });
+  //           }
+  //         });
+  //       });
   
-        return initialCheckedStates;
-      });
-    };
+  //       return initialCheckedStates;
+  //     });
+  //   };
   
-    initializeCheckedStates();
-  }, [raids, characterCount]);
+  //   initializeCheckedStates();
+  // }, [raids, characterCount]);
 
   const handleToggle = (raidPath: string, mode: 'normal' | 'hard') => {
     const fullPath = raidPath + mode;
@@ -144,16 +186,6 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
     acc[label].push(raid);
     return acc;
   }, {});
-
-  const handleAddCharacter = () => {
-    setCharacterCount(prevCount => prevCount + 1);
-  };
-
-  const handleRemoveCharacter = () => {
-    if (characterCount > 1) {
-      setCharacterCount(prevCount => prevCount - 1);
-    }
-  };
 
   const calculateCharacterTotalGold = (characterIndex: number) => {
     return Object.entries(checkedStates[characterIndex] || {}).reduce((characterSum, [key, checks]) => {
