@@ -86,50 +86,6 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
     handleCloseEditDialog();
   };
 
-  // useEffect(() => {
-  //   // Initialize character names array when character count changes
-  //   setCharacterNames(prevNames => {
-  //     const updatedNames = [...prevNames];
-  //     // If characterCount increased, add new characters with default names
-  //     for (let i = prevNames.length; i < characterCount; i++) {
-  //       updatedNames.push(`Character ${i + 1}`);
-  //     }
-  //     // If characterCount decreased, remove extra characters
-  //     return updatedNames.slice(0, characterCount);
-  //   });
-  // }, [characterCount]);
-
-  // useEffect(() => {
-  //   const initializeCheckedStates = () => {
-  //     setCheckedStates(prevStates => {
-  //       const initialCheckedStates = Array.from({ length: characterCount }, (_, index) => {
-  //         if (prevStates[index]) {
-  //           return { ...prevStates[index] };
-  //         } else {
-  //           return {};
-  //         }
-  //       });
-        
-  //       raids.forEach(raid => {
-  //         ['normal', 'hard'].forEach(mode => {
-  //           const fullPath = raid.path + mode;
-  //           if (raid.path.includes(mode)) {
-  //             initialCheckedStates.forEach((state) => {
-  //               if (!state[fullPath]) {
-  //                 state[fullPath] = new Array(raid.gateData.gold.length).fill(false);
-  //               }
-  //             });
-  //           }
-  //         });
-  //       });
-  
-  //       return initialCheckedStates;
-  //     });
-  //   };
-  
-  //   initializeCheckedStates();
-  // }, [raids, characterCount]);
-
   const handleToggle = (raidPath: string, mode: 'normal' | 'hard') => {
     const fullPath = raidPath + mode;
     setOpen(prev => ({ ...prev, [fullPath]: !prev[fullPath] }));
