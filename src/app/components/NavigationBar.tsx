@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// eslint-disable-next-line no-unused-vars
 import { faHome, faDungeon, faCoins } from '@fortawesome/free-solid-svg-icons';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
@@ -10,7 +11,7 @@ interface NavigationBarProps {
 
 const NavigationBar = ({ currentPath }: NavigationBarProps) => {
   const navItems = [
-    { path: "/", label: "Home", icon: faHome },
+    // { path: "/", label: "Home", icon: faHome },
     { path: "/raids", label: "Raids", icon: faDungeon },
     { path: "/gold-calculator", label: "Gold Calculator", icon: faCoins },
   ];
@@ -25,7 +26,7 @@ const NavigationBar = ({ currentPath }: NavigationBarProps) => {
     <div className="bg-secondary-background-color w-full h-14 flex justify-center items-center">
       <div className="flex gap-4 items-center">
         {navItems.map(item => (
-          (<Link
+          <Link
             href={item.path}
             key={item.label}
             passHref
@@ -40,13 +41,15 @@ const NavigationBar = ({ currentPath }: NavigationBarProps) => {
               } else {
                 router.push(item.path);
               }
-            }}>
+            }}
+          >
             <div className="text-chip-text-color bg-image-background-color rounded-full p-2">
               <FontAwesomeIcon icon={item.icon} className="text-xl" />
             </div>
-            <span className="ml-2 text-lg text-chip-text-color font-bold">{item.label}</span>
-
-          </Link>)
+            <span className={clsx("ml-2 text-lg text-chip-text-color font-bold", "hide-on-small")}>
+              {item.label}
+            </span>
+          </Link>
         ))}
       </div>
     </div>
