@@ -199,6 +199,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
           <Button onClick={handleSaveCharacterName} type="submit" sx={{ color: 'inherit' }}>Save</Button>
         </DialogActions>
       </Dialog>
+      
       <Dialog open={settingsDialogOpen} onClose={handleToggleSettingsDialog} sx={{
         '& .MuiPaper-root': {
           backgroundColor: 'var(--chip-background-color)',
@@ -208,10 +209,10 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
         <DialogTitle sx={{ color: 'var(--primary-text-label-color)' }}>Manage Raids</DialogTitle>
         <DialogContent>
           <div>
-            {raids.map((raid, index) => (
+            {Object.keys(raidGroups).map((label, index) => (
               <Chip
-                key={raid.path}
-                label={raid.label}
+                key={index}
+                label={label}
                 onClick={() => toggleRaidVisibility(index)}
                 color="primary"
                 sx={{
@@ -231,6 +232,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
           <Button onClick={handleToggleSettingsDialog} sx={{ color: 'inherit' }}>Close</Button>
         </DialogActions>
       </Dialog>
+
       <TableContainer component={Paper} sx={{
         width: 'calc(100% - 40px)', // Adjust the width to create distance from edges
         backgroundColor: 'var(--chip-background-color)',
