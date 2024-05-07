@@ -12,8 +12,6 @@ interface RaidGroup {
   [label: string]: Raid[];
 }
 
-// Existing imports...
-
 const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const [open, setOpen] = useState<{ [key: string]: boolean }>({});
   const [checkedStates, setCheckedStates] = useState<{ [key: string]: boolean[] }>({});
@@ -121,7 +119,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                   {groupedRaids.map((raid: Raid) => {
                     const mode = raid.path.includes('-hard') ? 'hard' : 'normal';
                     return (
-                      <React.Fragment key={raid.path}>
+                      <div key={raid.path}>
                         <IconButton onClick={() => handleToggle(raid.path, mode)} size="small">
                           <ExpandMoreIcon />
                         </IconButton>
@@ -136,7 +134,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                           label={mode.charAt(0).toUpperCase() + mode.slice(1)}
                         />
                         <Collapse in={open[raid.path + mode]} timeout="auto" unmountOnExit>
-                          <FormGroup>
+                          <div style={{ marginLeft: '40px' }}>
                             {raid.gateData.gold.map((_, gateIndex: number) => (
                               <FormControlLabel
                                 key={`${raid.path}-gate-${gateIndex}`}
@@ -147,11 +145,12 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                                   />
                                 }
                                 label={`Gate ${gateIndex + 1}`}
+                                style={{ display: 'block' }}
                               />
                             ))}
-                          </FormGroup>
+                          </div>
                         </Collapse>
-                      </React.Fragment>
+                      </div>
                     );
                   })}
                 </FormGroup>
