@@ -306,7 +306,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
           </TableHead>
           <TableBody>
             {Object.entries(raidGroups)
-              .filter(([label, _]) => raidVisibility[Object.keys(raidGroups).indexOf(label)])
+              .filter(([label]) => raidVisibility[Object.keys(raidGroups).indexOf(label)])
               .map(([label, groupedRaids], index) => (
                 <TableRow key={index} className={index % 2 === 0 ? 'even-row' : ''}>
                   <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px', position: 'relative', width: 'fit-content' }}>
