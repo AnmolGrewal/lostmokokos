@@ -97,13 +97,13 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
         <TableHead>
           <TableRow>
             <TableCell sx={{ fontWeight: 'bold', fontSize: '24px' }}>Raids</TableCell>
-            <TableCell sx={{ fontWeight: 'bold', fontSize: '24px' }}>Character 1</TableCell>
+            <TableCell sx={{ fontWeight: 'bold', fontSize: '24px', textAlign: 'center'}}>Character</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {Object.entries(raidGroups).map(([label, groupedRaids], index) => (
             <TableRow key={index} className={index % 2 === 0 ? 'even-row' : ''}>
-              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px', position: 'relative' }}>
+              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px', position: 'relative', width: 'fit-content' }}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <img
                     key={groupedRaids[0].path}
@@ -114,8 +114,8 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                   {label}
                 </div>
               </TableCell>
-              <TableCell>
-                <FormGroup row>
+              <TableCell sx={{ textAlign: 'center' }}>
+                <FormGroup row className='justify-center'>
                   {groupedRaids.map((raid: Raid) => {
                     const mode = raid.path.includes('-hard') ? 'hard' : 'normal';
                     return (
@@ -131,7 +131,8 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                               onChange={() => handleMainCheckboxChange(raid.path, mode)}
                             />
                           }
-                          label={mode.charAt(0).toUpperCase() + mode.slice(1)} className='w-24'
+                          label={mode.charAt(0).toUpperCase() + mode.slice(1)}
+                          sx={{ textAlign: 'center' }} // Center the labels
                         />
                         <Collapse in={open[raid.path + mode]} timeout="auto" unmountOnExit>
                           <div style={{ marginLeft: '40px' }}>
@@ -166,7 +167,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
         </TableBody>
       </Table>
     </TableContainer>
-  );
+  )
 };
 
 export default GoldGrid;
