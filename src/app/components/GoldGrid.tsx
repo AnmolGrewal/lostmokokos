@@ -109,7 +109,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                     key={groupedRaids[0].path}
                     src={groupedRaids[0].imgSrc}
                     alt={groupedRaids[0].label}
-                    style={{ width: '40px', height: '40px', marginRight: '10px' }}
+                    style={{ width: '40px', height: '40px' }}
                   />
                   {label}
                 </div>
@@ -119,7 +119,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                   {groupedRaids.map((raid: Raid) => {
                     const mode = raid.path.includes('-hard') ? 'hard' : 'normal';
                     return (
-                      <div key={raid.path}>
+                      <div key={raid.path} className='min-w-36 text-left'>
                         <IconButton onClick={() => handleToggle(raid.path, mode)} size="small">
                           <ExpandMoreIcon />
                         </IconButton>
