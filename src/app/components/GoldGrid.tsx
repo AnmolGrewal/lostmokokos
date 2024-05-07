@@ -43,9 +43,9 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
     const savedCharacterNames = JSON.parse(localStorage.getItem('characterNames') || '[]');
     const savedCheckedStates = JSON.parse(localStorage.getItem('checkedStates') || '[]');
 
-    setCharacterCount(savedCharacterCount);
-    setCharacterNames(savedCharacterNames.length ? savedCharacterNames : Array(savedCharacterCount).fill('Character'));
-    setCheckedStates(savedCheckedStates.length ? savedCheckedStates : Array.from({ length: savedCharacterCount }, () => initializeNewCharacterState()));
+    setCharacterCount(savedCharacterCount || 1); // Ensure at least 1 character is initialized
+    setCharacterNames(savedCharacterNames.length ? savedCharacterNames : Array(savedCharacterCount || 1).fill('Character'));
+    setCheckedStates(savedCheckedStates.length ? savedCheckedStates : Array.from({ length: savedCharacterCount || 1 }, () => initializeNewCharacterState()));
   }, [initializeNewCharacterState]);
 
   useEffect(() => {
