@@ -121,6 +121,15 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
     }
   };
 
+  const calculateCharacterTotalGold = (characterIndex: number) => {
+    return Object.entries(checkedStates[characterIndex] || {}).reduce((characterSum, [key, checks]) => {
+      const raidPath = key.replace(/normal|hard/, '');
+      const raid = raids.find(r => r.path === raidPath);
+      const sum = raid ? raid.gateData.gold.reduce((sum, gold, index) => sum + (checks[index] ? gold : 0), 0) : 0;
+      return characterSum + sum;
+    }, 0);
+  };
+
   return (
     <div>
       <h2 className="text-primary-text-color text-2xl mt-2 text-center">
@@ -217,6 +226,16 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                 ))}
               </TableRow>
             ))}
+            <TableRow key={`total-gold-row`}>
+              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
+                Character Total Gold
+              </TableCell>
+              {[...Array(characterCount)].map((_, index) => (
+                <TableCell key={`character-total-gold-${index}`} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
+                  {calculateCharacterTotalGold(index)}
+                </TableCell>
+              ))}
+            </TableRow>
             <TableRow>
               <TableCell colSpan={1 + characterCount} align="center" sx={{ fontWeight: 'bold', fontSize: '24px', borderBottom: '2px solid var(--primary-text-label-color)' }}>
                 Total Gold: {calculateTotalGold()}
