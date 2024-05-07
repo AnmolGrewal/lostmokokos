@@ -42,9 +42,37 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const [settingsDialogOpen, setSettingsDialogOpen] = useState<boolean>(false);
   const [raidVisibility, setRaidVisibility] = useState<boolean[]>(raids.map(() => true));
 
-  const toggleRaidVisibility = (index: number) => {
-    setRaidVisibility(prev => prev.map((visible, i) => i === index ? !visible : visible));
+  const toggleRaidVisibility = (labelIndex: number) => {
+    const label = Object.keys(raidGroups)[labelIndex];
+    const updatedVisibility = raidVisibility.map((visible, i) => i === labelIndex ? !visible : visible);
+    setRaidVisibility(updatedVisibility);
+    localStorage.setItem('raidVisibility', JSON.stringify(updatedVisibility));
+  
+    // If the raid is being hidden, set all associated check states to false
+    if (!updatedVisibility[labelIndex]) {
+      const raidsInGroup = raidGroups[label];
+  
+      setCheckedStates(prevStates => prevStates.map(characterState => {
+        let newState = { ...characterState };
+        raidsInGroup.forEach(raid => {
+          ['normal', 'hard'].forEach(mode => {
+            const fullPath = `${raid.path}${mode}`;
+            if (newState[fullPath]) {
+              newState[fullPath] = newState[fullPath].map(() => false);
+            }
+          });
+        });
+        return newState;
+      }));
+    }
   };
+
+  useEffect(() => {
+    const savedRaidVisibility = JSON.parse(localStorage.getItem('raidVisibility') || '[]');
+    if (savedRaidVisibility.length === raids.length) {
+      setRaidVisibility(savedRaidVisibility);
+    }
+  }, [raids.length]);
 
   useEffect(() => {
     const savedCharacterCount = parseInt(localStorage.getItem('characterCount') || '0', 10);
@@ -125,20 +153,18 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   };
 
   const calculateTotalGold = () => {
-    const total = Object.entries(checkedStates).reduce((totalSum, characterState) => {
-      return totalSum + Object.entries(characterState[1]).reduce((characterSum, [key, checks]) => {
-        const raidPath = key.replace(/normal|hard/, '');
-        const raid = raids.find(r => r.path === raidPath);
-        const sum = raid ? raid.gateData.gold.reduce((sum, gold, index) => sum + (checks[index] ? gold : 0), 0) : 0;
-        return characterSum + sum;
-      }, 0);
-    }, 0);
-    return total.toLocaleString(); // Converts number to string with commas
+    let total = 0;
+    for (let i = 0; i < characterCount; i++) {
+      total += calculateCharacterTotalGold(i);
+    }
+    return total.toLocaleString(); // Formats the total gold with commas
   };
 
   const raidGroups: RaidGroup = raids.reduce((acc: RaidGroup, raid: Raid) => {
     const label = raid.label;
-    acc[label] = acc[label] || [];
+    if (!acc[label]) {
+      acc[label] = [];
+    }
     acc[label].push(raid);
     return acc;
   }, {});
@@ -146,11 +172,15 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const calculateCharacterTotalGold = (characterIndex: number) => {
     const total = Object.entries(checkedStates[characterIndex] || {}).reduce((characterSum, [key, checks]) => {
       const raidPath = key.replace(/normal|hard/, '');
-      const raid = raids.find(r => r.path === raidPath);
-      const sum = raid ? raid.gateData.gold.reduce((sum, gold, index) => sum + (checks[index] ? gold : 0), 0) : 0;
-      return characterSum + sum;
+      const raidIndex = raids.findIndex(r => r.path === raidPath);
+      if (raidIndex !== -1 && raidVisibility[raidIndex]) { // Check if raid is visible
+        const raid = raids[raidIndex];
+        const sum = raid.gateData.gold.reduce((sum, gold, index) => sum + (checks[index] ? gold : 0), 0);
+        return characterSum + sum;
+      }
+      return characterSum; // If raid is not visible, don't include its gold
     }, 0);
-    return total.toLocaleString(); // Converts number to string with commas
+    return total; // Returns the numeric total gold for a character
   };
 
   const handleToggleSettingsDialog = () => {
@@ -213,14 +243,14 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
               <Chip
                 key={index}
                 label={label}
-                onClick={() => toggleRaidVisibility(index)}
+                onClick={() => toggleRaidVisibility(index)}  // Ensure this uses the right index
                 color="primary"
                 sx={{
                   bgcolor: raidVisibility[index] ? '#794244' : undefined,
                   color: '#fff',
                   margin: '5px',
                   '&:hover': {
-                    bgcolor: '#572C2C' // darker shade when hover
+                    bgcolor: '#572C2C'
                   }
                 }}
                 variant="outlined"
@@ -275,66 +305,68 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.entries(raidGroups).map(([label, groupedRaids], index) => (
-              <TableRow key={index} className={index % 2 === 0 ? 'even-row' : ''}>
-                <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px', position: 'relative', width: 'fit-content' }}>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <img
-                      key={groupedRaids[0].path}
-                      src={groupedRaids[0].imgSrc}
-                      alt={groupedRaids[0].label}
-                      style={{ width: '40px', height: '40px' }}
-                    />
-                    {label}
-                  </div>
-                </TableCell>
-                {[...Array(characterCount)].map((_, characterIndex) => (
-                  <TableCell key={characterIndex} sx={{ textAlign: 'center' }}>
-                    <FormGroup row className='justify-center'>
-                      {groupedRaids.map((raid: Raid) => {
-                        const mode = raid.path.includes('-hard') ? 'hard' : 'normal';
-                        return (
-                          <div key={raid.path} className='min-w-36 text-left'>
-                            <IconButton onClick={() => handleToggle(raid.path, mode)} size="small">
-                              <ExpandMoreIcon />
-                            </IconButton>
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  checked={checkedStates[characterIndex]?.[raid.path + mode]?.every(Boolean) || false}
-                                  indeterminate={checkedStates[characterIndex]?.[raid.path + mode]?.some(Boolean) && !checkedStates[characterIndex]?.[raid.path + mode]?.every(Boolean)}
-                                  onChange={() => handleMainCheckboxChange(raid.path, mode, characterIndex)}
-                                />
-                              }
-                              label={mode.charAt(0).toUpperCase() + mode.slice(1)}
-                              sx={{ textAlign: 'center' }} // Center the labels
-                            />
-                            <Collapse in={open[raid.path + mode]} timeout="auto" unmountOnExit>
-                              <div style={{ marginLeft: '40px' }}>
-                                {raid.gateData.gold.map((_, gateIndex: number) => (
-                                  <FormControlLabel className='flex justify-center items-center'
-                                    key={`${raid.path}-gate-${gateIndex}`}
-                                    control={
-                                      <Checkbox
-                                        checked={checkedStates[characterIndex]?.[raid.path + mode]?.[gateIndex] || false}
-                                        onChange={() => handleGateCheckboxChange(raid.path, mode, characterIndex, gateIndex)}
-                                        className='flex justify-center items-center'
-                                      />
-                                    }
-                                    label={`Gate ${gateIndex + 1}`}
-                                    style={{ display: 'flex'}}
-                                  />
-                                ))}
-                              </div>
-                            </Collapse>
-                          </div>
-                        );
-                      })}
-                    </FormGroup>
+            {Object.entries(raidGroups)
+              .filter(([label, _]) => raidVisibility[Object.keys(raidGroups).indexOf(label)])
+              .map(([label, groupedRaids], index) => (
+                <TableRow key={index} className={index % 2 === 0 ? 'even-row' : ''}>
+                  <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px', position: 'relative', width: 'fit-content' }}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <img
+                        key={groupedRaids[0].path}
+                        src={groupedRaids[0].imgSrc}
+                        alt={groupedRaids[0].label}
+                        style={{ width: '40px', height: '40px' }}
+                      />
+                      {label}
+                    </div>
                   </TableCell>
-                ))}
-              </TableRow>
-            ))}
+                  {[...Array(characterCount)].map((_, characterIndex) => (
+                    <TableCell key={characterIndex} sx={{ textAlign: 'center' }}>
+                      <FormGroup row className='justify-center'>
+                        {groupedRaids.map((raid: Raid) => {
+                          const mode = raid.path.includes('-hard') ? 'hard' : 'normal';
+                          return (
+                            <div key={raid.path} className='min-w-36 text-left'>
+                              <IconButton onClick={() => handleToggle(raid.path, mode)} size="small">
+                                <ExpandMoreIcon />
+                              </IconButton>
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={checkedStates[characterIndex]?.[raid.path + mode]?.every(Boolean) || false}
+                                    indeterminate={checkedStates[characterIndex]?.[raid.path + mode]?.some(Boolean) && !checkedStates[characterIndex]?.[raid.path + mode]?.every(Boolean)}
+                                    onChange={() => handleMainCheckboxChange(raid.path, mode, characterIndex)}
+                                  />
+                                }
+                                label={mode.charAt(0).toUpperCase() + mode.slice(1)}
+                                sx={{ textAlign: 'center' }} // Center the labels
+                              />
+                              <Collapse in={open[raid.path + mode]} timeout="auto" unmountOnExit>
+                                <div style={{ marginLeft: '40px' }}>
+                                  {raid.gateData.gold.map((_, gateIndex: number) => (
+                                    <FormControlLabel className='flex justify-center items-center'
+                                      key={`${raid.path}-gate-${gateIndex}`}
+                                      control={
+                                        <Checkbox
+                                          checked={checkedStates[characterIndex]?.[raid.path + mode]?.[gateIndex] || false}
+                                          onChange={() => handleGateCheckboxChange(raid.path, mode, characterIndex, gateIndex)}
+                                          className='flex justify-center items-center'
+                                        />
+                                      }
+                                      label={`Gate ${gateIndex + 1}`}
+                                      style={{ display: 'flex'}}
+                                    />
+                                  ))}
+                                </div>
+                              </Collapse>
+                            </div>
+                          );
+                        })}
+                      </FormGroup>
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
             <TableRow key={`total-gold-row`}>
               <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
                 Gold Per Character
