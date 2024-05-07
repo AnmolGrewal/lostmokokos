@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faDungeon } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faDungeon, faCoins } from '@fortawesome/free-solid-svg-icons';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 
@@ -11,7 +11,8 @@ interface NavigationBarProps {
 const NavigationBar = ({ currentPath }: NavigationBarProps) => {
   const navItems = [
     { path: "/", label: "Home", icon: faHome },
-    { path: "/raids", label: "Raids", icon: faDungeon }
+    { path: "/raids", label: "Raids", icon: faDungeon },
+    { path: "/gold-calculator", label: "Gold Calculator", icon: faCoins },
   ];
 
   const router = useRouter();
