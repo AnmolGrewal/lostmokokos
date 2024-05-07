@@ -45,7 +45,16 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   };
 
   useEffect(() => {
-    setCharacterNames(Array(characterCount).fill('Character'));
+    // Initialize character names array when character count changes
+    setCharacterNames(prevNames => {
+      const updatedNames = [...prevNames];
+      // If characterCount increased, add new characters with default names
+      for (let i = prevNames.length; i < characterCount; i++) {
+        updatedNames.push(`Character ${i + 1}`);
+      }
+      // If characterCount decreased, remove extra characters
+      return updatedNames.slice(0, characterCount);
+    });
   }, [characterCount]);
 
   useEffect(() => {
