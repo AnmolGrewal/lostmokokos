@@ -23,7 +23,6 @@ export default function RootLayout({
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>{metadata.title?.toString() ?? "Default Title"}</title>
         <meta name="description" content={metadata.description ?? ""} />
-        {/* Favicon for the browser tab, using local .ico file */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body className={`size-full ${inter.className} bg-primary-background-color`}>
