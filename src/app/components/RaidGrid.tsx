@@ -74,10 +74,11 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
         }
       }}>
         <Table aria-label="simple table">
+
           <TableHead>
             {raid.gateData.itemLevels.length === 1 ? (
               <TableRow>
-                <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
+                <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px', borderBottom: '2px solid var(--primary-text-label-color)' }}>
                   Item Level: {raid.gateData.itemLevels[0]}
                 </TableCell>
               </TableRow>
@@ -85,16 +86,17 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
             <TableRow>
               <TableCell sx={{ fontWeight: 'bold', fontSize: '24px', width: '10%' }}>Category</TableCell>
               {raid.gateData.gold.map((_, index) => (
-                <TableCell key={index} align="center" sx={{ fontWeight: 'bold', fontSize: '24px', width: `${90 / raid.gateData.gold.length}%` }}>Gate {index + 1}</TableCell>
+                <TableCell key={index} align="center" sx={{ fontWeight: 'bold', fontSize: '24px', width: `${90 / raid.gateData.gold.length}%`, borderBottom: '2px solid var(--primary-text-label-color)' }}>Gate {index + 1}</TableCell>
               ))}
-              <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '24px', width: '10%' }}>Total</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '24px', width: '10%', borderBottom: '2px solid var(--primary-text-label-color)' }}>Total</TableCell>
             </TableRow>
             {raid.gateData.itemLevels.length > 1 ? (
               <TableRow>
-                <TableCell sx={{ fontWeight: 'bold', fontSize: '24px' }}>Item Level</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', fontSize: '24px', borderBottom: '2px solid var(--primary-text-label-color)' }}>Item Level</TableCell>
                 {raid.gateData.itemLevels.map((level, index) => (
-                  <TableCell key={index} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>{level}</TableCell>
+                  <TableCell key={index} align="center" sx={{ fontWeight: 'bold', fontSize: '24px', borderBottom: '2px solid var(--primary-text-label-color)' }}>{level}</TableCell>
                 ))}
+                <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '24px', borderBottom: '2px solid var(--primary-text-label-color)' }}></TableCell>
               </TableRow>
             ) : null}
           </TableHead>
@@ -147,6 +149,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
               </TableCell>
             </TableRow>
           </TableBody>
+
         </Table>
       </TableContainer>
     </div>
