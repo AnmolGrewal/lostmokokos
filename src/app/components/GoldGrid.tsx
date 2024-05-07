@@ -139,22 +139,22 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
     const fullPath = raidPath + mode;
     const allChecked = checkedStates[columnIndex][fullPath]?.every(Boolean);
     setCheckedStates(prevStates => prevStates.map((state, index) => {
-      return index === columnIndex ? { ...state, [fullPath]: state[fullPath]?.map(() => !allChecked) || [] } : state;
+      if (index === columnIndex) {
+        let updatedState = { ...state };
+        updatedState[fullPath] = updatedState[fullPath].map(() => !allChecked);
+  
+        // Check for 'normal' mode and if 'hard' mode data exists in the current state
+        if (mode === 'normal' && state[raidPath + 'hard']) {
+          const raid = raids.find(r => r.path === raidPath);
+          const gateCount = raid?.gateData.gold.length || 0;
+          const gateStates = new Array(gateCount).fill(!allChecked);
+          updatedState[raidPath + 'hard'] = new Array(gateCount).fill(!allChecked);
+          updatedState[fullPath] = gateStates;
+        }
+        return updatedState;
+      }
+      return state;
     }));
-
-    // Update gate checkboxes when main checkbox is changed
-    if (mode === 'normal') {
-      const raid = raids.find(r => r.path === raidPath);
-      const gateCount = raid?.gateData.gold.length || 0;
-      const gateStates = new Array(gateCount).fill(!allChecked);
-      setCheckedStates(prevStates => prevStates.map((state, index) => {
-        return index === columnIndex ? {
-          ...state,
-          [raidPath + 'hard']: state[raidPath + 'hard']?.map(() => !allChecked) || [],
-          [raidPath + 'normal']: gateStates
-        } : state;
-      }));
-    }
   };
 
   const handleGateCheckboxChange = (raidPath: string, mode: 'normal' | 'hard', columnIndex: number, index: number) => {
