@@ -131,21 +131,22 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                               onChange={() => handleMainCheckboxChange(raid.path, mode)}
                             />
                           }
-                          label={mode.charAt(0).toUpperCase() + mode.slice(1)}
+                          label={mode.charAt(0).toUpperCase() + mode.slice(1)} className='w-24'
                         />
                         <Collapse in={open[raid.path + mode]} timeout="auto" unmountOnExit>
                           <div style={{ marginLeft: '40px' }}>
                             {raid.gateData.gold.map((_, gateIndex: number) => (
-                              <FormControlLabel
+                              <FormControlLabel className='flex justify-center items-center'
                                 key={`${raid.path}-gate-${gateIndex}`}
                                 control={
                                   <Checkbox
                                     checked={checkedStates[raid.path + mode]?.[gateIndex] || false}
                                     onChange={() => handleGateCheckboxChange(raid.path, mode, gateIndex)}
+                                    className='flex justify-center items-center'
                                   />
                                 }
                                 label={`Gate ${gateIndex + 1}`}
-                                style={{ display: 'block' }}
+                                style={{ display: 'flex'}}
                               />
                             ))}
                           </div>
