@@ -12,6 +12,8 @@ interface RaidGroup {
   [label: string]: Raid[];
 }
 
+// Existing imports...
+
 const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const [open, setOpen] = useState<{ [key: string]: boolean }>({});
   const [checkedStates, setCheckedStates] = useState<{ [key: string]: boolean[] }>({});
@@ -105,22 +107,12 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
             <TableRow key={index} className={index % 2 === 0 ? 'even-row' : ''}>
               <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px', position: 'relative' }}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  {groupedRaids.map((raid: Raid) => {
-                    const mode = raid.path.includes('-hard') ? 'hard' : 'normal';
-                    const fullPath = raid.path + mode;
-                    const isRendered = checkedStates[fullPath] !== undefined;
-                    if (isRendered) {
-                      return null; // Skip rendering if already rendered
-                    }
-                    return (
-                      <img
-                        key={raid.path}
-                        src={raid.imgSrc}
-                        alt={raid.label}
-                        style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px' }}
-                      />
-                    );
-                  })}
+                  <img
+                    key={groupedRaids[0].path}
+                    src={groupedRaids[0].imgSrc}
+                    alt={groupedRaids[0].label}
+                    style={{ width: '40px', height: '40px', marginRight: '10px' }}
+                  />
                   {label}
                 </div>
               </TableCell>
@@ -128,7 +120,6 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                 <FormGroup row>
                   {groupedRaids.map((raid: Raid) => {
                     const mode = raid.path.includes('-hard') ? 'hard' : 'normal';
-                    const fullPath = raid.path + mode;
                     return (
                       <React.Fragment key={raid.path}>
                         <IconButton onClick={() => handleToggle(raid.path, mode)} size="small">
@@ -137,21 +128,21 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                         <FormControlLabel
                           control={
                             <Checkbox
-                              checked={checkedStates[fullPath]?.every(Boolean) || false}
-                              indeterminate={checkedStates[fullPath]?.some(Boolean) && !checkedStates[fullPath]?.every(Boolean)}
+                              checked={checkedStates[raid.path + mode]?.every(Boolean) || false}
+                              indeterminate={checkedStates[raid.path + mode]?.some(Boolean) && !checkedStates[raid.path + mode]?.every(Boolean)}
                               onChange={() => handleMainCheckboxChange(raid.path, mode)}
                             />
                           }
                           label={mode.charAt(0).toUpperCase() + mode.slice(1)}
                         />
-                        <Collapse in={open[fullPath]} timeout="auto" unmountOnExit>
+                        <Collapse in={open[raid.path + mode]} timeout="auto" unmountOnExit>
                           <FormGroup>
                             {raid.gateData.gold.map((_, gateIndex: number) => (
                               <FormControlLabel
                                 key={`${raid.path}-gate-${gateIndex}`}
                                 control={
                                   <Checkbox
-                                    checked={checkedStates[fullPath]?.[gateIndex] || false}
+                                    checked={checkedStates[raid.path + mode]?.[gateIndex] || false}
                                     onChange={() => handleGateCheckboxChange(raid.path, mode, gateIndex)}
                                   />
                                 }
@@ -168,7 +159,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
             </TableRow>
           ))}
           <TableRow>
-            <TableCell colSpan={2} align="right" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
+            <TableCell colSpan={2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px', borderBottom: '2px solid var(--primary-text-label-color)' }}>
               Total Gold: {calculateTotalGold()}
             </TableCell>
           </TableRow>
