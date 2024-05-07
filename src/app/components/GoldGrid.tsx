@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Checkbox, FormGroup, FormControlLabel, Collapse, IconButton } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';  // For a toggle icon
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'; // For a toggle icon
 import { Raid } from '../../data/raidsInfo';
 
 interface GoldGridProps {
@@ -15,6 +15,20 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const [open, setOpen] = useState<{ [key: string]: boolean }>({});
   const [checkedStates, setCheckedStates] = useState<{ [key: string]: boolean[] }>({});
 
+  useEffect(() => {
+    raids.forEach(raid => {
+      ['normal', 'hard'].forEach(mode => {
+        const fullPath = raid.path + mode;
+        if (raid.path.includes(mode)) {
+          setCheckedStates(prev => ({
+            ...prev,
+            [fullPath]: new Array(raid.gateData.gold.length).fill(false) // Initialize with all unchecked
+          }));
+        }
+      });
+    });
+  }, [raids]);
+
   const handleToggle = (raidPath: string, mode: 'normal' | 'hard') => {
     const fullPath = raidPath + mode;
     setOpen(prev => ({ ...prev, [fullPath]: !prev[fullPath] }));
@@ -22,10 +36,23 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
 
   const handleMainCheckboxChange = (raidPath: string, mode: 'normal' | 'hard') => {
     const fullPath = raidPath + mode;
-    const currentStates = checkedStates[fullPath];
-    const allChecked = currentStates?.every(Boolean);
-    const newStates = currentStates?.map(() => !allChecked) || [];
-    setCheckedStates(prev => ({ ...prev, [fullPath]: newStates }));
+    const allChecked = checkedStates[fullPath]?.every(Boolean);
+    setCheckedStates(prev => ({
+      ...prev,
+      [fullPath]: prev[fullPath] ? prev[fullPath].map(() => !allChecked) : []
+    }));
+  
+    // Update gate checkboxes when main checkbox is changed
+    if (mode === 'normal') {
+      const raid = raids.find(r => r.path === raidPath);
+      const gateCount = raid?.gateData.gold.length || 0;
+      const gateStates = new Array(gateCount).fill(!allChecked);
+      setCheckedStates(prev => ({
+        ...prev,
+        [raidPath + 'hard']: prev[raidPath + 'hard'] ? prev[raidPath + 'hard'].map(() => !allChecked) : [],
+        [raidPath + 'normal']: gateStates
+      }));
+    }
   };
 
   const handleGateCheckboxChange = (raidPath: string, mode: 'normal' | 'hard', index: number) => {
@@ -35,6 +62,15 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
       currentStates[index] = !currentStates[index];
       return { ...prev, [fullPath]: currentStates };
     });
+  };
+
+  const calculateTotalGold = () => {
+    return Object.entries(checkedStates).reduce((totalSum, [key, checks]) => {
+      const raidPath = key.replace(/normal|hard/, '');
+      const raid = raids.find(r => r.path === raidPath);
+      const sum = raid ? raid.gateData.gold.reduce((sum, gold, index) => sum + (checks[index] ? gold : 0), 0) : 0;
+      return totalSum + sum;
+    }, 0);
   };
 
   const raidGroups: RaidGroup = raids.reduce((acc: RaidGroup, raid: Raid) => {
@@ -112,6 +148,11 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
               </TableCell>
             </TableRow>
           ))}
+          <TableRow>
+            <TableCell colSpan={2} align="right" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
+              Total Gold: {calculateTotalGold()}
+            </TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </TableContainer>
