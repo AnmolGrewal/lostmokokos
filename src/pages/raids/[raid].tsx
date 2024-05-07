@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import RaidGrid from '../../app/components/RaidGrid';
-import raidsInfo, { Raid } from '../../data/raidsInfo';  // Import the data and types
-import utilities from '@/utils/utilities';  // Import utility functions
+import raidsInfo, { Raid } from '../../data/raidsInfo';
+import utilities from '@/utils/utilities';
 
 const RaidPage: React.FC = () => {
   const router = useRouter();
   const { raid } = router.query;
+
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
     const defaultRaid = '/raids/thaemine';
@@ -21,6 +23,24 @@ const RaidPage: React.FC = () => {
     }
   }, [raid, router]);
 
+  useEffect(() => {
+    const handleRouteChangeStart = () => {
+      setScrollPosition(window.pageYOffset);
+    };
+
+    router.events.on('routeChangeStart', handleRouteChangeStart);
+    
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChangeStart);
+    };
+  }, [router]);
+
+  useEffect(() => {
+    if (router.isReady && raid) {
+      window.scrollTo(0, scrollPosition);
+    }
+  }, [router.isReady, raid, scrollPosition]);
+
   if (!router.isReady || !raid) {
     return <div>Loading...</div>;
   }
@@ -28,8 +48,6 @@ const RaidPage: React.FC = () => {
   const raidString = Array.isArray(raid) ? raid[0] : raid;
   const currentRaidData = raidsInfo.find((r: Raid) => r.path === `/raids/${raidString}`);
   const raidLabel = raidString ? utilities.capitalize(raidString) : "Raid";
-
-  // Check if the raid has a separate path ending with "-hard"
   const hasHardVersion = raidsInfo.some((r: Raid) => r.path === `/raids/${raidString}-hard`);
 
   return (
@@ -38,7 +56,6 @@ const RaidPage: React.FC = () => {
         <title>{raidLabel} - Raid Details</title>
         <meta name="description" content={`Learn more about the ${raidLabel} raid`} />
       </Head>
-      {/* Pass hasHardVersion to RaidGrid component */}
       {currentRaidData && <RaidGrid raid={currentRaidData} hasHardVersion={hasHardVersion} />}
     </div>
   );
