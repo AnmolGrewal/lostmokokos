@@ -168,10 +168,10 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
     <div>
       <h2 className="text-primary-text-color text-2xl mt-2 text-center">
         {'Gold Calculator'}
-        <IconButton onClick={handleAddCharacter} size="small" style={{ color: "var(--primary-text-color)" }}>
+        <IconButton onClick={handleAddCharacter} size="small" sx={{ color: "var(--primary-text-color)", bgcolor: "var(--image-background-color)", borderRadius: "50%", p: "5px", ml: "25px", mr: "5px", "&:hover": { bgcolor: "var(--primary-background-hover-color)" } }}>
           <AddIcon />
         </IconButton>
-        <IconButton onClick={handleRemoveCharacter} size="small" style={{ color: "var(--primary-text-color)" }}>
+        <IconButton onClick={handleRemoveCharacter} size="small" sx={{ color: "var(--primary-text-color)", bgcolor: "var(--image-background-color)", borderRadius: "50%", p: "5px", "&:hover": { bgcolor: "var(--primary-background-hover-color)" } }}>
           <RemoveIcon />
         </IconButton>
       </h2>
