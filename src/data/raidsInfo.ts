@@ -165,6 +165,15 @@ const raidsInfo: Raid[] = [
     }
   },
   {
+    path: "/raids/thaemine-hard",
+    label: "Thaemine",
+    imgSrc: "https://i.imgur.com/464OcZx.png",
+    gateData: {
+      gold: [5000, 6000, 9000, 21000],
+      boxCost: [2000, 2400, 2800, 3600]
+    }
+  },
+  {
     path: "/raids/ladon",
     label: "Ladon",
     imgSrc: "https://i.imgur.com/tju1uI1.png",
