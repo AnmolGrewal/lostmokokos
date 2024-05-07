@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Checkbox, FormGroup, FormControlLabel, Collapse, IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'; // For a toggle icon
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import { Raid } from '../../data/raidsInfo';
 
 interface GoldGridProps {
@@ -15,6 +17,7 @@ interface RaidGroup {
 const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const [open, setOpen] = useState<{ [key: string]: boolean }>({});
   const [checkedStates, setCheckedStates] = useState<{ [key: string]: boolean[] }>({});
+  const [characterCount, setCharacterCount] = useState<number>(1);
 
   useEffect(() => {
     raids.forEach(raid => {
@@ -42,7 +45,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
       ...prev,
       [fullPath]: prev[fullPath] ? prev[fullPath].map(() => !allChecked) : []
     }));
-  
+
     // Update gate checkboxes when main checkbox is changed
     if (mode === 'normal') {
       const raid = raids.find(r => r.path === raidPath);
@@ -81,97 +84,122 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
     return acc;
   }, {});
 
+  const handleAddCharacter = () => {
+    setCharacterCount(prevCount => prevCount + 1);
+  };
+
+  const handleRemoveCharacter = () => {
+    if (characterCount > 1) {
+      setCharacterCount(prevCount => prevCount - 1);
+    }
+  };
+
   return (
-    <TableContainer component={Paper} sx={{
-      width: 'calc(100% - 40px)', // Adjust the width to create distance from edges
-      backgroundColor: 'var(--chip-background-color)',
-      color: 'var(--primary-text-color)',
-      margin: '20px', // Add margin to create distance from edges
-      '.MuiTableCell-root': {
+    <div>
+      <h2 className="text-primary-text-color text-2xl mt-2 text-center">
+        {'Gold Calculator'}
+        <IconButton onClick={handleAddCharacter} size="small" style={{ color: "var(--primary-text-color)" }}>
+          <AddIcon />
+        </IconButton>
+        <IconButton onClick={handleRemoveCharacter} size="small" style={{ color: "var(--primary-text-color)" }}>
+          <RemoveIcon />
+        </IconButton>
+      </h2>
+      <TableContainer component={Paper} sx={{
+        width: 'calc(100% - 40px)', // Adjust the width to create distance from edges
+        backgroundColor: 'var(--chip-background-color)',
         color: 'var(--primary-text-color)',
-        borderBottom: '2px solid var(--primary-text-label-color)',
-        paddingLeft: 2,
-        paddingRight: 2
-      },
-      '.MuiSvgIcon-root': {
-        color: 'var(--primary-text-label-color)',
-      }
-    }}>
-      <Table aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell sx={{ fontWeight: 'bold', fontSize: '24px' }}>Raids</TableCell>
-            <TableCell sx={{ fontWeight: 'bold', fontSize: '24px', textAlign: 'center'}}>Character</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {Object.entries(raidGroups).map(([label, groupedRaids], index) => (
-            <TableRow key={index} className={index % 2 === 0 ? 'even-row' : ''}>
-              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px', position: 'relative', width: 'fit-content' }}>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <img
-                    key={groupedRaids[0].path}
-                    src={groupedRaids[0].imgSrc}
-                    alt={groupedRaids[0].label}
-                    style={{ width: '40px', height: '40px' }}
-                  />
-                  {label}
-                </div>
-              </TableCell>
-              <TableCell sx={{ textAlign: 'center' }}>
-                <FormGroup row className='justify-center'>
-                  {groupedRaids.map((raid: Raid) => {
-                    const mode = raid.path.includes('-hard') ? 'hard' : 'normal';
-                    return (
-                      <div key={raid.path} className='min-w-36 text-left'>
-                        <IconButton onClick={() => handleToggle(raid.path, mode)} size="small">
-                          <ExpandMoreIcon />
-                        </IconButton>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={checkedStates[raid.path + mode]?.every(Boolean) || false}
-                              indeterminate={checkedStates[raid.path + mode]?.some(Boolean) && !checkedStates[raid.path + mode]?.every(Boolean)}
-                              onChange={() => handleMainCheckboxChange(raid.path, mode)}
+        margin: '20px', // Add margin to create distance from edges
+        '.MuiTableCell-root': {
+          color: 'var(--primary-text-color)',
+          borderBottom: '2px solid var(--primary-text-label-color)',
+          paddingLeft: 2,
+          paddingRight: 2
+        },
+        '.MuiSvgIcon-root': {
+          color: 'var(--primary-text-label-color)',
+        }
+      }}>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ fontWeight: 'bold', fontSize: '24px' }}></TableCell>
+              {[...Array(characterCount)].map((_, index) => (
+                <TableCell key={index} sx={{ fontWeight: 'bold', fontSize: '24px', textAlign: 'center' }}>Character {index + 1}</TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {Object.entries(raidGroups).map(([label, groupedRaids], index) => (
+              <TableRow key={index} className={index % 2 === 0 ? 'even-row' : ''}>
+                <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px', position: 'relative', width: 'fit-content' }}>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <img
+                      key={groupedRaids[0].path}
+                      src={groupedRaids[0].imgSrc}
+                      alt={groupedRaids[0].label}
+                      style={{ width: '40px', height: '40px' }}
+                    />
+                    {label}
+                  </div>
+                </TableCell>
+                {[...Array(characterCount)].map((_, characterIndex) => (
+                  <TableCell key={characterIndex} sx={{ textAlign: 'center' }}>
+                    <FormGroup row className='justify-center'>
+                      {groupedRaids.map((raid: Raid) => {
+                        const mode = raid.path.includes('-hard') ? 'hard' : 'normal';
+                        return (
+                          <div key={raid.path} className='min-w-36 text-left'>
+                            <IconButton onClick={() => handleToggle(raid.path, mode)} size="small">
+                              <ExpandMoreIcon />
+                            </IconButton>
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  checked={checkedStates[raid.path + mode]?.every(Boolean) || false}
+                                  indeterminate={checkedStates[raid.path + mode]?.some(Boolean) && !checkedStates[raid.path + mode]?.every(Boolean)}
+                                  onChange={() => handleMainCheckboxChange(raid.path, mode)}
+                                />
+                              }
+                              label={mode.charAt(0).toUpperCase() + mode.slice(1)}
+                              sx={{ textAlign: 'center' }} // Center the labels
                             />
-                          }
-                          label={mode.charAt(0).toUpperCase() + mode.slice(1)}
-                          sx={{ textAlign: 'center' }} // Center the labels
-                        />
-                        <Collapse in={open[raid.path + mode]} timeout="auto" unmountOnExit>
-                          <div style={{ marginLeft: '40px' }}>
-                            {raid.gateData.gold.map((_, gateIndex: number) => (
-                              <FormControlLabel className='flex justify-center items-center'
-                                key={`${raid.path}-gate-${gateIndex}`}
-                                control={
-                                  <Checkbox
-                                    checked={checkedStates[raid.path + mode]?.[gateIndex] || false}
-                                    onChange={() => handleGateCheckboxChange(raid.path, mode, gateIndex)}
-                                    className='flex justify-center items-center'
+                            <Collapse in={open[raid.path + mode]} timeout="auto" unmountOnExit>
+                              <div style={{ marginLeft: '40px' }}>
+                                {raid.gateData.gold.map((_, gateIndex: number) => (
+                                  <FormControlLabel className='flex justify-center items-center'
+                                    key={`${raid.path}-gate-${gateIndex}`}
+                                    control={
+                                      <Checkbox
+                                        checked={checkedStates[raid.path + mode]?.[gateIndex] || false}
+                                        onChange={() => handleGateCheckboxChange(raid.path, mode, gateIndex)}
+                                        className='flex justify-center items-center'
+                                      />
+                                    }
+                                    label={`Gate ${gateIndex + 1}`}
+                                    style={{ display: 'flex'}}
                                   />
-                                }
-                                label={`Gate ${gateIndex + 1}`}
-                                style={{ display: 'flex'}}
-                              />
-                            ))}
+                                ))}
+                              </div>
+                            </Collapse>
                           </div>
-                        </Collapse>
-                      </div>
-                    );
-                  })}
-                </FormGroup>
+                        );
+                      })}
+                    </FormGroup>
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+            <TableRow>
+              <TableCell colSpan={1 + characterCount} align="center" sx={{ fontWeight: 'bold', fontSize: '24px', borderBottom: '2px solid var(--primary-text-label-color)' }}>
+                Total Gold: {calculateTotalGold()}
               </TableCell>
             </TableRow>
-          ))}
-          <TableRow>
-            <TableCell colSpan={2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px', borderBottom: '2px solid var(--primary-text-label-color)' }}>
-              Total Gold: {calculateTotalGold()}
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </TableContainer>
-  )
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+  );
 };
 
 export default GoldGrid;
