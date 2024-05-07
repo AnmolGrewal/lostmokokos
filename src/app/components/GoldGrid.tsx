@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Checkbox, FormGroup, FormControlLabel, Collapse } from '@mui/material';
 import { Raid } from '../../data/raidsInfo';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDungeon } from '@fortawesome/free-solid-svg-icons';
-import Rating from '@mui/material/Rating';
-import { styled } from '@mui/material/styles';
 
 interface GoldGridProps {
   raids: Raid[];
