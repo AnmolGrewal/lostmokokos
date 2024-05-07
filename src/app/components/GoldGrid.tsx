@@ -5,6 +5,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Raid } from '../../data/raidsInfo';
+import SettingsIcon from '@mui/icons-material/Settings';
+import Chip from '@mui/material/Chip';
 
 interface GoldGridProps {
   raids: Raid[];
@@ -37,6 +39,14 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
   const [editingCharacterIndex, setEditingCharacterIndex] = useState<number>(-1);
   const [tempName, setTempName] = useState<string>('');
+  const [settingsDialogOpen, setSettingsDialogOpen] = useState<boolean>(false);
+  const [raidVisibility, setRaidVisibility] = useState<{ [key: string]: boolean }>(
+    raids.reduce((acc, raid) => ({ ...acc, [raid.path]: true }), {})
+  );
+
+  const toggleRaidVisibility = (raidPath: string) => {
+    setRaidVisibility(prev => ({ ...prev, [raidPath]: !prev[raidPath] }));
+  };
 
   useEffect(() => {
     const savedCharacterCount = parseInt(localStorage.getItem('characterCount') || '0', 10);
@@ -145,6 +155,10 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
     return total.toLocaleString(); // Converts number to string with commas
   };
 
+  const handleToggleSettingsDialog = () => {
+    setSettingsDialogOpen(!settingsDialogOpen);
+  };
+
   return (
     <div>
       <h2 className="text-primary-text-color text-2xl mt-2 text-center">
@@ -152,8 +166,11 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
         <IconButton onClick={handleAddCharacter} size="small" sx={{ color: "var(--primary-text-color)", bgcolor: "var(--image-background-color)", borderRadius: "50%", p: "5px", ml: "25px", mr: "5px", "&:hover": { bgcolor: "var(--primary-background-hover-color)" } }}>
           <AddIcon />
         </IconButton>
-        <IconButton onClick={handleRemoveCharacter} size="small" sx={{ color: "var(--primary-text-color)", bgcolor: "var(--image-background-color)", borderRadius: "50%", p: "5px", "&:hover": { bgcolor: "var(--primary-background-hover-color)" } }}>
+        <IconButton onClick={handleRemoveCharacter} size="small" sx={{ color: "var(--primary-text-color)", bgcolor: "var(--image-background-color)", borderRadius: "50%", mr: "5px", p: "5px", "&:hover": { bgcolor: "var(--primary-background-hover-color)" } }}>
           <RemoveIcon />
+        </IconButton>
+        <IconButton onClick={handleToggleSettingsDialog} size="small" sx={{ color: "var(--primary-text-color)", bgcolor: "var(--image-background-color)", borderRadius: "50%", p: "5px", "&:hover": { bgcolor: "var(--primary-background-hover-color)" } }}>
+          <SettingsIcon />
         </IconButton>
       </h2>
       <Dialog open={editDialogOpen} onClose={handleCloseEditDialog} sx={{
@@ -182,6 +199,38 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
         <DialogActions>
           <Button onClick={handleCloseEditDialog} sx={{ color: 'inherit' }}>Cancel</Button>
           <Button onClick={handleSaveCharacterName} type="submit" sx={{ color: 'inherit' }}>Save</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={settingsDialogOpen} onClose={handleToggleSettingsDialog} sx={{
+        '& .MuiPaper-root': {
+          backgroundColor: 'var(--chip-background-color)',
+          color: 'var(--primary-text-color)',
+        }
+      }}>
+        <DialogTitle sx={{ color: 'var(--primary-text-label-color)' }}>Manage Raids</DialogTitle>
+        <DialogContent>
+          <div>
+            {raids.map((raid) => (
+              <Chip
+                key={raid.path}
+                label={raid.label}
+                onClick={() => toggleRaidVisibility(raid.path)}
+                color="primary"
+                sx={{
+                  bgcolor: raidVisibility[raid.path] ? '#794244' : undefined,
+                  color: '#fff',
+                  margin: '5px',
+                  '&:hover': {
+                    bgcolor: '#572C2C' // darker shade when hover
+                  }
+                }}
+                variant="outlined"
+              />
+            ))}
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleToggleSettingsDialog} sx={{ color: 'inherit' }}>Close</Button>
         </DialogActions>
       </Dialog>
       <TableContainer component={Paper} sx={{
@@ -227,64 +276,58 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
           </TableHead>
           <TableBody>
             {Object.entries(raidGroups).map(([label, groupedRaids], index) => (
-              <TableRow key={index} className={index % 2 === 0 ? 'even-row' : ''}>
-                <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px', position: 'relative', width: 'fit-content' }}>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <img
-                      key={groupedRaids[0].path}
-                      src={groupedRaids[0].imgSrc}
-                      alt={groupedRaids[0].label}
-                      style={{ width: '40px', height: '40px' }}
-                    />
-                    {label}
-                  </div>
-                </TableCell>
-                {[...Array(characterCount)].map((_, characterIndex) => (
-                  <TableCell key={characterIndex} sx={{ textAlign: 'center' }}>
-                    <FormGroup row className='justify-center'>
-                      {groupedRaids.map((raid: Raid) => {
-                        const mode = raid.path.includes('-hard') ? 'hard' : 'normal';
-                        return (
-                          <div key={raid.path} className='min-w-36 text-left'>
+              groupedRaids.filter(raid => raidVisibility[raid.path]).map((raid) => {
+                // Assuming the path somehow contains the mode directly
+                const mode = raid.path.includes('-hard') ? 'hard' : 'normal';
+                return (
+                  <TableRow key={raid.path} className={index % 2 === 0 ? 'even-row' : ''}>
+                    <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px', position: 'relative', width: 'fit-content' }}>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <img src={raid.imgSrc} alt={raid.label} style={{ width: '40px', height: '40px' }} />
+                        {raid.label}
+                      </div>
+                    </TableCell>
+                    {[...Array(characterCount)].map((_, characterIndex) => (
+                      <TableCell key={`${raid.path}-${characterIndex}`} sx={{ textAlign: 'center' }}>
+                        <FormGroup row className='justify-center'>
+                          <div className='min-w-36 text-left'>
                             <IconButton onClick={() => handleToggle(raid.path, mode)} size="small">
                               <ExpandMoreIcon />
                             </IconButton>
                             <FormControlLabel
                               control={
                                 <Checkbox
-                                  checked={checkedStates[characterIndex]?.[raid.path + mode]?.every(Boolean) || false}
-                                  indeterminate={checkedStates[characterIndex]?.[raid.path + mode]?.some(Boolean) && !checkedStates[characterIndex]?.[raid.path + mode]?.every(Boolean)}
+                                  checked={checkedStates[characterIndex]?.[raid.path]?.every(Boolean) || false}
+                                  indeterminate={checkedStates[characterIndex]?.[raid.path]?.some(Boolean) && !checkedStates[characterIndex]?.[raid.path]?.every(Boolean)}
                                   onChange={() => handleMainCheckboxChange(raid.path, mode, characterIndex)}
                                 />
                               }
                               label={mode.charAt(0).toUpperCase() + mode.slice(1)}
                               sx={{ textAlign: 'center' }} // Center the labels
                             />
-                            <Collapse in={open[raid.path + mode]} timeout="auto" unmountOnExit>
+                            <Collapse in={open[raid.path]} timeout="auto" unmountOnExit>
                               <div style={{ marginLeft: '40px' }}>
                                 {raid.gateData.gold.map((_, gateIndex: number) => (
-                                  <FormControlLabel className='flex justify-center items-center'
+                                  <FormControlLabel
                                     key={`${raid.path}-gate-${gateIndex}`}
                                     control={
                                       <Checkbox
-                                        checked={checkedStates[characterIndex]?.[raid.path + mode]?.[gateIndex] || false}
+                                        checked={checkedStates[characterIndex]?.[raid.path]?.[gateIndex] || false}
                                         onChange={() => handleGateCheckboxChange(raid.path, mode, characterIndex, gateIndex)}
-                                        className='flex justify-center items-center'
                                       />
                                     }
                                     label={`Gate ${gateIndex + 1}`}
-                                    style={{ display: 'flex'}}
                                   />
                                 ))}
                               </div>
                             </Collapse>
                           </div>
-                        );
-                      })}
-                    </FormGroup>
-                  </TableCell>
-                ))}
-              </TableRow>
+                        </FormGroup>
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                );
+              })
             ))}
             <TableRow key={`total-gold-row`}>
               <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
