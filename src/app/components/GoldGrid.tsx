@@ -91,6 +91,9 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
         borderBottom: '2px solid var(--primary-text-label-color)',
         paddingLeft: 2,
         paddingRight: 2
+      },
+      '.MuiSvgIcon-root': {
+        color: 'var(--primary-text-label-color)',
       }
     }}>
       <Table aria-label="simple table">
