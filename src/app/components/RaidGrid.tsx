@@ -4,8 +4,8 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { Raid } from '../../data/raidsInfo';
 import { faSkull } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import clsx from 'clsx'; // Import clsx for conditional class names
-import Link from 'next/link'; // Import Link from next.js for client-side routing
+import clsx from 'clsx';
+import Link from 'next/link';
 
 interface RaidGridProps {
   raid: Raid;
@@ -16,14 +16,13 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
   const [dimmed, setDimmed] = useState<boolean[][]>([]);
 
   useEffect(() => {
-    // Initialize the dimmed state based on the number of gates
     if (raid.gateData) {
       setDimmed(Array.from({ length: 2 }, (_, i) => Array(raid.gateData.gold.length).fill(i === 1)));
     }
-  }, [raid]); // Update dimmed state when raid prop changes
+  }, [raid]);
 
   if (!raid.gateData || !dimmed.length) {
-    return null; // Return null if raid.gateData or dimmed is undefined or empty
+    return null;
   }
 
   const totalGold = raid.gateData.gold.map((_, index) =>
@@ -76,14 +75,30 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
       }}>
         <Table aria-label="simple table">
           <TableHead>
+            {raid.gateData.itemLevels.length === 1 ? (
+              <TableRow>
+                <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
+                  Item Level: {raid.gateData.itemLevels[0]}
+                </TableCell>
+              </TableRow>
+            ) : null}
             <TableRow>
               <TableCell sx={{ fontWeight: 'bold', fontSize: '24px', width: '10%' }}>Category</TableCell>
               {raid.gateData.gold.map((_, index) => (
-                <TableCell key={index} align="center" sx={{ fontWeight: 'bold', fontSize: '24px', width: `${80 / (raid.gateData.gold.length + 1)}%` }}>Gate {index + 1}</TableCell>
+                <TableCell key={index} align="center" sx={{ fontWeight: 'bold', fontSize: '24px', width: `${90 / raid.gateData.gold.length}%` }}>Gate {index + 1}</TableCell>
               ))}
-              <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '24px', width: `${80 / (raid.gateData.gold.length + 1)}%` }}>Total</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '24px', width: '10%' }}>Total</TableCell>
             </TableRow>
+            {raid.gateData.itemLevels.length > 1 ? (
+              <TableRow>
+                <TableCell sx={{ fontWeight: 'bold', fontSize: '24px' }}>Item Level</TableCell>
+                {raid.gateData.itemLevels.map((level, index) => (
+                  <TableCell key={index} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>{level}</TableCell>
+                ))}
+              </TableRow>
+            ) : null}
           </TableHead>
+
           <TableBody>
             {rows.map((row, rowIndex) => (
               <TableRow key={rowIndex} className={rowIndex % 2 === 0 ? 'even-row' : ''}>
