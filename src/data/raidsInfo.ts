@@ -165,12 +165,21 @@ const raidsInfo: Raid[] = [
     }
   },
   {
-    path: "/raids/thaemine-hard",
-    label: "Thaemine",
-    imgSrc: "https://i.imgur.com/464OcZx.png",
+    path: "/raids/ladon",
+    label: "Ladon",
+    imgSrc: "https://i.imgur.com/tju1uI1.png",
     gateData: {
-      gold: [5000, 6000, 9000, 21000],
-      boxCost: [2000, 2400, 2800, 3600]
+      gold: [5000, 9500],
+      boxCost: [2200, 3400]
+    }
+  },
+  {
+    path: "/raids/ladon-hard",
+    label: "Ladon",
+    imgSrc: "https://i.imgur.com/tju1uI1.png",
+    gateData: {
+      gold: [6000, 12500],
+      boxCost: [2800, 4100]
     }
   },
 ];
