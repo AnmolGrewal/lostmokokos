@@ -14,36 +14,56 @@ interface RaidGroup {
   [label: string]: Raid[];
 }
 
+interface CharacterState {
+  [key: string]: boolean[];
+}
+
 const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const [open, setOpen] = useState<{ [key: string]: boolean }>({});
-  const [checkedStates, setCheckedStates] = useState<{ [key: string]: boolean[] }>({});
+  const [checkedStates, setCheckedStates] = useState<CharacterState[]>([]);
   const [characterCount, setCharacterCount] = useState<number>(1);
 
   useEffect(() => {
-    raids.forEach(raid => {
-      ['normal', 'hard'].forEach(mode => {
-        const fullPath = raid.path + mode;
-        if (raid.path.includes(mode)) {
-          setCheckedStates(prev => ({
-            ...prev,
-            [fullPath]: new Array(raid.gateData.gold.length).fill(false) // Initialize with all unchecked
-          }));
-        }
+    const initializeCheckedStates = () => {
+      setCheckedStates(prevStates => {
+        const initialCheckedStates = Array.from({ length: characterCount }, (_, index) => {
+          if (prevStates[index]) {
+            return { ...prevStates[index] };
+          } else {
+            return {};
+          }
+        });
+        
+        raids.forEach(raid => {
+          ['normal', 'hard'].forEach(mode => {
+            const fullPath = raid.path + mode;
+            if (raid.path.includes(mode)) {
+              initialCheckedStates.forEach((state) => {
+                if (!state[fullPath]) {
+                  state[fullPath] = new Array(raid.gateData.gold.length).fill(false);
+                }
+              });
+            }
+          });
+        });
+  
+        return initialCheckedStates;
       });
-    });
-  }, [raids]);
+    };
+  
+    initializeCheckedStates();
+  }, [raids, characterCount]);
 
   const handleToggle = (raidPath: string, mode: 'normal' | 'hard') => {
     const fullPath = raidPath + mode;
     setOpen(prev => ({ ...prev, [fullPath]: !prev[fullPath] }));
   };
 
-  const handleMainCheckboxChange = (raidPath: string, mode: 'normal' | 'hard') => {
+  const handleMainCheckboxChange = (raidPath: string, mode: 'normal' | 'hard', columnIndex: number) => {
     const fullPath = raidPath + mode;
-    const allChecked = checkedStates[fullPath]?.every(Boolean);
-    setCheckedStates(prev => ({
-      ...prev,
-      [fullPath]: prev[fullPath] ? prev[fullPath].map(() => !allChecked) : []
+    const allChecked = checkedStates[columnIndex][fullPath]?.every(Boolean);
+    setCheckedStates(prevStates => prevStates.map((state, index) => {
+      return index === columnIndex ? { ...state, [fullPath]: state[fullPath]?.map(() => !allChecked) || [] } : state;
     }));
 
     // Update gate checkboxes when main checkbox is changed
@@ -51,29 +71,36 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
       const raid = raids.find(r => r.path === raidPath);
       const gateCount = raid?.gateData.gold.length || 0;
       const gateStates = new Array(gateCount).fill(!allChecked);
-      setCheckedStates(prev => ({
-        ...prev,
-        [raidPath + 'hard']: prev[raidPath + 'hard'] ? prev[raidPath + 'hard'].map(() => !allChecked) : [],
-        [raidPath + 'normal']: gateStates
+      setCheckedStates(prevStates => prevStates.map((state, index) => {
+        return index === columnIndex ? {
+          ...state,
+          [raidPath + 'hard']: state[raidPath + 'hard']?.map(() => !allChecked) || [],
+          [raidPath + 'normal']: gateStates
+        } : state;
       }));
     }
   };
 
-  const handleGateCheckboxChange = (raidPath: string, mode: 'normal' | 'hard', index: number) => {
+  const handleGateCheckboxChange = (raidPath: string, mode: 'normal' | 'hard', columnIndex: number, index: number) => {
     const fullPath = raidPath + mode;
-    setCheckedStates(prev => {
-      const currentStates = prev[fullPath] || new Array(raids.find(raid => raid.path === raidPath)?.gateData.gold.length).fill(false);
-      currentStates[index] = !currentStates[index];
-      return { ...prev, [fullPath]: currentStates };
+    setCheckedStates(prevStates => {
+      const newState = [...prevStates];
+      newState[columnIndex] = {
+        ...newState[columnIndex],
+        [fullPath]: newState[columnIndex][fullPath]?.map((value, i) => i === index ? !value : value) || []
+      };
+      return newState;
     });
   };
 
   const calculateTotalGold = () => {
-    return Object.entries(checkedStates).reduce((totalSum, [key, checks]) => {
-      const raidPath = key.replace(/normal|hard/, '');
-      const raid = raids.find(r => r.path === raidPath);
-      const sum = raid ? raid.gateData.gold.reduce((sum, gold, index) => sum + (checks[index] ? gold : 0), 0) : 0;
-      return totalSum + sum;
+    return Object.entries(checkedStates).reduce((totalSum, characterState) => {
+      return totalSum + Object.entries(characterState[1]).reduce((characterSum, [key, checks]) => {
+        const raidPath = key.replace(/normal|hard/, '');
+        const raid = raids.find(r => r.path === raidPath);
+        const sum = raid ? raid.gateData.gold.reduce((sum, gold, index) => sum + (checks[index] ? gold : 0), 0) : 0;
+        return characterSum + sum;
+      }, 0);
     }, 0);
   };
 
@@ -156,9 +183,9 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                             <FormControlLabel
                               control={
                                 <Checkbox
-                                  checked={checkedStates[raid.path + mode]?.every(Boolean) || false}
-                                  indeterminate={checkedStates[raid.path + mode]?.some(Boolean) && !checkedStates[raid.path + mode]?.every(Boolean)}
-                                  onChange={() => handleMainCheckboxChange(raid.path, mode)}
+                                  checked={checkedStates[characterIndex]?.[raid.path + mode]?.every(Boolean) || false}
+                                  indeterminate={checkedStates[characterIndex]?.[raid.path + mode]?.some(Boolean) && !checkedStates[characterIndex]?.[raid.path + mode]?.every(Boolean)}
+                                  onChange={() => handleMainCheckboxChange(raid.path, mode, characterIndex)}
                                 />
                               }
                               label={mode.charAt(0).toUpperCase() + mode.slice(1)}
@@ -171,8 +198,8 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                                     key={`${raid.path}-gate-${gateIndex}`}
                                     control={
                                       <Checkbox
-                                        checked={checkedStates[raid.path + mode]?.[gateIndex] || false}
-                                        onChange={() => handleGateCheckboxChange(raid.path, mode, gateIndex)}
+                                        checked={checkedStates[characterIndex]?.[raid.path + mode]?.[gateIndex] || false}
+                                        onChange={() => handleGateCheckboxChange(raid.path, mode, characterIndex, gateIndex)}
                                         className='flex justify-center items-center'
                                       />
                                     }
