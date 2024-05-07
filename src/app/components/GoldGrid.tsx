@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Checkbox, FormGroup, FormControlLabel, Collapse, IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'; // For a toggle icon
@@ -102,8 +103,26 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
         <TableBody>
           {Object.entries(raidGroups).map(([label, groupedRaids], index) => (
             <TableRow key={index} className={index % 2 === 0 ? 'even-row' : ''}>
-              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
-                {label}
+              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px', position: 'relative' }}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  {groupedRaids.map((raid: Raid) => {
+                    const mode = raid.path.includes('-hard') ? 'hard' : 'normal';
+                    const fullPath = raid.path + mode;
+                    const isRendered = checkedStates[fullPath] !== undefined;
+                    if (isRendered) {
+                      return null; // Skip rendering if already rendered
+                    }
+                    return (
+                      <img
+                        key={raid.path}
+                        src={raid.imgSrc}
+                        alt={raid.label}
+                        style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px' }}
+                      />
+                    );
+                  })}
+                  {label}
+                </div>
               </TableCell>
               <TableCell>
                 <FormGroup row>
