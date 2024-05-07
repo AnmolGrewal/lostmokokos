@@ -6,7 +6,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Lost Ark Helping Hand",
+  title: "Lost Mokokos",
   description: "Website to help players with their journey in Lost Ark",
 };
 
