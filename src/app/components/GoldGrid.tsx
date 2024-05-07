@@ -83,9 +83,10 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
 
   return (
     <TableContainer component={Paper} sx={{
-      width: '100%',
+      width: 'calc(100% - 40px)', // Adjust the width to create distance from edges
       backgroundColor: 'var(--chip-background-color)',
       color: 'var(--primary-text-color)',
+      margin: '20px', // Add margin to create distance from edges
       '.MuiTableCell-root': {
         color: 'var(--primary-text-color)',
         borderBottom: '2px solid var(--primary-text-label-color)',
