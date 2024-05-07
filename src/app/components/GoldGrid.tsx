@@ -170,7 +170,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   };
 
   const calculateTotalGold = () => {
-    return Object.entries(checkedStates).reduce((totalSum, characterState) => {
+    const total = Object.entries(checkedStates).reduce((totalSum, characterState) => {
       return totalSum + Object.entries(characterState[1]).reduce((characterSum, [key, checks]) => {
         const raidPath = key.replace(/normal|hard/, '');
         const raid = raids.find(r => r.path === raidPath);
@@ -178,6 +178,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
         return characterSum + sum;
       }, 0);
     }, 0);
+    return total.toLocaleString(); // Converts number to string with commas
   };
 
   const raidGroups: RaidGroup = raids.reduce((acc: RaidGroup, raid: Raid) => {
@@ -188,12 +189,13 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   }, {});
 
   const calculateCharacterTotalGold = (characterIndex: number) => {
-    return Object.entries(checkedStates[characterIndex] || {}).reduce((characterSum, [key, checks]) => {
+    const total = Object.entries(checkedStates[characterIndex] || {}).reduce((characterSum, [key, checks]) => {
       const raidPath = key.replace(/normal|hard/, '');
       const raid = raids.find(r => r.path === raidPath);
       const sum = raid ? raid.gateData.gold.reduce((sum, gold, index) => sum + (checks[index] ? gold : 0), 0) : 0;
       return characterSum + sum;
     }, 0);
+    return total.toLocaleString(); // Converts number to string with commas
   };
 
   return (
