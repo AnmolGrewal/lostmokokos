@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Checkbox, FormGroup, FormControlLabel, Collapse, IconButton } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'; // For a toggle icon
+import React, { useState, useEffect } from 'react';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Checkbox, Collapse, FormControlLabel, FormGroup } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Raid } from '../../data/raidsInfo';
@@ -22,6 +22,31 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const [open, setOpen] = useState<{ [key: string]: boolean }>({});
   const [checkedStates, setCheckedStates] = useState<CharacterState[]>([]);
   const [characterCount, setCharacterCount] = useState<number>(1);
+  const [characterNames, setCharacterNames] = useState<string[]>(Array(characterCount).fill('Character'));
+  const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
+  const [editingCharacterIndex, setEditingCharacterIndex] = useState<number>(-1);
+  const [tempName, setTempName] = useState<string>('');
+
+  const handleOpenEditDialog = (index: number) => {
+    setEditingCharacterIndex(index);
+    setTempName(characterNames[index]);
+    setEditDialogOpen(true);
+  };
+
+  const handleCloseEditDialog = () => {
+    setEditDialogOpen(false);
+  };
+
+  const handleSaveCharacterName = () => {
+    const updatedNames = [...characterNames];
+    updatedNames[editingCharacterIndex] = tempName;
+    setCharacterNames(updatedNames);
+    handleCloseEditDialog();
+  };
+
+  useEffect(() => {
+    setCharacterNames(Array(characterCount).fill('Character'));
+  }, [characterCount]);
 
   useEffect(() => {
     const initializeCheckedStates = () => {
@@ -141,6 +166,34 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
           <RemoveIcon />
         </IconButton>
       </h2>
+      <Dialog open={editDialogOpen} onClose={handleCloseEditDialog} sx={{
+        '& .MuiPaper-root': {
+          backgroundColor: 'var(--chip-background-color)',
+          color: 'var(--primary-text-color)',
+        }
+      }}>
+        <DialogTitle sx={{ color: 'var(--primary-text-label-color)' }}>Set Character Name</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label=""
+            type="text"
+            fullWidth
+            variant="standard"
+            value={tempName}
+            onChange={(e) => setTempName(e.target.value)}
+            InputProps={{
+              sx: { color: 'inherit' }
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseEditDialog} sx={{ color: 'inherit' }}>Cancel</Button>
+          <Button onClick={handleSaveCharacterName} type="submit" sx={{ color: 'inherit' }}>Save</Button>
+        </DialogActions>
+      </Dialog>
       <TableContainer component={Paper} sx={{
         width: 'calc(100% - 40px)', // Adjust the width to create distance from edges
         backgroundColor: 'var(--chip-background-color)',
@@ -169,7 +222,16 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
             <TableRow>
               <TableCell sx={{ fontWeight: 'bold', fontSize: '24px' }}></TableCell>
               {[...Array(characterCount)].map((_, index) => (
-                <TableCell key={index} sx={{ fontWeight: 'bold', fontSize: '24px', textAlign: 'center' }}>Character {index + 1}</TableCell>
+                <TableCell key={index} sx={{ fontWeight: 'bold', fontSize: '24px', textAlign: 'center' }}>
+                  <Button onClick={() => handleOpenEditDialog(index)} sx={{
+                    color: 'inherit',
+                    fontFamily: 'Inter, sans-serif', // Ensure 'Inter' font is loaded in your project
+                    fontSize: '24px',
+                    textTransform: 'none'  // This prevents the text from being all caps
+                  }}>
+                    {characterNames[index]}
+                  </Button>
+                </TableCell>
               ))}
             </TableRow>
           </TableHead>
