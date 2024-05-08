@@ -6,6 +6,7 @@ import { faSkull } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import Link from 'next/link';
+import raidsInfo from '../../data/raidsInfo';
 
 interface RaidGridProps {
   raid: Raid;
@@ -14,12 +15,22 @@ interface RaidGridProps {
 
 const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
   const [dimmed, setDimmed] = useState<boolean[][]>([]);
+  const [hovering, setHovering] = useState<boolean>(false);
 
   useEffect(() => {
-    if (raid.gateData) {
-      setDimmed(Array.from({ length: 2 }, (_, i) => Array(raid.gateData.gold.length).fill(i === 1)));
-    }
+    setDimmed(Array.from({ length: 2 }, (_, i) => Array(raid.gateData?.gold.length).fill(i === 1)));
   }, [raid]);
+
+  const hardVersion = raidsInfo.find(r => r.path === `${raid.path}-hard`);
+
+  const displayValues = (rowIndex: number, columnIndex: number) => {
+    if (!hovering || !hardVersion) {
+      return raid.gateData?.[rowIndex === 0 ? 'gold' : 'boxCost'][columnIndex];
+    } else {
+      const diff = hardVersion.gateData?.[rowIndex === 0 ? 'gold' : 'boxCost'][columnIndex] - raid.gateData?.[rowIndex === 0 ? 'gold' : 'boxCost'][columnIndex];
+      return `${raid.gateData?.[rowIndex === 0 ? 'gold' : 'boxCost'][columnIndex]} (${diff >= 0 ? '+' : ''}${diff})`;
+    }
+  };
 
   if (!raid.gateData || !dimmed.length) {
     return null;
@@ -46,17 +57,23 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
     { category: 'Box Cost', values: raid.gateData.boxCost, total: totalBoxCost }
   ];
 
+  if (!raid.gateData || !dimmed.length) {
+    return null;
+  }
+
   return (
     <div className="flex flex-col items-center w-full sm:px-4">
       <div className="flex flex-col items-center w-full">
         <img src={raid.imgSrc} alt={`${raid.label} Raid`} className="rounded-full w-48 h-48" />
         <h2 className="text-primary-text-label-color text-2xl mt-2">
           {raid.label} Raid{' '}
-          {(hasHardVersion || raid.path.endsWith('-hard')) && ( // Check if hasHardVersion or raid path ends with '-hard'
+          {hasHardVersion && (
             <Link href={raid.path.endsWith('-hard') ? raid.path.replace('-hard', '') : `${raid.path}-hard`}>
               <FontAwesomeIcon
                 icon={faSkull}
                 className={clsx("text-red-500", "ml-2", { "opacity-25": !raid.path.endsWith('-hard') }, "skull-icon")}
+                onMouseEnter={() => setHovering(true)}
+                onMouseLeave={() => setHovering(false)}
               />
             </Link>
           )}
@@ -118,6 +135,8 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                         transition: 'opacity 0.3s ease'
                       }}
                       onClick={() => handleCellClick(rowIndex, columnIndex)}
+                      onMouseEnter={() => setHovering(true)}
+                      onMouseLeave={() => setHovering(false)}
                     >
                       <img
                         src="https://i.imgur.com/DI98qp1.png"
@@ -127,17 +146,15 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                           marginRight: '5px',
                           transition: 'width 0.3s ease'
                         }}
-                        onMouseEnter={(e) => { e.currentTarget.style.width = '30px'; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.width = '20px'; }}
                       />
-                      {value}
+                      {hovering ? displayValues(rowIndex, columnIndex) : value}
                     </div>
                   </TableCell>
                 ))}
                 <TableCell align="center" className={row.category === 'Box Cost' ? 'box-cost-cell' : ''} sx={{ borderBottom: '2px solid var(--primary-text-label-color)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" style={{ width: '20px', marginRight: '5px' }} />
-                    {row.total}
+                    {hovering ? displayValues(rowIndex, row.values.length) : row.total}
                   </div>
                 </TableCell>
               </TableRow>

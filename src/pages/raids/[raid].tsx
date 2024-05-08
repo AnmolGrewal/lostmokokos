@@ -29,7 +29,7 @@ const RaidPage: React.FC = () => {
     };
 
     router.events.on('routeChangeStart', handleRouteChangeStart);
-    
+
     return () => {
       router.events.off('routeChangeStart', handleRouteChangeStart);
     };
@@ -48,7 +48,9 @@ const RaidPage: React.FC = () => {
   const raidString = Array.isArray(raid) ? raid[0] : raid;
   const currentRaidData = raidsInfo.find((r: Raid) => r.path === `/raids/${raidString}`);
   const raidLabel = raidString ? utilities.capitalize(raidString) : "Raid";
-  const hasHardVersion = raidsInfo.some((r: Raid) => r.path === `/raids/${raidString}-hard`);
+
+  // Enhanced check for hard version
+  const hasHardVersion = raidsInfo.some((r: Raid) => r.path === `/raids/${raidString}-hard`) || raidString.endsWith('-hard');
 
   return (
     <div className='bg-primary-background-color'>
