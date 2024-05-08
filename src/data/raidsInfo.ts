@@ -193,8 +193,8 @@ const raidsInfo: Raid[] = [
     }
   },
   {
-    path: "/raids/ladon",
-    label: "Ladon",
+    path: "/raids/echidna",
+    label: "Echidna",
     imgSrc: "https://i.imgur.com/tju1uI1.png",
     gateData: {
       gold: [5000, 9500],
@@ -203,8 +203,8 @@ const raidsInfo: Raid[] = [
     }
   },
   {
-    path: "/raids/ladon-hard",
-    label: "Ladon",
+    path: "/raids/echidna-hard",
+    label: "Echidna",
     imgSrc: "https://i.imgur.com/tju1uI1.png",
     gateData: {
       gold: [6000, 12500],

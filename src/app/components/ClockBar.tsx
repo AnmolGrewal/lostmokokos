@@ -40,9 +40,9 @@ const ClockBar = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-3 h-7 items-center justify-center transition bg-primary-background-color">
-      {/* Ladon Release Date */}
+      {/* Echidna Release Date */}
       <div className="text-center text-sm md:text-base hidden md:block">
-        <span className='text-primary-text-label-color'>Ladon Release Date: <span className="font-semibold text-primary-text-label-color">{times.nextUpdate}</span></span>
+        <span className='text-primary-text-label-color'>Echidna Release Date: <span className="font-semibold text-primary-text-label-color">{times.nextUpdate}</span></span>
       </div>
 
       {/* Daily Reset */}
