@@ -99,8 +99,9 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
               <FontAwesomeIcon
                 icon={faSkull}
                 className={clsx("text-red-500", "ml-2", { "opacity-25": !raid.path.endsWith('-hard') }, "skull-icon")}
-                onMouseEnter={() => setHovering(true)}
+                onMouseEnter={() => setHovering(!raid.path.endsWith('-hard'))}
                 onMouseLeave={() => setHovering(false)}
+                onClick={() => setHovering(false)}
               />
             </Link>
           )}
