@@ -226,11 +226,11 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
             <ul className="text-sm">
               <li className="mt-1 flex items-center justify-center">
                 <AddIcon sx={{ mr: 1 }} />
-                <span>Add another Character column to the end</span>
+                <span>Add character column</span>
               </li>
               <li className="mt-1 flex items-center justify-center">
                 <RemoveIcon sx={{ mr: 1 }} />
-                <span>Remove the most recent Character column</span>
+                <span>Remove character column</span>
               </li>
               <li className="mt-1 flex items-center justify-center">
                 <SettingsIcon sx={{ mr: 1 }} />
@@ -240,7 +240,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleToggleSettingsDialog} sx={{ color: 'inherit' }}>Close</Button>
+          <Button onClick={handleToggleHelpDialog} sx={{ color: 'inherit' }}>Close</Button>
         </DialogActions>
       </Dialog>
 
