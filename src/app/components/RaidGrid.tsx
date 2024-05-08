@@ -93,21 +93,19 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
       <div className="flex flex-col items-center w-full">
         <img src={raid.imgSrc} alt={`${raid.label} Raid`} className="rounded-full w-48 h-48" />
         <h2 className="text-primary-text-label-color text-2xl mt-2 flex items-center">
-          <span>{raid.label} Raid&nbsp;</span>
-          <span className=''>
-            {raid.path.endsWith('-hard') ? ' Hard' : ' Normal'}{' '}
-            {hasHardVersion && (
-              <Link href={raid.path.endsWith('-hard') ? raid.path.replace('-hard', '') : `${raid.path}-hard`}>
-                <FontAwesomeIcon
-                  icon={faSkull}
-                  className={clsx("text-red-500", "ml-2", { "opacity-25": !raid.path.endsWith('-hard') }, "skull-icon")}
-                  onMouseEnter={() => setHovering(!raid.path.endsWith('-hard'))}
-                  onMouseLeave={() => setHovering(false)}
-                  onClick={() => setHovering(false)}
-                />
-              </Link>
-            )}
-          </span>
+          {raid.label} Raid
+          {raid.path.endsWith('-hard') ? ' Hard' : ' Normal'}{' '}
+          {hasHardVersion && (
+            <Link href={raid.path.endsWith('-hard') ? raid.path.replace('-hard', '') : `${raid.path}-hard`}>
+              <FontAwesomeIcon
+                icon={faSkull}
+                className={clsx("text-red-500", "ml-2", { "opacity-25": !raid.path.endsWith('-hard') }, "skull-icon")}
+                onMouseEnter={() => setHovering(!raid.path.endsWith('-hard'))}
+                onMouseLeave={() => setHovering(false)}
+                onClick={() => setHovering(false)}
+              />
+            </Link>
+          )}
         </h2>
       </div>
       <TableContainer component={Paper} sx={{
