@@ -75,3 +75,15 @@ html, body {
   transform: scale(1.3); /* Example hover effect: increase size */
   transition: transform 0.3s ease; /* Smooth transition */
 }
+
+html {
+  background-color: var(--primary-background-color); /* Default background color */
+}
+
+body {
+  background-color: var(--primary-background-color); /* Main background color */
+}
+
+.flex.flex-col.min-h-screen.bg-primary-background-color {
+  background-color: inherit; /* Ensure this uses the body's background color */
+}
