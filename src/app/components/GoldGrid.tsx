@@ -7,6 +7,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { Raid } from '../../data/raidsInfo';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Chip from '@mui/material/Chip';
+import { clsx } from 'clsx';
 
 interface GoldGridProps {
   raids: Raid[];
@@ -236,21 +237,25 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
           color: 'var(--primary-text-color)',
         }
       }}>
-        <DialogTitle sx={{ color: 'var(--primary-text-label-color)' }}>Manage Raids</DialogTitle>
+        <DialogTitle sx={{ color: 'var(--primary-text-label-color)', textAlign: 'center' }}>Manage Raids</DialogTitle>
         <DialogContent>
-          <div>
+          <div className="grid grid-cols-3 gap-4">
             {Object.keys(raidGroups).map((label, index) => (
               <Chip
                 key={index}
                 label={label}
-                onClick={() => toggleRaidVisibility(index)}  // Ensure this uses the right index
+                onClick={() => toggleRaidVisibility(index)}
                 color="primary"
+                className={clsx(
+                  "flex items-center px-3 py-1 rounded-full transition-all duration-300 ease-in-out",
+                  raidVisibility[index] ? 'bg-primary-background-selection-color active-raid' : 'bg-chip-background-color',
+                  !raidVisibility[index] && "hover:bg-primary-background-hover-color hover:scale-105 cursor-pointer"
+                )}
                 sx={{
-                  bgcolor: raidVisibility[index] ? '#794244' : undefined,
                   color: '#fff',
                   margin: '5px',
                   '&:hover': {
-                    bgcolor: '#572C2C'
+                    bgcolor: '#572C2C' // Ensure hover effects are still applicable
                   }
                 }}
                 variant="outlined"

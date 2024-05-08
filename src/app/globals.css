@@ -87,3 +87,7 @@ body {
 .flex.flex-col.min-h-screen.bg-primary-background-color {
   background-color: inherit; /* Ensure this uses the body's background color */
 }
+
+.active-raid {
+  border: 2px solid var(--image-calendar-color);
+}
