@@ -14,7 +14,7 @@ interface RaidGridProps {
 }
 
 const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
-  const [dimmed, setDimmed] = useState<boolean[][]>([]);
+  const [dimmed, setDimmed] = useState<boolean[][] | null>(null);
   const [hovering, setHovering] = useState<boolean>(false);
 
   useEffect(() => {
@@ -24,7 +24,11 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
         Array(raid.gateData.boxCost.length).fill(true)
       ]);
     }
-  }, [raid.gateData]);
+  }, [raid.gateData, raid.gateData.gold.length, raid.gateData.boxCost.length]);
+
+  if (!dimmed || !raid.gateData) {
+    return null;
+  }
 
   const hardVersion = raidsInfo.find(r => r.path === `${raid.path}-hard`);
 
@@ -59,24 +63,28 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
   };
 
   const calculateTotal = (values: number[], rowIndex: number): number => {
-    if (!dimmed[rowIndex] || dimmed[rowIndex].length !== values.length) {
-      console.error('Mismatch or uninitialized state for dimmed values');
+    if (!dimmed || rowIndex >= dimmed.length || values.length !== dimmed[rowIndex].length) {
       return 0;
     }
   
-    // Safe calculation when hard version has different number of gates
-    return values.reduce((acc: number, curr: number, index: number) => acc + (dimmed[rowIndex][index] ? 0 : curr), 0);
+    return values.reduce((acc, curr, index) => acc + (dimmed[rowIndex][index] ? 0 : curr), 0);
   };
   
   // Update total calculation calls by passing the row index
-  const totalGold = calculateTotal(raid.gateData.gold, 0);
-  const totalBoxCost = calculateTotal(raid.gateData.boxCost, 1);
+  const totalGold = raid.gateData ? calculateTotal(raid.gateData.gold, 0) : 0;
+  const totalBoxCost = raid.gateData ? calculateTotal(raid.gateData.boxCost, 1) : 0;
   const goldEarned = totalGold - totalBoxCost;
 
-  const handleCellClick = (rowIndex: number, columnIndex: number): void => {
-    const updatedDimmed = [...dimmed];
-    updatedDimmed[rowIndex][columnIndex] = !updatedDimmed[rowIndex][columnIndex];
-    setDimmed(updatedDimmed);
+  const handleCellClick = (rowIndex, columnIndex) => {
+    setDimmed(currentDimmed => {
+      const updatedRow = [...currentDimmed[rowIndex]];
+      updatedRow[columnIndex] = !updatedRow[columnIndex];
+      return [
+        ...currentDimmed.slice(0, rowIndex),
+        updatedRow,
+        ...currentDimmed.slice(rowIndex + 1)
+      ];
+    });
   };
 
   const rows = [

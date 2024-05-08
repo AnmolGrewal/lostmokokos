@@ -58,7 +58,9 @@ const RaidPage: React.FC = () => {
         <title>{raidLabel} - Raid Details</title>
         <meta name="description" content={`Learn more about the ${raidLabel} raid`} />
       </Head>
-      {currentRaidData && <RaidGrid raid={currentRaidData} hasHardVersion={hasHardVersion} />}
+      {currentRaidData && (
+        <RaidGrid key={currentRaidData.path} raid={currentRaidData} hasHardVersion={hasHardVersion} />
+      )}
     </div>
   );
 };
