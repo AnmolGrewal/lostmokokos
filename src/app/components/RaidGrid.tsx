@@ -18,35 +18,58 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
   const [hovering, setHovering] = useState<boolean>(false);
 
   useEffect(() => {
-    setDimmed(Array.from({ length: 2 }, (_, i) => Array(raid.gateData?.gold.length).fill(i === 1)));
-  }, [raid]);
+    if (raid.gateData && raid.gateData.gold && raid.gateData.boxCost) {
+      setDimmed([
+        Array(raid.gateData.gold.length).fill(false),
+        Array(raid.gateData.boxCost.length).fill(true)
+      ]);
+    }
+  }, [raid.gateData]);
 
   const hardVersion = raidsInfo.find(r => r.path === `${raid.path}-hard`);
 
-  const displayValues = (rowIndex: number, columnIndex: number) => {
-    if (!hovering || !hardVersion) {
-      return raid.gateData?.[rowIndex === 0 ? 'gold' : 'boxCost'][columnIndex];
+  const displayValues = (rowIndex: number, columnIndex: number): string => {
+    const category = rowIndex === 0 ? 'gold' : 'boxCost';
+    const currentValues = raid.gateData[category].map(Number);
+    const hardValues = hardVersion ? hardVersion.gateData[category].map(Number) : [];
+  
+    if (!hovering || !hardVersion || columnIndex >= currentValues.length) {
+      return currentValues[columnIndex].toString();
     } else {
-      const diff = hardVersion.gateData?.[rowIndex === 0 ? 'gold' : 'boxCost'][columnIndex] - raid.gateData?.[rowIndex === 0 ? 'gold' : 'boxCost'][columnIndex];
-      return `${raid.gateData?.[rowIndex === 0 ? 'gold' : 'boxCost'][columnIndex]} (${diff >= 0 ? '+' : ''}${diff})`;
+      const diff = hardValues[columnIndex] - currentValues[columnIndex];
+      return `${currentValues[columnIndex]} (${diff >= 0 ? '+' : ''}${diff})`;
     }
   };
 
-  if (!raid.gateData || !dimmed.length) {
-    return null;
-  }
+  const displayTotalValues = (rowIndex: number): string => {
+    const values = raid.gateData?.[rowIndex === 0 ? 'gold' : 'boxCost'].map(Number) || [];
+    const hardValues = hardVersion?.gateData?.[rowIndex === 0 ? 'gold' : 'boxCost'].map(Number) || [];
+  
+    if (!hovering || !hardVersion) {
+      return calculateTotal(values, rowIndex).toString();
+    } else {
+      const totalHard = calculateTotal(hardValues, rowIndex);
+      const totalCurrent = calculateTotal(values, rowIndex);
+      const diff = totalHard - totalCurrent;
+      return `${totalCurrent} (${diff >= 0 ? '+' : ''}${diff})`;
+    }
+  };
 
-  const totalGold = raid.gateData.gold.map((_, index) =>
-    dimmed[0][index] ? 0 : raid.gateData.gold[index]
-  ).reduce((acc, curr) => acc + curr, 0);
-
-  const totalBoxCost = raid.gateData.boxCost.map((_, index) =>
-    dimmed[1][index] ? 0 : raid.gateData.boxCost[index]
-  ).reduce((acc, curr) => acc + curr, 0);
-
+  const calculateTotal = (values: number[], rowIndex: number): number => {
+    if (!dimmed[rowIndex] || dimmed[rowIndex].length !== values.length) {
+      console.error('Mismatch or uninitialized state for dimmed values');
+      return 0;
+    }
+    
+    return values.reduce((acc: number, curr: number, index: number) => acc + (dimmed[rowIndex][index] ? 0 : curr), 0);
+  };
+  
+  // Update total calculation calls by passing the row index
+  const totalGold = calculateTotal(raid.gateData.gold, 0);
+  const totalBoxCost = calculateTotal(raid.gateData.boxCost, 1);
   const goldEarned = totalGold - totalBoxCost;
 
-  const handleCellClick = (rowIndex: number, columnIndex: number) => {
+  const handleCellClick = (rowIndex: number, columnIndex: number): void => {
     const updatedDimmed = [...dimmed];
     updatedDimmed[rowIndex][columnIndex] = !updatedDimmed[rowIndex][columnIndex];
     setDimmed(updatedDimmed);
@@ -135,8 +158,6 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                         transition: 'opacity 0.3s ease'
                       }}
                       onClick={() => handleCellClick(rowIndex, columnIndex)}
-                      onMouseEnter={() => setHovering(true)}
-                      onMouseLeave={() => setHovering(false)}
                     >
                       <img
                         src="https://i.imgur.com/DI98qp1.png"
@@ -154,7 +175,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                 <TableCell align="center" className={row.category === 'Box Cost' ? 'box-cost-cell' : ''} sx={{ borderBottom: '2px solid var(--primary-text-label-color)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" style={{ width: '20px', marginRight: '5px' }} />
-                    {hovering ? displayValues(rowIndex, row.values.length) : row.total}
+                    {hovering ? displayTotalValues(rowIndex) : row.total}
                   </div>
                 </TableCell>
               </TableRow>
