@@ -1,12 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Raid } from '../../data/raidsInfo';
 import { faSkull } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import Link from 'next/link';
-
-import { Raid } from '../../data/raidsInfo'; // Make sure the path is correct
 
 interface RaidGridProps {
   raid: Raid;
@@ -15,8 +14,6 @@ interface RaidGridProps {
 
 const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
   const [dimmed, setDimmed] = useState<boolean[][]>([]);
-  const [showDiff, setShowDiff] = useState(false);
-  const [differences, setDifferences] = useState<number[]>([]);
 
   useEffect(() => {
     if (raid.gateData) {
@@ -44,16 +41,6 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
     setDimmed(updatedDimmed);
   };
 
-  const handleMouseEnter = () => {
-    const diffs = raid.gateData.gold.map((gold, index) => gold - raid.gateData.boxCost[index]);
-    setDifferences(diffs);
-    setShowDiff(true);
-  };
-
-  const handleMouseLeave = () => {
-    setShowDiff(false);
-  };
-
   const rows = [
     { category: 'Gold', values: raid.gateData.gold, total: totalGold },
     { category: 'Box Cost', values: raid.gateData.boxCost, total: totalBoxCost }
@@ -65,14 +52,12 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
         <img src={raid.imgSrc} alt={`${raid.label} Raid`} className="rounded-full w-48 h-48" />
         <h2 className="text-primary-text-label-color text-2xl mt-2">
           {raid.label} Raid{' '}
-          {(hasHardVersion || raid.path.endsWith('-hard')) && (
+          {(hasHardVersion || raid.path.endsWith('-hard')) && ( // Check if hasHardVersion or raid path ends with '-hard'
             <Link href={raid.path.endsWith('-hard') ? raid.path.replace('-hard', '') : `${raid.path}-hard`}>
-              <a onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                <FontAwesomeIcon
-                  icon={faSkull}
-                  className={clsx("text-red-500 ml-2", { "opacity-25": !raid.path.endsWith('-hard') })}
-                />
-              </a>
+              <FontAwesomeIcon
+                icon={faSkull}
+                className={clsx("text-red-500", "ml-2", { "opacity-25": !raid.path.endsWith('-hard') }, "skull-icon")}
+              />
             </Link>
           )}
         </h2>
@@ -89,6 +74,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
         }
       }}>
         <Table aria-label="simple table">
+
           <TableHead>
             {raid.gateData.itemLevels.length === 1 ? (
               <TableRow>
@@ -114,6 +100,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
               </TableRow>
             ) : null}
           </TableHead>
+
           <TableBody>
             {rows.map((row, rowIndex) => (
               <TableRow key={rowIndex} className={rowIndex % 2 === 0 ? 'even-row' : ''}>
@@ -143,14 +130,14 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                         onMouseEnter={(e) => { e.currentTarget.style.width = '30px'; }}
                         onMouseLeave={(e) => { e.currentTarget.style.width = '20px'; }}
                       />
-                      {showDiff ? differences[columnIndex] : value}
+                      {value}
                     </div>
                   </TableCell>
                 ))}
                 <TableCell align="center" className={row.category === 'Box Cost' ? 'box-cost-cell' : ''} sx={{ borderBottom: '2px solid var(--primary-text-label-color)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" style={{ width: '20px', marginRight: '5px' }} />
-                    {showDiff ? differences.reduce((a, b) => a + b, 0) : row.total}
+                    {row.total}
                   </div>
                 </TableCell>
               </TableRow>
@@ -158,10 +145,11 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
             {/* Gold Earnable row */}
             <TableRow className={rows.length % 2 === 0 ? 'even-row' : ''}>
               <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
-                Gold Earnable: {showDiff ? differences.reduce((a, b) => a + b, 0) - totalBoxCost : goldEarned}
+                Gold Earnable: {goldEarned}
               </TableCell>
             </TableRow>
           </TableBody>
+
         </Table>
       </TableContainer>
     </div>
