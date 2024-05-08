@@ -222,19 +222,19 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
         <DialogTitle sx={{ color: 'var(--primary-text-label-color)', textAlign: 'center' }}>Help</DialogTitle>
         <DialogContent>
           <div className="mt-3">
-            <p className="text-sm text-center">Click on each icon to perform the corresponding action:</p>
-            <ul className="text-sm">
-              <li className="mt-1 flex items-center justify-center">
+            <p className="text-sm text-center mb-10">Click on each icon to perform the corresponding action:</p>
+            <ul className="text-sm justify-center items-center">
+              <li className="mt-1 flex">
                 <AddIcon sx={{ mr: 1 }} />
-                <span>Add character column</span>
+                <span className='mt-0.5'>Add character column</span>
               </li>
-              <li className="mt-1 flex items-center justify-center">
+              <li className="mt-1 flex">
                 <RemoveIcon sx={{ mr: 1 }} />
-                <span>Remove character column</span>
+                <span className='mt-0.5'>Remove character column</span>
               </li>
-              <li className="mt-1 flex items-center justify-center">
+              <li className="mt-1 flex">
                 <SettingsIcon sx={{ mr: 1 }} />
-                <span>Select raids to show or remove from the grid</span>
+                <span className='mt-0.5'>Select raids to show or remove from the grid</span>
               </li>
             </ul>
           </div>
