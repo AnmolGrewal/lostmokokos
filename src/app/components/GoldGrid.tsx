@@ -9,6 +9,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import Chip from '@mui/material/Chip';
 import { clsx } from 'clsx';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import TitleIcon from '@mui/icons-material/Title';
 
 interface GoldGridProps {
   raids: Raid[];
@@ -224,17 +225,21 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
           <div className="mt-3">
             <p className="text-sm text-center mb-10">Click on each icon to perform the corresponding action:</p>
             <ul className="text-sm justify-center items-center">
-              <li className="mt-1 flex">
+              <li className="mt-4 flex">
                 <AddIcon sx={{ mr: 1 }} />
                 <span className='mt-0.5'>Add character column</span>
               </li>
-              <li className="mt-1 flex">
+              <li className="mt-4 flex">
                 <RemoveIcon sx={{ mr: 1 }} />
                 <span className='mt-0.5'>Remove character column</span>
               </li>
-              <li className="mt-1 flex">
+              <li className="mt-4 flex">
                 <SettingsIcon sx={{ mr: 1 }} />
                 <span className='mt-0.5'>Select raids to show or remove from the grid</span>
+              </li>
+              <li className="mt-4 flex">
+                <TitleIcon sx={{ mr: 1 }} />
+                <span className='mt-0.5'>Select character column title to change character name</span>
               </li>
             </ul>
           </div>
