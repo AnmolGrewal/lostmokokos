@@ -8,6 +8,7 @@ import { Raid } from '../../data/raidsInfo';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Chip from '@mui/material/Chip';
 import { clsx } from 'clsx';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 interface GoldGridProps {
   raids: Raid[];
@@ -188,6 +189,12 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
     setSettingsDialogOpen(!settingsDialogOpen);
   };
 
+  const [helpDialogOpen, setHelpDialogOpen] = useState<boolean>(false);
+
+  const handleToggleHelpDialog = () => {
+    setHelpDialogOpen(!helpDialogOpen);
+  };
+
   return (
     <div>
       <h2 className="text-primary-text-color text-2xl mt-2 text-center">
@@ -198,10 +205,46 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
         <IconButton onClick={handleRemoveCharacter} size="small" sx={{ color: "var(--primary-text-color)", bgcolor: "var(--image-background-color)", borderRadius: "50%", mr: "5px", p: "5px", "&:hover": { bgcolor: "var(--primary-background-hover-color)" } }}>
           <RemoveIcon />
         </IconButton>
-        <IconButton onClick={handleToggleSettingsDialog} size="small" sx={{ color: "var(--primary-text-color)", bgcolor: "var(--image-background-color)", borderRadius: "50%", p: "5px", "&:hover": { bgcolor: "var(--primary-background-hover-color)" } }}>
+        <IconButton onClick={handleToggleSettingsDialog} size="small" sx={{ color: "var(--primary-text-color)", bgcolor: "var(--image-background-color)", borderRadius: "50%", mr: "5px", p: "5px", "&:hover": { bgcolor: "var(--primary-background-hover-color)" } }}>
           <SettingsIcon />
         </IconButton>
+        <IconButton onClick={handleToggleHelpDialog} size="small" sx={{ color: "var(--primary-text-color)", bgcolor: "var(--image-background-color)", borderRadius: "50%", p: "5px", "&:hover": { bgcolor: "var(--primary-background-hover-color)" } }}>
+          <HelpOutlineIcon />
+        </IconButton>
       </h2>
+
+      <Dialog open={helpDialogOpen} onClose={handleToggleHelpDialog} sx={{
+        '& .MuiPaper-root': {
+          backgroundColor: 'var(--chip-background-color)',
+          color: 'var(--primary-text-color)',
+        }
+      }}>
+        <DialogTitle sx={{ color: 'var(--primary-text-label-color)', textAlign: 'center' }}>Help</DialogTitle>
+        <DialogContent>
+          <div className="mt-3">
+            <p className="text-sm text-center">Click on each icon to perform the corresponding action:</p>
+            <ul className="text-sm">
+              <li className="mt-1 flex items-center justify-center">
+                <AddIcon sx={{ mr: 1 }} />
+                <span>Add another Character column to the end</span>
+              </li>
+              <li className="mt-1 flex items-center justify-center">
+                <RemoveIcon sx={{ mr: 1 }} />
+                <span>Remove the most recent Character column</span>
+              </li>
+              <li className="mt-1 flex items-center justify-center">
+                <SettingsIcon sx={{ mr: 1 }} />
+                <span>Select raids to show or remove from the grid</span>
+              </li>
+            </ul>
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleToggleSettingsDialog} sx={{ color: 'inherit' }}>Close</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Others */}
       <Dialog open={editDialogOpen} onClose={handleCloseEditDialog} sx={{
         '& .MuiPaper-root': {
           backgroundColor: 'var(--chip-background-color)',
