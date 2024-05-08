@@ -31,12 +31,12 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
   const displayValues = (rowIndex: number, columnIndex: number): string => {
     const category = rowIndex === 0 ? 'gold' : 'boxCost';
     const currentValues = raid.gateData[category].map(Number);
-    const hardValues = hardVersion ? hardVersion.gateData[category].map(Number) : [];
+    const hardValues = hardVersion && hardVersion.gateData[category] ? hardVersion.gateData[category].map(Number) : [];
   
     if (!hovering || !hardVersion || columnIndex >= currentValues.length) {
       return currentValues[columnIndex].toString();
     } else {
-      const diff = hardValues[columnIndex] - currentValues[columnIndex];
+      const diff = (hardValues[columnIndex] || 0) - currentValues[columnIndex];
       return `${currentValues[columnIndex]} (${diff >= 0 ? '+' : ''}${diff})`;
     }
   };
@@ -45,11 +45,14 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
     const values = raid.gateData?.[rowIndex === 0 ? 'gold' : 'boxCost'].map(Number) || [];
     const hardValues = hardVersion?.gateData?.[rowIndex === 0 ? 'gold' : 'boxCost'].map(Number) || [];
   
+    // Use the lesser of the two lengths for safe operation
+    const minGateCount = Math.min(values.length, hardValues.length);
+  
     if (!hovering || !hardVersion) {
-      return calculateTotal(values, rowIndex).toString();
+      return calculateTotal(values.slice(0, minGateCount), rowIndex).toString();
     } else {
-      const totalHard = calculateTotal(hardValues, rowIndex);
-      const totalCurrent = calculateTotal(values, rowIndex);
+      const totalHard = calculateTotal(hardValues.slice(0, minGateCount), rowIndex);
+      const totalCurrent = calculateTotal(values.slice(0, minGateCount), rowIndex);
       const diff = totalHard - totalCurrent;
       return `${totalCurrent} (${diff >= 0 ? '+' : ''}${diff})`;
     }
@@ -60,7 +63,8 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
       console.error('Mismatch or uninitialized state for dimmed values');
       return 0;
     }
-    
+  
+    // Safe calculation when hard version has different number of gates
     return values.reduce((acc: number, curr: number, index: number) => acc + (dimmed[rowIndex][index] ? 0 : curr), 0);
   };
   
