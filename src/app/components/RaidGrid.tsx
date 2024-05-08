@@ -75,10 +75,15 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
   const totalBoxCost = raid.gateData ? calculateTotal(raid.gateData.boxCost, 1) : 0;
   const goldEarned = totalGold - totalBoxCost;
 
-  const handleCellClick = (rowIndex, columnIndex) => {
-    setDimmed(currentDimmed => {
+  const handleCellClick = (rowIndex: number, columnIndex: number) => {
+    setDimmed((currentDimmed) => {
+      if (currentDimmed === null) {
+        return null;
+      }
+  
       const updatedRow = [...currentDimmed[rowIndex]];
       updatedRow[columnIndex] = !updatedRow[columnIndex];
+      
       return [
         ...currentDimmed.slice(0, rowIndex),
         updatedRow,
