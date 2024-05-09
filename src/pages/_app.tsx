@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import ContentSelector from '../app/components/ContentSelector';
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/react"
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google'
 
 // Dynamically import a component, disabling server-side rendering for it
 const ClockBar = dynamic(() => import('../app/components/ClockBar'), {
@@ -33,6 +34,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
         <Analytics />
         <SpeedInsights />
+        <GoogleAnalytics gaId="G-Z3BL4HXK7M" />
+        <GoogleTagManager gtmId="G-Z3BL4HXK7M" />
       </main>
     </div>
   );
