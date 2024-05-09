@@ -287,25 +287,21 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
       }}>
         <DialogTitle sx={{ color: 'var(--primary-text-label-color)', textAlign: 'center' }}>Manage Raids</DialogTitle>
         <DialogContent>
+          <div className="mt-3">
+            <p className="text-sm text-center mb-10">Select A Raid Below to Toggle Raid Visibility</p>
+          </div>
           <div className="grid grid-cols-3 gap-4">
             {Object.keys(raidGroups).map((label, index) => (
               <Chip
                 key={index}
                 label={label}
                 onClick={() => toggleRaidVisibility(index)}
-                color="primary"
                 className={clsx(
-                  "flex items-center px-3 py-1 rounded-full transition-all duration-300 ease-in-out",
-                  raidVisibility[index] ? 'bg-primary-background-selection-color active-raid' : 'bg-chip-background-color',
-                  !raidVisibility[index] && "hover:bg-primary-background-hover-color hover:scale-105 cursor-pointer"
+                  "!flex !items-center !px-3 !py-1 !rounded-full !transition-all !duration-300 !ease-in-out raid-chip",
+                  raidVisibility[index] ? '!bg-primary-background-selection-color !active-raid' : '!bg-chip-background-color',
+                  !raidVisibility[index] && "!hover:bg-primary-background-hover-color !hover:scale-105 !cursor-pointer",
+                  "!text-white !m-1"
                 )}
-                sx={{
-                  color: '#fff',
-                  margin: '5px',
-                  '&:hover': {
-                    bgcolor: '#572C2C' // Ensure hover effects are still applicable
-                  }
-                }}
                 variant="outlined"
               />
             ))}

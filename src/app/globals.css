@@ -91,3 +91,8 @@ body {
 .active-raid {
   border: 2px solid var(--image-calendar-color);
 }
+
+.raid-chip:hover {
+  background-color: var(--primary-background-hover-color) !important;
+  scale: 1.05 !important;
+}
