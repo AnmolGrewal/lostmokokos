@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Helmet } from 'react-helmet';
 
 export default function Home() {
   const [todos, setTodos] = useState<string[]>([]);
@@ -31,6 +32,10 @@ export default function Home() {
 
   return (
     <main className="main-content bg-primary-background-color text-white min-h-screen">
+      <Helmet>
+        <title>Lost Mokokos</title>
+        <meta name="description" content="Lost Ark Information for all your needs" />
+      </Helmet>
       <h1 className="text-4xl text-center mt-4 mb-4">Lost Mokokos</h1>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
         <h2 className="text-lg text-primary-text-color">Todo List</h2>

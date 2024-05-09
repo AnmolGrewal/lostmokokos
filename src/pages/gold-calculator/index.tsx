@@ -12,7 +12,7 @@ const GoldCalculatorIndexPage: React.FC = () => {
     <div className='bg-primary-background-color'>
       <Helmet>
         <title>Gold Calculator</title>
-        <meta name="description" content="Description of Gold Calculator" />
+        <meta name="description" content="Gold Income Calculator based on Raids for Lost Ark" />
       </Helmet>
       <GoldGrid raids={raidsInfo} />
     </div>
