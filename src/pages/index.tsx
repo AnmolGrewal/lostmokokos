@@ -65,8 +65,9 @@ export default function Home() {
         <h2 className="text-lg text-primary-text-color mb-4">Updates So Far</h2>
         <p className="text-secondary-text-color">
           - Updated Manage Raids styling to work properly for Active, Inactive and Hover over Raid Chips and Help Text<br />
-          - Adding Basic HomePage for Updates and Communication<br />
+          - Added Basic HomePage for Updates and Communication<br />
           - Todo List is only temporary for fun will probably remove it later or revamp it<br />
+          - Updated Total Gold Row in Gold Calculator to Be Visible Always on the Bottom, made it mobile friendly
         </p>
         <h2 className="text-lg text-primary-text-color mt-5">Do not Remove Thaemine or Echnida as Raids otherwise your Raid Calculator will be Incorrect for Kayangel NM and Brelshaza</h2>
       </div>
