@@ -312,31 +312,30 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
         </DialogActions>
       </Dialog>
 
-      <TableContainer component={Paper} sx={{
-        width: 'calc(100% - 40px)', // Adjust the width to create distance from edges
-        backgroundColor: 'var(--chip-background-color)',
-        color: 'var(--primary-text-color)',
-        margin: '20px', // Add margin to create distance from edges
-        '.MuiTableCell-root': {
+      <TableContainer
+        component={Paper}
+        sx={(theme) => ({
+          width: 'calc(100% - 40px)',
+          backgroundColor: 'var(--chip-background-color)',
           color: 'var(--primary-text-color)',
-          borderBottom: '2px solid var(--primary-text-label-color)',
-          paddingLeft: 2,
-          paddingRight: 2
-        },
-        '.MuiSvgIcon-root': {
-          color: 'var(--primary-text-label-color)',
-        }
-      }}>
+          margin: '20px',
+          marginBottom: '55px', // Default to 55px
+          [theme.breakpoints.up(640)]: { // Directly using 640 pixels as the breakpoint
+            marginBottom: '85px', // Applies 85px margin-bottom at 640 pixels width and above
+          },
+          '.MuiTableCell-root': {
+            color: 'var(--primary-text-color)',
+            borderBottom: '2px solid var(--primary-text-label-color)',
+            paddingLeft: '2px',
+            paddingRight: '2px'
+          },
+          '.MuiSvgIcon-root': {
+            color: 'var(--primary-text-label-color)',
+          }
+        })}
+      >
         <Table aria-label="simple table">
           <TableHead>
-            <TableRow>
-              <TableCell colSpan={1 + characterCount} align="center" sx={{ fontWeight: 'bold', fontSize: '24px', borderBottom: '2px solid var(--primary-text-label-color)' }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-                  Total Gold: {calculateTotalGold()}
-                  <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" style={{ width: '20px', marginLeft: '5px' }} />
-                </span>
-              </TableCell>
-            </TableRow>
             <TableRow>
               <TableCell sx={{ fontWeight: 'bold', fontSize: '24px' }}></TableCell>
               {[...Array(characterCount)].map((_, index) => (
@@ -432,6 +431,10 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      <footer className="fixed bottom-2 left-1/2 -translate-x-1/2 bg-primary-background-color text-primary-text-color text-center p-2 rounded-full border border-primary-border-color shadow-md inline-flex items-center justify-center gap-2 sm:p-4 sm:text-2xl">
+        Total Gold: {calculateTotalGold()}
+        <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" className="w-5 sm:w-10" />
+      </footer>
     </div>
   );
 };
