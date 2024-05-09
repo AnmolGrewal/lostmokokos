@@ -11,7 +11,7 @@ interface NavigationBarProps {
 
 const NavigationBar = ({ currentPath }: NavigationBarProps) => {
   const navItems = [
-    // { path: "/", label: "Home", icon: faHome },
+    { path: "/", label: "Home", icon: faHome },
     { path: "/raids", label: "Raids", icon: faDungeon },
     { path: "/gold-calculator", label: "Gold Calculator", icon: faCoins },
   ];
