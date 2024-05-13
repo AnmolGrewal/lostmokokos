@@ -505,7 +505,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
               </TableCell>
               {[...Array(characterCount)].map((_, index) => (
                 <TableCell key={index} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
-                  <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', marginRight: '43px'}}>
                     <IconButton onClick={() => handleOpenAdditionalGoldDialog(index)}>
                       <EditIcon />
                     </IconButton>
