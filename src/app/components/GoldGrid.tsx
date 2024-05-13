@@ -10,6 +10,7 @@ import Chip from '@mui/material/Chip';
 import { clsx } from 'clsx';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import TitleIcon from '@mui/icons-material/Title';
+import EditIcon from '@mui/icons-material/Edit';
 
 interface GoldGridProps {
   raids: Raid[];
@@ -45,6 +46,32 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const [settingsDialogOpen, setSettingsDialogOpen] = useState<boolean>(false);
   const [raidVisibility, setRaidVisibility] = useState<boolean[]>(raids.map(() => true));
 
+  const [additionalGold, setAdditionalGold] = useState<number[]>(new Array(characterCount).fill(0));
+
+  const [additionalGoldDialogOpen, setAdditionalGoldDialogOpen] = useState<boolean>(false);
+  const [currentEditingIndex, setCurrentEditingIndex] = useState<number>(-1);
+  const [tempAdditionalGold, setTempAdditionalGold] = useState<number>(0);
+
+  const handleOpenAdditionalGoldDialog = (index: number) => {
+    setCurrentEditingIndex(index);
+    setTempAdditionalGold(additionalGold[index]);
+    setAdditionalGoldDialogOpen(true);
+  };
+
+  const handleCloseAdditionalGoldDialog = () => {
+    setAdditionalGoldDialogOpen(false);
+  };
+
+  const handleSaveAdditionalGold = () => {
+    console.log('Saving additional gold:', tempAdditionalGold, 'at index:', currentEditingIndex);
+    const updatedGold = [...additionalGold];
+    updatedGold[currentEditingIndex] = tempAdditionalGold;
+    console.log('Updated additional gold array:', updatedGold);
+    setAdditionalGold(updatedGold);
+    handleCloseAdditionalGoldDialog();
+    console.log('Additional Gold Array:', additionalGold);  // Debugging line
+  };
+
   const toggleRaidVisibility = (labelIndex: number) => {
     const label = Object.keys(raidGroups)[labelIndex];
     const updatedVisibility = raidVisibility.map((visible, i) => i === labelIndex ? !visible : visible);
@@ -71,33 +98,51 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   };
 
   useEffect(() => {
-    const savedRaidVisibility = JSON.parse(localStorage.getItem('raidVisibility') || '[]');
-    if (savedRaidVisibility.length === raids.length) {
-      setRaidVisibility(savedRaidVisibility);
-    }
-  }, [raids.length]);
+    const loadInitialData = () => {
+      const savedRaidVisibility = JSON.parse(localStorage.getItem('raidVisibility') || '[]');
+      const savedCharacterCount = parseInt(localStorage.getItem('characterCount') || '1', 10);
+      const savedCharacterNames = JSON.parse(localStorage.getItem('characterNames') || '[]');
+      const defaultCharacterNames = Array(savedCharacterCount).fill('Character').map((name, index) => `${name} ${index + 1}`);
+      const savedCheckedStates = JSON.parse(localStorage.getItem('checkedStates') || '[]');
+      const savedAdditionalGold = JSON.parse(localStorage.getItem('additionalGold') || '[]');
+      const defaultAdditionalGold = new Array(savedCharacterCount).fill(0);
+  
+      setRaidVisibility(savedRaidVisibility.length ? savedRaidVisibility : raids.map(() => true));
+      setCharacterCount(savedCharacterCount);
+      setCharacterNames(savedCharacterNames.length ? savedCharacterNames : defaultCharacterNames);
+      setCheckedStates(savedCheckedStates.length ? savedCheckedStates : Array.from({ length: savedCharacterCount }, initializeNewCharacterState));
+  
+      console.log("sAVED Additional Gold Array:", savedAdditionalGold);  // Debugging line
+      console.log("DEFAULT Additional Gold Array:", defaultAdditionalGold);  // Debugging line
+      if (savedAdditionalGold.length === savedCharacterCount) {
+        setAdditionalGold(savedAdditionalGold);
+      } else {
+        setAdditionalGold(defaultAdditionalGold);
+      }
+    };
+  
+    loadInitialData();
+  }, [raids.length, initializeNewCharacterState, raids]);
 
   useEffect(() => {
-    const savedCharacterCount = parseInt(localStorage.getItem('characterCount') || '0', 10);
-    const savedCharacterNames = JSON.parse(localStorage.getItem('characterNames') || '[]');
-    const savedCheckedStates = JSON.parse(localStorage.getItem('checkedStates') || '[]');
-
-    setCharacterCount(savedCharacterCount || 1); // Ensure at least 1 character is initialized
-    setCharacterNames(savedCharacterNames.length ? savedCharacterNames : Array(savedCharacterCount || 1).fill('Character'));
-    setCheckedStates(savedCheckedStates.length ? savedCheckedStates : Array.from({ length: savedCharacterCount || 1 }, () => initializeNewCharacterState()));
-  }, [initializeNewCharacterState]);
-
-  useEffect(() => {
+    // Save all character related data to localStorage
     localStorage.setItem('characterCount', characterCount.toString());
     localStorage.setItem('characterNames', JSON.stringify(characterNames));
     localStorage.setItem('checkedStates', JSON.stringify(checkedStates));
-  }, [characterCount, characterNames, checkedStates]);
+    localStorage.setItem('additionalGold', JSON.stringify(additionalGold));
+    console.log("Additional Gold Array:", additionalGold);  // Debugging line
+  }, [characterCount, characterNames, checkedStates, additionalGold]);
 
   const handleAddCharacter = () => {
     const newCharacterName = `Character ${characterCount + 1}`;
     setCharacterCount(prev => prev + 1);
     setCharacterNames(prev => [...prev, newCharacterName]);
     setCheckedStates(prev => [...prev, initializeNewCharacterState()]);
+    setAdditionalGold(prev => {
+      const newGoldArray = [...prev, 0];
+      console.log("New Additional Gold Array in HandleAddCharacter:", newGoldArray);  // Debugging line
+      return newGoldArray;
+    });
   };
 
   const handleRemoveCharacter = () => {
@@ -105,6 +150,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
       setCharacterCount(prev => prev - 1);
       setCharacterNames(prev => prev.slice(0, -1));
       setCheckedStates(prev => prev.slice(0, -1));
+      setAdditionalGold(prev => prev.slice(0, -1));
     }
   };
 
@@ -158,7 +204,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const calculateTotalGold = () => {
     let total = 0;
     for (let i = 0; i < characterCount; i++) {
-      total += calculateCharacterTotalGold(i);
+      total += calculateCharacterTotalGold(i) + additionalGold[i];
     }
     return total.toLocaleString(); // Formats the total gold with commas
   };
@@ -183,7 +229,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
       }
       return characterSum; // If raid is not visible, don't include its gold
     }, 0);
-    return total; // Returns the numeric total gold for a character
+    return total + additionalGold[characterIndex]; // Returns the numeric total gold for a character
   };
 
   const handleToggleSettingsDialog = () => {
@@ -240,6 +286,10 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
               <li className="mt-4 flex">
                 <TitleIcon sx={{ mr: 1 }} />
                 <span className='mt-0.5'>Select character column title to change character name</span>
+              </li>
+              <li className="mt-4 flex">
+                <EditIcon sx={{ mr: 1 }} />
+                <span className='mt-0.5'>Click to edit the particular field in question</span>
               </li>
             </ul>
           </div>
@@ -309,6 +359,35 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleToggleSettingsDialog} sx={{ color: 'inherit' }}>Close</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={additionalGoldDialogOpen} onClose={handleCloseAdditionalGoldDialog} sx={{
+        '& .MuiPaper-root': {
+          backgroundColor: 'var(--chip-background-color)',
+          color: 'var(--primary-text-color)',
+        }
+      }}>
+        <DialogTitle sx={{ color: 'var(--primary-text-label-color)' }}>Enter Additional Gold</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="additionalGold"
+            label="Gold Amount"
+            type="number"
+            fullWidth
+            variant="standard"
+            value={tempAdditionalGold}
+            onChange={(e) => setTempAdditionalGold(parseInt(e.target.value) || 0)}
+            InputProps={{
+              sx: { color: 'inherit' }
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseAdditionalGoldDialog} sx={{ color: 'inherit' }}>Cancel</Button>
+          <Button onClick={handleSaveAdditionalGold} sx={{ color: 'inherit' }}>Save</Button>
         </DialogActions>
       </Dialog>
 
@@ -415,6 +494,25 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                   ))}
                 </TableRow>
               ))}
+            <TableRow>
+              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
+                <div className='flex flex-row'>
+                  <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" style={{ width: '40px', verticalAlign: 'middle' }} />
+                  Extra Gold
+                </div>
+              </TableCell>
+              {[...Array(characterCount)].map((_, index) => (
+                <TableCell key={index} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                    <IconButton onClick={() => handleOpenAdditionalGoldDialog(index)}>
+                      <EditIcon />
+                    </IconButton>
+                    {additionalGold[index].toLocaleString()}
+                    <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" style={{ width: '20px', marginLeft: '5px' }} />
+                  </span>
+                </TableCell>
+              ))}
+            </TableRow>
             <TableRow key={`total-gold-row`}>
               <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
                 Gold Per Character
