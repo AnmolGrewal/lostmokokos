@@ -82,6 +82,7 @@ export default function Home() {
         </ul>
       </div>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
+        <h1 className='text-primary-text-color text-center text-[48px]'>Please do not Remove Thaemine or Echnida Raids or you will get incorrect Calculations. Working on a Fix!</h1>
         <Timeline position="alternate-reverse">
           {[
             "Updated Manage Raids styling to work properly for Active, Inactive and Hover over Raid Chips and Help Text",
@@ -91,6 +92,8 @@ export default function Home() {
             "Removing Page Refresh when you add something to Todo List",
             "Updated Communication Text to be More User Friendly with a Timeline Instead of a List",
             "Working on Thaemine and Echnida Removal Fix, Most Likely rewriting The Raid Calculator from scratch to be more efficient and easier to maintain",
+            "Added a New Row called Additional Gold to Add your own Gold to the Total Gold Calculation based on each Individual Character",
+            "Fixed Issue with text cutting into Checkbox's for labels on Smaller Windows"
           ].reverse().map((content, index) => (
             <TimelineItem key={index}>
               <TimelineSeparator>
