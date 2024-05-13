@@ -93,7 +93,9 @@ export default function Home() {
             "Updated Communication Text to be More User Friendly with a Timeline Instead of a List",
             "Working on Thaemine and Echnida Removal Fix, Most Likely rewriting The Raid Calculator from scratch to be more efficient and easier to maintain",
             "Added a New Row called Additional Gold to Add your own Gold to the Total Gold Calculation based on each Individual Character",
-            "Fixed Issue with text cutting into Checkbox's for labels on Smaller Windows"
+            "Fixed Issue with text cutting into Checkbox's for labels on Smaller Windows",
+            "Adding Show Differences Icon on Raids instead of doing mouse hover to be more mobile friendly",
+            "Updating Gold Formatting to your currency locale formatting",
           ].reverse().map((content, index) => (
             <TimelineItem key={index}>
               <TimelineSeparator>

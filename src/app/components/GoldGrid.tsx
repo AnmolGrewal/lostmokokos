@@ -522,7 +522,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
               {[...Array(characterCount)].map((_, index) => (
                 <TableCell key={`character-total-gold-${index}`} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
                   <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-                    {calculateCharacterTotalGold(index)}
+                    {calculateCharacterTotalGold(index).toLocaleString()}
                     <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" style={{ width: '20px', marginLeft: '5px' }} />
                   </span>
                 </TableCell>
