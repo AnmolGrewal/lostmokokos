@@ -497,7 +497,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                 </TableRow>
               ))}
             <TableRow>
-              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
+              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px', flexShrink: 0, whiteSpace: 'nowrap' }}>
                 <div className='flex flex-row'>
                   <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" style={{ width: '40px', verticalAlign: 'middle' }} />
                   Extra Gold
