@@ -96,6 +96,7 @@ export default function Home() {
             "Fixed Issue with text cutting into Checkbox's for labels on Smaller Windows",
             "Adding Show Differences Icon on Raids instead of doing mouse hover to be more mobile friendly",
             "Updating Gold Formatting to your currency locale formatting",
+            "Lined up Additional Gold with Total Gold for better readability",
           ].reverse().map((content, index) => (
             <TimelineItem key={index}>
               <TimelineSeparator>
