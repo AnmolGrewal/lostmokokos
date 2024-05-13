@@ -26,11 +26,17 @@ export default function Home() {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  const handleAddTodo = (event) => {
-    event.preventDefault();
+  const handleAddTodo = () => {
     if (input) {
       setTodos(todos => [...todos, input]);
       setInput('');
+    }
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Prevent form from submitting
+      handleAddTodo();
     }
   };
 
@@ -48,18 +54,18 @@ export default function Home() {
       <h1 className="text-4xl text-center mt-4 mb-4">Lost Mokokos</h1>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
         <h2 className="text-lg text-primary-text-color">Todo List</h2>
-        <form className="flex gap-2 mb-4">
+        <form className="flex gap-2 mb-4" onSubmit={(e) => { e.preventDefault(); handleAddTodo(); }}>
           <input
             type="text"
             className="flex-grow p-2 border rounded bg-primary-background-color text-white"
             placeholder="Add a new task"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleAddTodo()}
+            onKeyPress={handleKeyPress}
           />
           <button
             className="bg-primary-background-selection-color text-white px-4 py-2 rounded"
-            onClick={handleAddTodo}
+            type="submit"
           >
             Add
           </button>
@@ -76,7 +82,6 @@ export default function Home() {
         </ul>
       </div>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
-        <h2 className="text-lg text-primary-text-color text-center">Do not Remove Thaemine or Echnida as Raids otherwise your Raid Calculator will be Incorrect for Kayangel NM and Brelshaza</h2>
         <Timeline position="alternate-reverse">
           {[
             "Updated Manage Raids styling to work properly for Active, Inactive and Hover over Raid Chips and Help Text",
