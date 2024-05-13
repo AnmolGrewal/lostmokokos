@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import Link from 'next/link';
 import raidsInfo from '../../data/raidsInfo';
+import IconButton from '@mui/material/IconButton';
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 
 interface RaidGridProps {
   raid: Raid;
@@ -15,7 +17,7 @@ interface RaidGridProps {
 
 const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
   const [dimmed, setDimmed] = useState<boolean[][] | null>(null);
-  const [hovering, setHovering] = useState<boolean>(false);
+  const [showDifferences, setShowDifferences] = useState<boolean>(false);
 
   useEffect(() => {
     if (raid.gateData && raid.gateData.gold && raid.gateData.boxCost) {
@@ -37,7 +39,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
     const currentValues = raid.gateData[category].map(Number);
     const hardValues = hardVersion && hardVersion.gateData[category] ? hardVersion.gateData[category].map(Number) : [];
   
-    if (!hovering || !hardVersion || columnIndex >= currentValues.length) {
+    if (!showDifferences || !hardVersion || columnIndex >= currentValues.length) {
       return currentValues[columnIndex].toString();
     } else {
       const diff = (hardValues[columnIndex] || 0) - currentValues[columnIndex];
@@ -52,7 +54,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
     // Use the lesser of the two lengths for safe operation
     const minGateCount = Math.min(values.length, hardValues.length);
   
-    if (!hovering || !hardVersion) {
+    if (!showDifferences || !hardVersion) {
       return calculateTotal(values.slice(0, minGateCount), rowIndex).toString();
     } else {
       const totalHard = calculateTotal(hardValues.slice(0, minGateCount), rowIndex);
@@ -105,19 +107,27 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
     <div className="flex flex-col items-center w-full sm:px-4">
       <div className="flex flex-col items-center w-full">
         <img src={raid.imgSrc} alt={`${raid.label} Raid`} className="rounded-full w-48 h-48" />
-        <h2 className="text-primary-text-label-color text-2xl mt-2 flex items-center">
+        <h2 className="text-primary-text-label-color text-2xl flex">
           {raid.label} Raid
           {raid.path.endsWith('-hard') ? ' Hard' : ' Normal'}{' '}
           {hasHardVersion && (
-            <Link href={raid.path.endsWith('-hard') ? raid.path.replace('-hard', '') : `${raid.path}-hard`}>
-              <FontAwesomeIcon
-                icon={faSkull}
-                className={clsx("text-red-500", "ml-2", { "opacity-25": !raid.path.endsWith('-hard') }, "skull-icon")}
-                onMouseEnter={() => setHovering(!raid.path.endsWith('-hard'))}
-                onMouseLeave={() => setHovering(false)}
-                onClick={() => setHovering(false)}
-              />
-            </Link>
+            <div className='flex flex-row h-8'>
+              <Link href={raid.path.endsWith('-hard') ? raid.path.replace('-hard', '') : `${raid.path}-hard`}>
+                <FontAwesomeIcon
+                  icon={faSkull}
+                  className={clsx("text-red-500", "ml-2", { "opacity-25": !raid.path.endsWith('-hard') }, "skull-icon")}
+                />
+              </Link>
+              {!raid.path.endsWith('-hard') && (
+                <IconButton
+                  onClick={() => setShowDifferences(!showDifferences)}
+                  aria-label="Show differences"
+                  className="ml-2" // Tailwind class for margin left
+                >
+                  <CompareArrowsIcon className={clsx("text-red-500", {"opacity-25": !showDifferences, "opacity-100": showDifferences})} />
+                </IconButton>
+              )}
+            </div>
           )}
         </h2>
       </div>
@@ -187,14 +197,14 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                           transition: 'width 0.3s ease'
                         }}
                       />
-                      {hovering ? displayValues(rowIndex, columnIndex) : value}
+                      {showDifferences ? displayValues(rowIndex, columnIndex) : value}
                     </div>
                   </TableCell>
                 ))}
                 <TableCell align="center" className={row.category === 'Box Cost' ? 'box-cost-cell' : ''} sx={{ borderBottom: '2px solid var(--primary-text-label-color)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" style={{ width: '20px', marginRight: '5px' }} />
-                    {hovering ? displayTotalValues(rowIndex) : row.total}
+                    {showDifferences ? displayTotalValues(rowIndex) : row.total}
                   </div>
                 </TableCell>
               </TableRow>
