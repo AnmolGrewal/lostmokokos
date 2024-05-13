@@ -436,15 +436,17 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
               .filter(([label]) => raidVisibility[Object.keys(raidGroups).indexOf(label)])
               .map(([label, groupedRaids], index) => (
                 <TableRow key={index} className={index % 2 === 0 ? 'even-row' : ''}>
-                  <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px', position: 'relative', width: 'fit-content' }}>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px', position: 'relative', width: 'fit-content', flexShrink: 0, minWidth: "150px"}}>
+                    <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0}}>
                       <img
                         key={groupedRaids[0].path}
                         src={groupedRaids[0].imgSrc}
                         alt={groupedRaids[0].label}
                         style={{ width: '40px', height: '40px' }}
                       />
-                      {label}
+                      <div className='shrink-0'>
+                        {label}
+                      </div>
                     </div>
                   </TableCell>
                   {[...Array(characterCount)].map((_, characterIndex) => (
