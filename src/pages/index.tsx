@@ -2,6 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Helmet } from 'react-helmet';
+import Timeline from '@mui/lab/Timeline';
+import TimelineItem from '@mui/lab/TimelineItem';
+import TimelineSeparator from '@mui/lab/TimelineSeparator';
+import TimelineConnector from '@mui/lab/TimelineConnector';
+import TimelineContent from '@mui/lab/TimelineContent';
+import TimelineDot from '@mui/lab/TimelineDot';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 
 export default function Home() {
   const [todos, setTodos] = useState<string[]>([]);
@@ -18,7 +26,8 @@ export default function Home() {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  const handleAddTodo = () => {
+  const handleAddTodo = (event) => {
+    event.preventDefault();
     if (input) {
       setTodos(todos => [...todos, input]);
       setInput('');
@@ -67,14 +76,30 @@ export default function Home() {
         </ul>
       </div>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
-        <h2 className="text-lg text-primary-text-color mb-4">Updates So Far</h2>
-        <p className="text-secondary-text-color">
-          - Updated Manage Raids styling to work properly for Active, Inactive and Hover over Raid Chips and Help Text<br />
-          - Added Basic HomePage for Updates and Communication<br />
-          - Todo List is only temporary for fun will probably remove it later or revamp it<br />
-          - Updated Total Gold Row in Gold Calculator to Be Visible Always on the Bottom, made it mobile friendly
-        </p>
-        <h2 className="text-lg text-primary-text-color mt-5">Do not Remove Thaemine or Echnida as Raids otherwise your Raid Calculator will be Incorrect for Kayangel NM and Brelshaza</h2>
+        <h2 className="text-lg text-primary-text-color text-center">Do not Remove Thaemine or Echnida as Raids otherwise your Raid Calculator will be Incorrect for Kayangel NM and Brelshaza</h2>
+        <Timeline position="alternate-reverse">
+          {[
+            "Updated Manage Raids styling to work properly for Active, Inactive and Hover over Raid Chips and Help Text",
+            "Added Basic HomePage for Updates and Communication",
+            "Todo List is only temporary for fun will probably remove it later or revamp it",
+            "Updated Total Gold Row in Gold Calculator to Be Visible Always on the Bottom, made it mobile friendly",
+            "Removing Page Refresh when you add something to Todo List",
+            "Updated Communication Text to be More User Friendly with a Timeline Instead of a List",
+            "Working on Thaemine and Echnida Removal Fix, Most Likely rewriting The Raid Calculator from scratch to be more efficient and easier to maintain",
+          ].reverse().map((content, index) => (
+            <TimelineItem key={index}>
+              <TimelineSeparator>
+                <TimelineDot />
+                <TimelineConnector />
+              </TimelineSeparator>
+              <TimelineContent>
+                <Paper elevation={3} className="p-3 bg-primary-background-color text-primary-text-color">
+                  <Typography>{content}</Typography>
+                </Paper>
+              </TimelineContent>
+            </TimelineItem>
+          ))}
+        </Timeline>
       </div>
     </main>
   );
