@@ -230,7 +230,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                       {rewards.map((reward, rewardIndex) => (
                         <div key={rewardIndex} className='reward-cell flex flex-row flex-shrink-0 justify-center items-center text-2xl w-fit'>
                           <div className='reward-count'>{reward}</div>
-                          <Tooltip title={`${raid.gateRewardImgToolTip}`} placement="top">
+                          <Tooltip title={`${raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][rewardIndex]}`} placement="top">
                             <img
                               src={raid.gateRewardImgSrc && raid.gateRewardImgSrc[0][rewardIndex]}
                               alt={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][rewardIndex]}
