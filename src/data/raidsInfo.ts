@@ -193,7 +193,7 @@ const raidsInfo: Raid[] = [
     label: "Voldis",
     imgSrc: "https://i.imgur.com/sSdCEIA.png",
     gateRewardImgSrc: [["https://i.imgur.com/LAzTJgP.png", "https://i.imgur.com/d5VKKW1.png"]],
-    gateRewardImgToolTip: [["Clear Energy of Wisdom, Clear Elixir of Wisdom"]],
+    gateRewardImgToolTip: [["Clear Energy of Wisdom"," Clear Elixir of Wisdom"]],
     gateData: {
       gold: [1500, 1750, 2500, 3250],
       boxCost: [700, 800, 900, 1100],
