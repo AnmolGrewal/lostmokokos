@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tooltip } from '@mui/material';
 import { Raid } from '../../data/raidsInfo';
 import { faSkull } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -230,12 +230,14 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                       {rewards.map((reward, rewardIndex) => (
                         <div key={rewardIndex} className='reward-cell flex flex-row flex-shrink-0 justify-center items-center text-2xl w-fit'>
                           <div className='reward-count'>{reward}</div>
-                          <img
-                            src={raid.gateRewardImgSrc && raid.gateRewardImgSrc[0][rewardIndex]}
-                            alt={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][rewardIndex]}
-                            title={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][rewardIndex]}
-                            className='reward-img'
-                          />
+                          <Tooltip title={`${raid.gateRewardImgToolTip}`} placement="top">
+                            <img
+                              src={raid.gateRewardImgSrc && raid.gateRewardImgSrc[0][rewardIndex]}
+                              alt={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][rewardIndex]}
+                              title={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][rewardIndex]}
+                              className='reward-img'
+                            />
+                          </Tooltip>
                         </div>
                       ))}
                     </div>
