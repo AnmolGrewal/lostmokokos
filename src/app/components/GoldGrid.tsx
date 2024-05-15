@@ -63,13 +63,10 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   };
 
   const handleSaveAdditionalGold = () => {
-    console.log('Saving additional gold:', tempAdditionalGold, 'at index:', currentEditingIndex);
     const updatedGold = [...additionalGold];
     updatedGold[currentEditingIndex] = tempAdditionalGold;
-    console.log('Updated additional gold array:', updatedGold);
     setAdditionalGold(updatedGold);
     handleCloseAdditionalGoldDialog();
-    console.log('Additional Gold Array:', additionalGold);  // Debugging line
   };
 
   const toggleRaidVisibility = (labelIndex: number) => {
@@ -112,8 +109,6 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
       setCharacterNames(savedCharacterNames.length ? savedCharacterNames : defaultCharacterNames);
       setCheckedStates(savedCheckedStates.length ? savedCheckedStates : Array.from({ length: savedCharacterCount }, initializeNewCharacterState));
   
-      console.log("sAVED Additional Gold Array:", savedAdditionalGold);  // Debugging line
-      console.log("DEFAULT Additional Gold Array:", defaultAdditionalGold);  // Debugging line
       if (savedAdditionalGold.length === savedCharacterCount) {
         setAdditionalGold(savedAdditionalGold);
       } else {
@@ -130,7 +125,6 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
     localStorage.setItem('characterNames', JSON.stringify(characterNames));
     localStorage.setItem('checkedStates', JSON.stringify(checkedStates));
     localStorage.setItem('additionalGold', JSON.stringify(additionalGold));
-    console.log("Additional Gold Array:", additionalGold);  // Debugging line
   }, [characterCount, characterNames, checkedStates, additionalGold]);
 
   const handleAddCharacter = () => {
@@ -140,7 +134,6 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
     setCheckedStates(prev => [...prev, initializeNewCharacterState()]);
     setAdditionalGold(prev => {
       const newGoldArray = [...prev, 0];
-      console.log("New Additional Gold Array in HandleAddCharacter:", newGoldArray);  // Debugging line
       return newGoldArray;
     });
   };
