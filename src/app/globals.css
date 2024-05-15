@@ -96,3 +96,18 @@ body {
   background-color: var(--primary-background-hover-color) !important;
   scale: 1.05 !important;
 }
+
+.raid-table-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.reward-img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}

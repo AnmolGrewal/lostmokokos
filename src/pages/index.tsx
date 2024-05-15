@@ -83,6 +83,8 @@ export default function Home() {
       </div>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
         <h1 className='text-primary-text-color text-center text-[48px]'>Please do not Remove Thaemine or Echnida Raids or you will get incorrect Calculations. Working on a Fix!</h1>
+        <hr className="my-8" />
+        <h2 className='text-primary-text-color text-center text-[48px]'>Boss Rewards for Box and Clear are the same so they are not added twice</h2>
         <Timeline position="alternate-reverse">
           {[
             "Updated Manage Raids styling to work properly for Active, Inactive and Hover over Raid Chips and Help Text",
@@ -97,6 +99,8 @@ export default function Home() {
             "Adding Show Differences Icon on Raids instead of doing mouse hover to be more mobile friendly",
             "Updating Gold Formatting to your currency locale formatting",
             "Lined up Additional Gold with Total Gold for better readability",
+            "Updated Raids Data to Include Boss Drops Upto Echnida",
+            "Working on fixing totals for double boss rewards stacking on each other in raids Page",
           ].reverse().map((content, index) => (
             <TimelineItem key={index}>
               <TimelineSeparator>

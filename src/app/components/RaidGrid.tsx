@@ -76,6 +76,18 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
   const totalGold = raid.gateData ? calculateTotal(raid.gateData.gold, 0) : 0;
   const totalBoxCost = raid.gateData ? calculateTotal(raid.gateData.boxCost, 1) : 0;
   const goldEarned = totalGold - totalBoxCost;
+  const rewardsFirstTotal = raid.gateData.gateRewards
+    ? raid.gateData.gateRewards.reduce((acc, curr) => acc + curr[0], 0)
+    : 0;
+  const rewardsSecondTotal = raid.gateData.gateRewards
+    ? raid.gateData.gateRewards.reduce((acc, curr) => {
+      if (curr.length > 1) {
+        return acc + curr[1];
+      }
+      return acc;
+    }, 0)
+    : 0;
+  
 
   const handleCellClick = (rowIndex: number, columnIndex: number) => {
     setDimmed((currentDimmed) => {
@@ -209,8 +221,56 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                 </TableCell>
               </TableRow>
             ))}
+            {raid.gateRewardImgSrc && (
+              <TableRow className='even-row'>
+                <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>Rewards</TableCell>
+                {raid.gateData.gateRewards && raid.gateData.gateRewards.map((rewards, index) => (
+                  <TableCell key={index}>
+                    <div className='raid-table-cell'>
+                      {rewards.map((reward, rewardIndex) => (
+                        <div key={rewardIndex} className='reward-cell flex flex-row flex-shrink-0 justify-center items-center text-2xl w-fit'>
+                          <div className='reward-count'>{reward}</div>
+                          <img
+                            src={raid.gateRewardImgSrc && raid.gateRewardImgSrc[0][rewardIndex]}
+                            alt={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][rewardIndex]}
+                            title={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][rewardIndex]}
+                            className='reward-img'
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </TableCell>
+                ))}
+                <TableCell>
+                  <div className='raid-table-cell'>
+                    <div className='reward-cell flex flex-row flex-shrink-0 justify-center items-center text-2xl w-fit'>
+                      <div className='reward-count'>{rewardsFirstTotal}</div>
+                      <img
+                        src={raid.gateRewardImgSrc && raid.gateRewardImgSrc[0][0]}
+                        alt={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][0]}
+                        title={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][0]}
+                        className='reward-img'
+                      />
+                    </div>
+                  </div>
+                  {rewardsSecondTotal > 0 && (
+                    <div className='raid-table-cell'>
+                      <div className='reward-cell flex flex-row flex-shrink-0 justify-center items-center text-2xl w-fit'>
+                        <div className='reward-count'>{rewardsSecondTotal}</div>
+                        <img
+                          src={raid.gateRewardImgSrc && raid.gateRewardImgSrc[0][1]}
+                          alt={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][1]}
+                          title={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][1]}
+                          className='reward-img'
+                        />
+                      </div>
+                    </div>
+                  )}
+                </TableCell>
+              </TableRow>
+            )}
             {/* Gold Earnable row */}
-            <TableRow className={rows.length % 2 === 0 ? 'even-row' : ''}>
+            <TableRow>
               <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
                 Gold Earnable: {goldEarned}
               </TableCell>
