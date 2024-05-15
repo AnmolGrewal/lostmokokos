@@ -49,7 +49,7 @@ const raidsInfo: Raid[] = [
     path: "/raids/valtan",
     label: "Valtan",
     imgSrc: "https://i.imgur.com/ApCDeQb.png",
-    gateRewardImgSrc: [["https://imgur.com/VCqULik", "https://imgur.com/CloDByc"]],
+    gateRewardImgSrc: [["https://i.imgur.com/VCqULik.png", "https://i.imgur.com/CloDByc.png"]],
     gateRewardImgToolTip: [["Demon Beast Bone", "Demon Beast Tendon"]],
     gateData: {
       gold: [500, 700],
@@ -62,7 +62,7 @@ const raidsInfo: Raid[] = [
     path: "/raids/valtan-hard",
     label: "Valtan",
     imgSrc: "https://i.imgur.com/ApCDeQb.png",
-    gateRewardImgSrc: [["https://imgur.com/VCqULik"]],
+    gateRewardImgSrc: [["https://i.imgur.com/VCqULik.png"]],
     gateRewardImgToolTip: [["Demon Beast Bone"]],
     gateData: {
       gold: [700, 1100],
@@ -75,7 +75,7 @@ const raidsInfo: Raid[] = [
     path: "/raids/vykas",
     label: "Vykas",
     imgSrc: "https://i.imgur.com/5VoXEOB.png",
-    gateRewardImgSrc: [["https://imgur.com/uzmLA6L", "https://imgur.com/YhGuP3L"]],
+    gateRewardImgSrc: [["https://i.imgur.com/uzmLA6L.png", "https://i.imgur.com/YhGuP3L.png"]],
     gateRewardImgToolTip: [["Covetous Fang", "Covetous Wing"]],
     gateData: {
       gold: [600, 1000],
@@ -88,7 +88,7 @@ const raidsInfo: Raid[] = [
     path: "/raids/vykas-hard",
     label: "Vykas",
     imgSrc: "https://i.imgur.com/5VoXEOB.png",
-    gateRewardImgSrc: [["https://imgur.com/YhGuP3L"]],
+    gateRewardImgSrc: [["https://i.imgur.com/YhGuP3L.png"]],
     gateRewardImgToolTip: [["Covetous Wing"]],
     gateData: {
       gold: [900, 1500],
@@ -101,7 +101,7 @@ const raidsInfo: Raid[] = [
     path: "/raids/clown",
     label: "Clown",
     imgSrc: "https://i.imgur.com/hOOSdDm.png",
-    gateRewardImgSrc: [["https://imgur.com/XoYiAKo"]],
+    gateRewardImgSrc: [["https://i.imgur.com/XoYiAKo.png"]],
     gateRewardImgToolTip: [["Mayhem Horn"]],
     gateData: {
       gold: [600, 900, 1500],
@@ -114,7 +114,7 @@ const raidsInfo: Raid[] = [
     path: "/raids/brelshaza",
     label: "Brelshaza",
     imgSrc: "https://i.imgur.com/bL9k49k.png",
-    gateRewardImgSrc: [["https://imgur.com/3poB3IP"]],
+    gateRewardImgSrc: [["https://i.imgur.com/3poB3IP.png"]],
     gateRewardImgToolTip: [["Phantom Intention"]],
     gateData: {
       gold: [2000, 2500, 1500, 2500],
@@ -127,7 +127,7 @@ const raidsInfo: Raid[] = [
     path: "/raids/brelshaza-hard",
     label: "Brelshaza",
     imgSrc: "https://i.imgur.com/bL9k49k.png",
-    gateRewardImgSrc: [["https://imgur.com/3poB3IP"]],
+    gateRewardImgSrc: [["https://i.imgur.com/3poB3IP.png"]],
     gateRewardImgToolTip: [["Phantom Intention"]],
     gateData: {
       gold: [2500, 3000, 2000, 3000],
@@ -140,7 +140,7 @@ const raidsInfo: Raid[] = [
     path: "/raids/kayangel",
     label: "Kayangel",
     imgSrc: "https://i.imgur.com/2P9urFh.png",
-    gateRewardImgSrc: [["https://imgur.com/RTrjfkO", "https://imgur.com/Cx0nbdR"]],
+    gateRewardImgSrc: [["https://i.imgur.com/RTrjfkO.png", "https://i.imgur.com/Cx0nbdR.png"]],
     gateRewardImgToolTip: [["Light's Trial", "Empyrean of Contemplation"]],
     gateData: {
       gold: [1000, 1500, 2000],
@@ -153,7 +153,7 @@ const raidsInfo: Raid[] = [
     path: "/raids/kayangel-hard",
     label: "Kayangel",
     imgSrc: "https://i.imgur.com/2P9urFh.png",
-    gateRewardImgSrc: [["https://imgur.com/RTrjfkO", "https://imgur.com/Cx0nbdR"]],
+    gateRewardImgSrc: [["https://i.imgur.com/RTrjfkO.png", "https://i.imgur.com/Cx0nbdR.png"]],
     gateRewardImgToolTip: [["Light's Trial", "Empyrean of Contemplation"]],
     gateData: {
       gold: [1500, 2000, 3000],
@@ -166,7 +166,7 @@ const raidsInfo: Raid[] = [
     path: "/raids/akkan",
     label: "Akkan",
     imgSrc: "https://i.imgur.com/W4ekupW.png",
-    gateRewardImgSrc: [["https://imgur.com/UnGFUC6"]],
+    gateRewardImgSrc: [["https://i.imgur.com/UnGFUC6.png"]],
     gateRewardImgToolTip: [["Eye of Decay"]],
     gateData: {
       gold: [1500, 2000, 4000],
@@ -179,7 +179,7 @@ const raidsInfo: Raid[] = [
     path: "/raids/akkan-hard",
     label: "Akkan",
     imgSrc: "https://i.imgur.com/W4ekupW.png",
-    gateRewardImgSrc: [["https://imgur.com/UnGFUC6"]],
+    gateRewardImgSrc: [["https://i.imgur.com/UnGFUC6.png"]],
     gateRewardImgToolTip: [["Eye of Decay"]],
     gateData: {
       gold: [1750, 2500, 5750],
@@ -192,7 +192,7 @@ const raidsInfo: Raid[] = [
     path: "/raids/voldis",
     label: "Voldis",
     imgSrc: "https://i.imgur.com/sSdCEIA.png",
-    gateRewardImgSrc: [["https://imgur.com/LAzTJgP", "https://imgur.com/d5VKKW1"]],
+    gateRewardImgSrc: [["https://i.imgur.com/LAzTJgP.png", "https://i.imgur.com/d5VKKW1.png"]],
     gateRewardImgToolTip: [["Clear Energy of Wisdom, Clear Elixir of Wisdom"]],
     gateData: {
       gold: [1500, 1750, 2500, 3250],
@@ -205,7 +205,7 @@ const raidsInfo: Raid[] = [
     path: "/raids/voldis-hard",
     label: "Voldis",
     imgSrc: "https://i.imgur.com/sSdCEIA.png",
-    gateRewardImgSrc: [["https://imgur.com/XYyJ9aG", "https://imgur.com/dS0ZviV"]],
+    gateRewardImgSrc: [["https://i.imgur.com/XYyJ9aG.png", "https://i.imgur.com/dS0ZviV.png"]],
     gateRewardImgToolTip: [["Splendid Energy of Wisdom", "Splendid Elixir of Wisdom"]],
     gateData: {
       gold: [2000, 2500, 4000, 6000],
@@ -218,7 +218,7 @@ const raidsInfo: Raid[] = [
     path: "/raids/thaemine",
     label: "Thaemine",
     imgSrc: "https://i.imgur.com/464OcZx.png",
-    gateRewardImgSrc: [["https://imgur.com/BSm95D5", "https://imgur.com/sU7Fdcu"]],
+    gateRewardImgSrc: [["https://i.imgur.com/BSm95D5.png", "https://i.imgur.com/sU7Fdcu.png"]],
     gateRewardImgToolTip: [["Magical Spring Water", "Dark Fire"]],
     gateData: {
       gold: [3500, 4000, 5500],
@@ -231,7 +231,7 @@ const raidsInfo: Raid[] = [
     path: "/raids/thaemine-hard",
     label: "Thaemine",
     imgSrc: "https://i.imgur.com/464OcZx.png",
-    gateRewardImgSrc: [["https://imgur.com/BSm95D5", "https://imgur.com/sU7Fdcu"]],
+    gateRewardImgSrc: [["https://i.imgur.com/BSm95D5.png", "https://i.imgur.com/sU7Fdcu.png"]],
     gateRewardImgToolTip: [["Magical Spring Water", "Dark Fire"]],
     gateData: {
       gold: [5000, 6000, 9000, 21000],
@@ -244,7 +244,7 @@ const raidsInfo: Raid[] = [
     path: "/raids/echidna",
     label: "Echidna",
     imgSrc: "https://i.imgur.com/tju1uI1.png",
-    gateRewardImgSrc: [["https://imgur.com/paUGipq"]],
+    gateRewardImgSrc: [["https://i.imgur.com/paUGipq.png"]],
     gateRewardImgToolTip: [["Scale of Agris"]],
     gateData: {
       gold: [5000, 9500],
@@ -257,7 +257,7 @@ const raidsInfo: Raid[] = [
     path: "/raids/echidna-hard",
     label: "Echidna",
     imgSrc: "https://i.imgur.com/tju1uI1.png",
-    gateRewardImgSrc: [["https://imgur.com/9O6FFL2"]],
+    gateRewardImgSrc: [["https://i.imgur.com/9O6FFL2.png"]],
     gateRewardImgToolTip: [["Alcyone Eye"]],
     gateData: {
       gold: [6000, 12500],
