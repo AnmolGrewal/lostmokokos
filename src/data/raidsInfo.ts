@@ -2,6 +2,7 @@ export interface GateData {
   gold: number[];
   boxCost: number[];
   itemLevels: number[];
+  gateRewards?: number[][];
 }
 
 export interface Raid {
@@ -9,6 +10,8 @@ export interface Raid {
   label: string;
   imgSrc: string;
   gateData: GateData;
+  gateRewardImgSrc?: string[][];
+  gateRewardImgToolTip?: string[][];
 }
 
 const raidsInfo: Raid[] = [
