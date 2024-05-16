@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tooltip, Tab } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tooltip } from '@mui/material';
 import { Raid } from '../../data/raidsInfo';
 import { faSkull } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -89,7 +89,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
     }, 0)
     : 0;
   const honorShardsTotal = raid?.gateData?.honorShards?.reduce((total, shards) => total + shards, 0);
-  const boxHonorShardsTotal = raid?.gateData?.honorShards?.reduce((total, shards) => total + shards, 0);
+  const boxHonorShardsTotal = raid?.gateData?.boxHonorShards?.reduce((total, shards) => total + shards, 0);
   
 
   const handleCellClick = (rowIndex: number, columnIndex: number) => {
@@ -237,7 +237,6 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                             <img
                               src={raid.gateRewardImgSrc && raid.gateRewardImgSrc[0][rewardIndex]}
                               alt={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][rewardIndex]}
-                              title={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][rewardIndex]}
                               className='reward-img'
                             />
                           </Tooltip>
@@ -275,41 +274,53 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
               </TableRow>
             )}
             {/* Row for Honor Shards Normal Clear */}
-            <TableRow>
-              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>Shards</TableCell>
-              {raid?.gateData?.honorShards?.map((shards, index) => (
-                <TableCell key={index} align="center" sx={{ fontSize: '24px' }}>
+            {raid?.gateData?.honorShards && (
+              <TableRow>
+                <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>Shards</TableCell>
+                {raid?.gateData?.honorShards?.map((shards, index) => (
+                  <TableCell key={index} align="center" sx={{ fontSize: '24px' }}>
+                    <div className='flex flex-row raid-table-cell-row'>
+                      {shards}
+                      <img src={imagesData.honorShards} alt="Honor Shard" className='honor-shard-img' />
+                    </div>
+                  </TableCell>
+                ))}
+                <TableCell align="center" sx={{ fontSize: '24px' }}>
                   <div className='flex flex-row raid-table-cell-row'>
-                    {shards}
+                    {honorShardsTotal}
                     <img src={imagesData.honorShards} alt="Honor Shard" className='honor-shard-img' />
                   </div>
                 </TableCell>
-              ))}
-              <TableCell align="center" sx={{ fontSize: '24px' }}>
-                <div className='flex flex-row raid-table-cell-row'>
-                  {honorShardsTotal}
-                  <img src={imagesData.honorShards} alt="Honor Shard" className='honor-shard-img' />
-                </div>
-              </TableCell>
-            </TableRow>
+              </TableRow>
+            )}
             {/* Row for Honor Shards Box Clear */}
-            <TableRow>
-              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>Box Shards</TableCell>
-              {raid?.gateData?.honorShards?.map((shards, index) => (
-                <TableCell key={index} align="center" sx={{ fontSize: '24px' }}>
+            {raid?.gateData?.boxHonorShards && (
+              <TableRow className='even-row'>
+                <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>Box Shards</TableCell>
+                {raid?.gateData?.boxHonorShards?.map((shards, index) => (
+                  <TableCell key={index} align="center" sx={{ fontSize: '24px' }}>
+                    <div className='flex flex-row raid-table-cell-row'>
+                      {shards}
+                      <img src={imagesData.honorShards} alt="Honor Shard" className='honor-shard-img' />
+                    </div>
+                  </TableCell>
+                ))}
+                <TableCell align="center" sx={{ fontSize: '24px' }}>
                   <div className='flex flex-row raid-table-cell-row'>
-                    {shards}
+                    {boxHonorShardsTotal}
                     <img src={imagesData.honorShards} alt="Honor Shard" className='honor-shard-img' />
                   </div>
                 </TableCell>
-              ))}
-              <TableCell align="center" sx={{ fontSize: '24px' }}>
-                <div className='flex flex-row raid-table-cell-row'>
-                  {honorShardsTotal}
-                  <img src={imagesData.honorShards} alt="Honor Shard" className='honor-shard-img' />
-                </div>
-              </TableCell>
-            </TableRow>
+              </TableRow>
+            )}
+            {/* Shards Earnable row */}
+            {(raid?.gateData?.honorShards || raid?.gateData?.boxHonorShards) && (
+              <TableRow className='even-row'>
+                <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
+                  Honor Shards Earnable: {(honorShardsTotal ?? 0) + (boxHonorShardsTotal ?? 0)}
+                </TableCell>
+              </TableRow>
+            )}
             {/* Gold Earnable row */}
             <TableRow className='even-row'>
               <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
