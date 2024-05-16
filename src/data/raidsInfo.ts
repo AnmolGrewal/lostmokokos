@@ -3,6 +3,7 @@ export interface GateData {
   boxCost: number[];
   itemLevels: number[];
   gateRewards?: number[][];
+  honorShards?: number[];
 }
 
 export interface Raid {
@@ -23,6 +24,7 @@ const raidsInfo: Raid[] = [
       gold: [200, 300],
       boxCost: [100, 150],
       itemLevels: [1340],
+      honorShards: [200, 300]
     }
   },
   {
@@ -33,6 +35,7 @@ const raidsInfo: Raid[] = [
       gold: [300, 400],
       boxCost: [100, 150],
       itemLevels: [1370],
+      honorShards: [300, 400]
     }
   },
   {
@@ -43,6 +46,7 @@ const raidsInfo: Raid[] = [
       gold: [300, 300, 400],
       boxCost: [100, 150, 150],
       itemLevels: [1370],
+      honorShards: [300, 300, 400]
     }
   },
   {
@@ -56,6 +60,7 @@ const raidsInfo: Raid[] = [
       boxCost: [300, 400],
       itemLevels: [1415],
       gateRewards: [[1, 3], [2, 3]],
+      honorShards: [400, 600]
     }
   },
   {
@@ -69,6 +74,7 @@ const raidsInfo: Raid[] = [
       boxCost: [450, 600],
       itemLevels: [1445],
       gateRewards: [[3], [3]],
+      honorShards: [500, 700]
     }
   },
   {
@@ -82,6 +88,7 @@ const raidsInfo: Raid[] = [
       boxCost: [300, 450],
       itemLevels: [1430],
       gateRewards: [[2, 1], [4, 2]],
+      honorShards: [500, 700]
     }
   },
   {
@@ -95,6 +102,7 @@ const raidsInfo: Raid[] = [
       boxCost: [500, 650],
       itemLevels: [1460],
       gateRewards: [[3], [3]],
+      honorShards: [600, 900]
     }
   },
   {
@@ -108,6 +116,7 @@ const raidsInfo: Raid[] = [
       boxCost: [300, 500, 700],
       itemLevels: [1475],
       gateRewards: [[1], [2], [2]],
+      honorShards: [800, 800, 800]
     }
   },
   {
@@ -121,6 +130,7 @@ const raidsInfo: Raid[] = [
       boxCost: [400, 600, 800, 1500],
       itemLevels: [1490, 1490, 1500, 1520],
       gateRewards: [[4], [4], [5], [7]],
+      honorShards: [1000, 1200, 1500, 3000]
     }
   },
   {
@@ -134,6 +144,7 @@ const raidsInfo: Raid[] = [
       boxCost: [700, 900, 1100, 1800],
       itemLevels: [1540, 1540, 1550, 1560],
       gateRewards: [[6], [6], [7], [10]],
+      honorShards: [2500, 2500, 3000, 6000]
     }
   },
   {
@@ -147,6 +158,7 @@ const raidsInfo: Raid[] = [
       boxCost: [600, 800, 1000],
       itemLevels: [1540],
       gateRewards: [[11], [12,1], [17,2]],
+      honorShards: [2000, 2500, 3000]
     }
   },
   {
@@ -160,6 +172,7 @@ const raidsInfo: Raid[] = [
       boxCost: [700, 900, 1100],
       itemLevels: [1580],
       gateRewards: [[14,1], [16,1], [20,3]],
+      honorShards: [2500, 3500, 5000]
     }
   },
   {
@@ -173,6 +186,7 @@ const raidsInfo: Raid[] = [
       boxCost: [900, 1100, 1500],
       itemLevels: [1580],
       gateRewards: [[3], [3], [5]],
+      honorShards: [1600, 1600, 2400]
     }
   },
   {
@@ -186,6 +200,7 @@ const raidsInfo: Raid[] = [
       boxCost: [1200, 1400, 1900],
       itemLevels: [1600],
       gateRewards: [[7], [7], [8]],
+      honorShards: [2400, 2400, 4000]
     }
   },
   {
@@ -199,6 +214,7 @@ const raidsInfo: Raid[] = [
       boxCost: [700, 800, 900, 1100],
       itemLevels: [1600],
       gateRewards: [[2], [2], [3], [1,1]],
+      honorShards: [1500, 1500, 2000, 2000]
     }
   },
   {
@@ -212,6 +228,7 @@ const raidsInfo: Raid[] = [
       boxCost: [1000, 1000, 1500, 2000],
       itemLevels: [1620],
       gateRewards: [[2], [2], [3], [1,1]],
+      honorShards: [1800, 1800, 2400, 2400],
     }
   },
   {
@@ -225,6 +242,7 @@ const raidsInfo: Raid[] = [
       boxCost: [1500, 1800, 2500],
       itemLevels: [1610],
       gateRewards: [[2,3], [3,4], [4,6]],
+      honorShards: [2000, 2500, 3000],
     }
   },
   {
@@ -238,6 +256,7 @@ const raidsInfo: Raid[] = [
       boxCost: [2000, 2400, 2800, 3600],
       itemLevels: [1630],
       gateRewards: [[6,6], [9,8], [12,12], [12,12]],
+      honorShards: [2400, 3000, 3600, 4500],
     }
   },
   {
