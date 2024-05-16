@@ -101,6 +101,7 @@ export default function Home() {
             "Lined up Additional Gold with Total Gold for better readability",
             "Updated Raids Data to Include Boss Drops Upto Echnida",
             "Working on fixing totals for double boss rewards stacking on each other in raids Page",
+            "Added Trash Can Icon to Clear All Data from Gold Calculator Except Raid Selections",
           ].reverse().map((content, index) => (
             <TimelineItem key={index}>
               <TimelineSeparator>

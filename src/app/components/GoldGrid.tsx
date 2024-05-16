@@ -11,6 +11,7 @@ import { clsx } from 'clsx';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import TitleIcon from '@mui/icons-material/Title';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface GoldGridProps {
   raids: Raid[];
@@ -235,6 +236,13 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
     setHelpDialogOpen(!helpDialogOpen);
   };
 
+  const handleClearAllData = () => {
+    setCharacterCount(1);
+    setCharacterNames(['Character 1']);
+    setCheckedStates([initializeNewCharacterState()]);
+    setAdditionalGold(new Array(1).fill(0));
+  };
+
   return (
     <div>
       <h2 className="text-primary-text-color text-2xl mt-2 text-center">
@@ -248,8 +256,11 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
         <IconButton onClick={handleToggleSettingsDialog} size="small" sx={{ color: "var(--primary-text-color)", bgcolor: "var(--image-background-color)", borderRadius: "50%", mr: "5px", p: "5px", "&:hover": { bgcolor: "var(--primary-background-hover-color)" } }}>
           <SettingsIcon />
         </IconButton>
-        <IconButton onClick={handleToggleHelpDialog} size="small" sx={{ color: "var(--primary-text-color)", bgcolor: "var(--image-background-color)", borderRadius: "50%", p: "5px", "&:hover": { bgcolor: "var(--primary-background-hover-color)" } }}>
+        <IconButton onClick={handleToggleHelpDialog} size="small" sx={{ color: "var(--primary-text-color)", bgcolor: "var(--image-background-color)", borderRadius: "50%",mr: "5px", p: "5px", "&:hover": { bgcolor: "var(--primary-background-hover-color)" } }}>
           <HelpOutlineIcon />
+        </IconButton>
+        <IconButton onClick={handleClearAllData} size="small" sx={{ color: "var(--primary-text-color)", bgcolor: "var(--image-background-color)", borderRadius: "50%", p: "5px", "&:hover": { bgcolor: "var(--primary-background-hover-color)" } }}>
+          <DeleteIcon />
         </IconButton>
       </h2>
 
@@ -283,6 +294,10 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
               <li className="mt-4 flex">
                 <EditIcon sx={{ mr: 1 }} />
                 <span className='mt-0.5'>Click to edit the particular field in question</span>
+              </li>
+              <li className="mt-4 flex">
+                <DeleteIcon sx={{ mr: 1 }} />
+                <span className='mt-0.5'>Click to clear all data and reset to default</span>
               </li>
             </ul>
           </div>
