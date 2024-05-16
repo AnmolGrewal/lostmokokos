@@ -348,7 +348,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
           <div className="mt-3">
             <p className="text-sm text-center mb-10">Select A Raid Below to Toggle Raid Visibility</p>
           </div>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {Object.keys(raidGroups).map((label, index) => (
               <Chip
                 key={index}
