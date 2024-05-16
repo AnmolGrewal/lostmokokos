@@ -107,6 +107,16 @@ body {
   flex-direction: column;
 }
 
+.raid-table-cell-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  flex-direction: row;
+}
+
 .reward-img {
   width: 48px;
   height: 48px;
@@ -117,4 +127,10 @@ body {
   width: 30px; /* Adjust the width as needed */
   text-align: center; /* Align the text to the right */
   padding-right: 5px; /* Add some padding to the right to create space between the count and the image */
+}
+
+.honor-shard-img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
 }

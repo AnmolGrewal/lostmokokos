@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tooltip } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tooltip, Tab } from '@mui/material';
 import { Raid } from '../../data/raidsInfo';
 import { faSkull } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,6 +9,7 @@ import Link from 'next/link';
 import raidsInfo from '../../data/raidsInfo';
 import IconButton from '@mui/material/IconButton';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import imagesData from '@/data/imageLinks';
 
 interface RaidGridProps {
   raid: Raid;
@@ -87,6 +88,8 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
       return acc;
     }, 0)
     : 0;
+  const honorShardsTotal = raid?.gateData?.honorShards?.reduce((total, shards) => total + shards, 0);
+  const boxHonorShardsTotal = raid?.gateData?.honorShards?.reduce((total, shards) => total + shards, 0);
   
 
   const handleCellClick = (rowIndex: number, columnIndex: number) => {
@@ -200,6 +203,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                       }}
                       onClick={() => handleCellClick(rowIndex, columnIndex)}
                     >
+                      {showDifferences ? displayValues(rowIndex, columnIndex) : value}
                       <img
                         src="https://i.imgur.com/DI98qp1.png"
                         alt="Gold Icon"
@@ -209,14 +213,13 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                           transition: 'width 0.3s ease'
                         }}
                       />
-                      {showDifferences ? displayValues(rowIndex, columnIndex) : value}
                     </div>
                   </TableCell>
                 ))}
                 <TableCell align="center" className={row.category === 'Box Cost' ? 'box-cost-cell' : ''} sx={{ borderBottom: '2px solid var(--primary-text-label-color)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" style={{ width: '20px', marginRight: '5px' }} />
                     {showDifferences ? displayTotalValues(rowIndex) : row.total}
+                    <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" style={{ width: '20px', marginRight: '5px' }} />
                   </div>
                 </TableCell>
               </TableRow>
@@ -271,8 +274,44 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                 </TableCell>
               </TableRow>
             )}
-            {/* Gold Earnable row */}
+            {/* Row for Honor Shards Normal Clear */}
             <TableRow>
+              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>Shards</TableCell>
+              {raid?.gateData?.honorShards?.map((shards, index) => (
+                <TableCell key={index} align="center" sx={{ fontSize: '24px' }}>
+                  <div className='flex flex-row raid-table-cell-row'>
+                    {shards}
+                    <img src={imagesData.honorShards} alt="Honor Shard" className='honor-shard-img' />
+                  </div>
+                </TableCell>
+              ))}
+              <TableCell align="center" sx={{ fontSize: '24px' }}>
+                <div className='flex flex-row raid-table-cell-row'>
+                  {honorShardsTotal}
+                  <img src={imagesData.honorShards} alt="Honor Shard" className='honor-shard-img' />
+                </div>
+              </TableCell>
+            </TableRow>
+            {/* Row for Honor Shards Box Clear */}
+            <TableRow>
+              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>Box Shards</TableCell>
+              {raid?.gateData?.honorShards?.map((shards, index) => (
+                <TableCell key={index} align="center" sx={{ fontSize: '24px' }}>
+                  <div className='flex flex-row raid-table-cell-row'>
+                    {shards}
+                    <img src={imagesData.honorShards} alt="Honor Shard" className='honor-shard-img' />
+                  </div>
+                </TableCell>
+              ))}
+              <TableCell align="center" sx={{ fontSize: '24px' }}>
+                <div className='flex flex-row raid-table-cell-row'>
+                  {honorShardsTotal}
+                  <img src={imagesData.honorShards} alt="Honor Shard" className='honor-shard-img' />
+                </div>
+              </TableCell>
+            </TableRow>
+            {/* Gold Earnable row */}
+            <TableRow className='even-row'>
               <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
                 Gold Earnable: {goldEarned}
               </TableCell>
