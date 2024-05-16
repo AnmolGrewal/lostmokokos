@@ -321,7 +321,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
             )}
             {/* Shards Earnable row */}
             {(raid?.gateData?.honorShards || raid?.gateData?.boxHonorShards) && (
-              <TableRow className='even-row'>
+              <TableRow>
                 <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
                   Honor Shards Earnable: {(honorShardsTotal ?? 0) + (boxHonorShardsTotal ?? 0)}
                 </TableCell>
