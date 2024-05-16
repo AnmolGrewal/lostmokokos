@@ -226,7 +226,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>Rewards</TableCell>
                 {raid.gateData.gateRewards && raid.gateData.gateRewards.map((rewards, index) => (
                   <TableCell key={index}>
-                    <div className='raid-table-cell'>
+                    <div className='raid-table-cell min-w-max'>
                       {rewards.map((reward, rewardIndex) => (
                         <div key={rewardIndex} className='reward-cell flex flex-row flex-shrink-0 justify-center items-center text-2xl w-fit'>
                           <div className='reward-count'>{reward}</div>
@@ -244,7 +244,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                   </TableCell>
                 ))}
                 <TableCell>
-                  <div className='raid-table-cell'>
+                  <div className='raid-table-cell min-w-max'>
                     <div className='reward-cell flex flex-row flex-shrink-0 justify-center items-center text-2xl w-fit'>
                       <div className='reward-count'>{rewardsFirstTotal}</div>
                       <img
@@ -256,7 +256,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                     </div>
                   </div>
                   {rewardsSecondTotal > 0 && (
-                    <div className='raid-table-cell'>
+                    <div className='raid-table-cell min-w-max'>
                       <div className='reward-cell flex flex-row flex-shrink-0 justify-center items-center text-2xl w-fit'>
                         <div className='reward-count'>{rewardsSecondTotal}</div>
                         <img

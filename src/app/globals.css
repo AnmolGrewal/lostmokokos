@@ -104,10 +104,17 @@ body {
   position: relative;
   cursor: pointer;
   transition: opacity 0.3s ease;
+  flex-direction: column;
 }
 
 .reward-img {
   width: 48px;
   height: 48px;
   object-fit: contain;
+}
+
+.reward-count {
+  width: 30px; /* Adjust the width as needed */
+  text-align: center; /* Align the text to the right */
+  padding-right: 5px; /* Add some padding to the right to create space between the count and the image */
 }
