@@ -236,11 +236,18 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
     setHelpDialogOpen(!helpDialogOpen);
   };
 
-  const handleClearAllData = () => {
+  const [confirmClearDialogOpen, setConfirmClearDialogOpen] = useState<boolean>(false);
+
+  const handleToggleConfirmClearDialog = () => {
+    setConfirmClearDialogOpen(!confirmClearDialogOpen);
+  };
+  
+  const handleClearAllDataConfirmed = () => {
     setCharacterCount(1);
     setCharacterNames(['Character 1']);
     setCheckedStates([initializeNewCharacterState()]);
     setAdditionalGold(new Array(1).fill(0));
+    handleToggleConfirmClearDialog();
   };
 
   return (
@@ -259,10 +266,26 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
         <IconButton onClick={handleToggleHelpDialog} size="small" sx={{ color: "var(--primary-text-color)", bgcolor: "var(--image-background-color)", borderRadius: "50%",mr: "5px", p: "5px", "&:hover": { bgcolor: "var(--primary-background-hover-color)" } }}>
           <HelpOutlineIcon />
         </IconButton>
-        <IconButton onClick={handleClearAllData} size="small" sx={{ color: "var(--primary-text-color)", bgcolor: "var(--image-background-color)", borderRadius: "50%", p: "5px", "&:hover": { bgcolor: "var(--primary-background-hover-color)" } }}>
+        <IconButton onClick={handleToggleConfirmClearDialog} size="small" sx={{ color: "var(--primary-text-color)", bgcolor: "var(--image-background-color)", borderRadius: "50%", p: "5px", "&:hover": { bgcolor: "var(--primary-background-hover-color)" } }}>
           <DeleteIcon />
         </IconButton>
       </h2>
+
+      <Dialog open={confirmClearDialogOpen} onClose={handleToggleConfirmClearDialog} sx={{
+        '& .MuiPaper-root': {
+          backgroundColor: 'var(--chip-background-color)',
+          color: 'var(--primary-text-color)',
+        }
+      }}>
+        <DialogTitle sx={{ color: 'var(--primary-text-label-color)' }}>Confirm Clear All Data</DialogTitle>
+        <DialogContent>
+          <p>Are you sure you want to clear all data and reset to default?</p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleToggleConfirmClearDialog} sx={{ color: 'inherit' }}>Cancel</Button>
+          <Button onClick={handleClearAllDataConfirmed} sx={{ color: 'inherit' }}>Clear All Data</Button>
+        </DialogActions>
+      </Dialog>
 
       <Dialog open={helpDialogOpen} onClose={handleToggleHelpDialog} sx={{
         '& .MuiPaper-root': {
