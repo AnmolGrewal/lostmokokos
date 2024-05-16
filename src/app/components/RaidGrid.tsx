@@ -224,6 +224,12 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                 </TableCell>
               </TableRow>
             ))}
+            {/* Gold Earnable row */}
+            <TableRow className='even-row'>
+              <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
+                Gold Earnable: {goldEarned}
+              </TableCell>
+            </TableRow>
             {raid.gateRewardImgSrc && (
               <TableRow className='even-row'>
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>Rewards</TableCell>
@@ -321,12 +327,6 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                 </TableCell>
               </TableRow>
             )}
-            {/* Gold Earnable row */}
-            <TableRow className='even-row'>
-              <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
-                Gold Earnable: {goldEarned}
-              </TableCell>
-            </TableRow>
           </TableBody>
 
         </Table>
