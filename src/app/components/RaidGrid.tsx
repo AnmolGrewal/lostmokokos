@@ -90,6 +90,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
     : 0;
   const honorShardsTotal = raid?.gateData?.honorShards?.reduce((total, shards) => total + shards, 0);
   const boxHonorShardsTotal = raid?.gateData?.boxHonorShards?.reduce((total, shards) => total + shards, 0);
+  const chaosStonesTotal = raid?.gateData?.chaosStones?.reduce((total, stones) => total + stones, 0);
   
 
   const handleCellClick = (rowIndex: number, columnIndex: number) => {
@@ -315,6 +316,28 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                   <div className='flex flex-row raid-table-cell-row min-w-max'>
                     {boxHonorShardsTotal}
                     <img src={imagesData.honorShards} alt="Honor Shard" className='honor-shard-img' />
+                  </div>
+                </TableCell>
+              </TableRow>
+            )}
+            {/* Chaos Stones Row Total */}
+            {(chaosStonesTotal && chaosStonesTotal > 0) && (
+              <TableRow className='even-row min-w-max'>
+                <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>Chaos Stones</TableCell>
+                {raid?.gateData?.chaosStones?.map((stones, index) => (
+                  <TableCell key={index} align="center" sx={{ fontSize: '24px' }}>
+                    {(stones > 0) && (
+                      <div className='flex flex-row raid-table-cell-row'>
+                        {stones}
+                        <img src={imagesData.chaosStones} alt="Chaos Stones" className='honor-shard-img' />
+                      </div>
+                    )}
+                  </TableCell>
+                ))}
+                <TableCell align="right" sx={{ fontSize: '24px' }} className='min-w-max'>
+                  <div className='flex flex-row raid-table-cell-row min-w-max'>
+                    {chaosStonesTotal}
+                    <img src={imagesData.chaosStones} alt="Honor Shard" className='honor-shard-img' />
                   </div>
                 </TableCell>
               </TableRow>

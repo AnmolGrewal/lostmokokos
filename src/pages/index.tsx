@@ -104,7 +104,8 @@ export default function Home() {
             "Added Trash Can Icon to Clear All Data from Gold Calculator Except Raid Selections",
             "Managing Raids is now 2 columns if you have a smaller screen or width",
             "Added All Honor Shard Rewards Upto Thaemine!",
-            "Added a Popup to confirm to clear data so you don't accidently delete it :)"
+            "Added a Popup to confirm to clear data so you don't accidently delete it :)",
+            "Adding Chaos Stones to Raid Grid",
           ].reverse().map((content, index) => (
             <TimelineItem key={index}>
               <TimelineSeparator>
