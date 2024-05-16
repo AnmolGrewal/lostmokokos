@@ -103,7 +103,8 @@ export default function Home() {
             "Working on fixing totals for double boss rewards stacking on each other in raids Page",
             "Added Trash Can Icon to Clear All Data from Gold Calculator Except Raid Selections",
             "Managing Raids is now 2 columns if you have a smaller screen or width",
-            "Added All Honor Shard Rewards Upto Thaemine!"
+            "Added All Honor Shard Rewards Upto Thaemine!",
+            "Added a Popup to confirm to clear data so you don't accidently delete it :)"
           ].reverse().map((content, index) => (
             <TimelineItem key={index}>
               <TimelineSeparator>
