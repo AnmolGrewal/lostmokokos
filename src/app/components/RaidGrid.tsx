@@ -281,7 +281,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
             )}
             {/* Row for Honor Shards Normal Clear */}
             {raid?.gateData?.honorShards && (
-              <TableRow>
+              <TableRow className='min-w-max'>
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>Shards</TableCell>
                 {raid?.gateData?.honorShards?.map((shards, index) => (
                   <TableCell key={index} align="center" sx={{ fontSize: '24px' }}>
@@ -291,8 +291,8 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                     </div>
                   </TableCell>
                 ))}
-                <TableCell align="center" sx={{ fontSize: '24px' }}>
-                  <div className='flex flex-row raid-table-cell-row'>
+                <TableCell align="center" sx={{ fontSize: '24px' }} className='min-w-max'>
+                  <div className='flex flex-row raid-table-cell-row min-w-max'>
                     {honorShardsTotal}
                     <img src={imagesData.honorShards} alt="Honor Shard" className='honor-shard-img' />
                   </div>
@@ -301,7 +301,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
             )}
             {/* Row for Honor Shards Box Clear */}
             {raid?.gateData?.boxHonorShards && (
-              <TableRow className='even-row'>
+              <TableRow className='even-row min-w-max'>
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>Box Shards</TableCell>
                 {raid?.gateData?.boxHonorShards?.map((shards, index) => (
                   <TableCell key={index} align="center" sx={{ fontSize: '24px' }}>
@@ -311,8 +311,8 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                     </div>
                   </TableCell>
                 ))}
-                <TableCell align="center" sx={{ fontSize: '24px' }}>
-                  <div className='flex flex-row raid-table-cell-row'>
+                <TableCell align="center" sx={{ fontSize: '24px' }} className='min-w-max'>
+                  <div className='flex flex-row raid-table-cell-row min-w-max'>
                     {boxHonorShardsTotal}
                     <img src={imagesData.honorShards} alt="Honor Shard" className='honor-shard-img' />
                   </div>
