@@ -124,9 +124,11 @@ body {
 }
 
 .reward-count {
-  width: 30px; /* Adjust the width as needed */
+  min-width: 30px; /* Adjust the width as needed */
   text-align: center; /* Align the text to the right */
   padding-right: 5px; /* Add some padding to the right to create space between the count and the image */
+  display: flex;
+  flex-shrink: 0;
 }
 
 .honor-shard-img {
