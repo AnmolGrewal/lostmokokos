@@ -198,7 +198,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const calculateTotalGold = () => {
     let total = 0;
     for (let i = 0; i < characterCount; i++) {
-      total += calculateCharacterTotalGold(i) + additionalGold[i];
+      total += calculateCharacterTotalGold(i);
     }
     return total.toLocaleString(); // Formats the total gold with commas
   };

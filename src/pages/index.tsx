@@ -106,6 +106,7 @@ export default function Home() {
             "Added All Honor Shard Rewards Upto Thaemine!",
             "Added a Popup to confirm to clear data so you don't accidently delete it :)",
             "Adding Chaos Stones to Raid Grid",
+            "Fixed bug that Additional Gold was Adding Twice to Total Gold",
           ].reverse().map((content, index) => (
             <TimelineItem key={index}>
               <TimelineSeparator>
