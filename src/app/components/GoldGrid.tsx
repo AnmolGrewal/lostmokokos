@@ -29,10 +29,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const initializeNewCharacterState = useCallback((): CharacterState => {
     let newState: CharacterState = {};
     raids.forEach(raid => {
-      ['normal', 'hard'].forEach(mode => {
-        const fullPath = `${raid.path}${mode}`;
-        newState[fullPath] = new Array(raid.gateData.gold.length).fill(false);
-      });
+      newState[raid.path] = new Array(raid.gateData.gold.length).fill(false);
     });
     return newState;
   }, [raids]);
@@ -83,12 +80,9 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
       setCheckedStates(prevStates => prevStates.map(characterState => {
         let newState = { ...characterState };
         raidsInGroup.forEach(raid => {
-          ['normal', 'hard'].forEach(mode => {
-            const fullPath = `${raid.path}${mode}`;
-            if (newState[fullPath]) {
-              newState[fullPath] = newState[fullPath].map(() => false);
-            }
-          });
+          if (newState[raid.path]) {
+            newState[raid.path] = newState[raid.path].map(() => false);
+          }
         });
         return newState;
       }));
@@ -165,31 +159,28 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
     handleCloseEditDialog();
   };
 
-  const handleToggle = (raidPath: string, mode: 'normal' | 'hard') => {
-    const fullPath = raidPath + mode;
-    setOpen(prev => ({ ...prev, [fullPath]: !prev[fullPath] }));
+  const handleToggle = (raidPath: string) => {
+    setOpen(prev => ({ ...prev, [raidPath]: !prev[raidPath] }));
   };
 
-  const handleMainCheckboxChange = (raidPath: string, mode: 'normal' | 'hard', columnIndex: number) => {
-    const fullPath = raidPath + mode;
-    const allChecked = checkedStates[columnIndex][fullPath]?.every(Boolean);
+  const handleMainCheckboxChange = (raidPath: string, columnIndex: number) => {
+    const allChecked = checkedStates[columnIndex][raidPath]?.every(Boolean);
     setCheckedStates(prevStates => prevStates.map((state, index) => {
       if (index === columnIndex) {
         let updatedState = { ...state };
-        updatedState[fullPath] = updatedState[fullPath].map(() => !allChecked);
+        updatedState[raidPath] = updatedState[raidPath].map(() => !allChecked);
         return updatedState;
       }
       return state;
     }));
   };
 
-  const handleGateCheckboxChange = (raidPath: string, mode: 'normal' | 'hard', columnIndex: number, index: number) => {
-    const fullPath = raidPath + mode;
+  const handleGateCheckboxChange = (raidPath: string, columnIndex: number, index: number) => {
     setCheckedStates(prevStates => {
       const newState = [...prevStates];
       newState[columnIndex] = {
         ...newState[columnIndex],
-        [fullPath]: newState[columnIndex][fullPath]?.map((value, i) => i === index ? !value : value) || []
+        [raidPath]: newState[columnIndex][raidPath]?.map((value, i) => i === index ? !value : value) || []
       };
       return newState;
     });
@@ -213,18 +204,20 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   }, {});
 
   const calculateCharacterTotalGold = (characterIndex: number) => {
-    const total = Object.entries(checkedStates[characterIndex] || {}).reduce((characterSum, [key, checks]) => {
-      const raidPath = key.replace(/normal|hard/, '');
-      const raidIndex = raids.findIndex(r => r.path === raidPath);
-      if (raidIndex !== -1 && raidVisibility[raidIndex]) { // Check if raid is visible
-        const raid = raids[raidIndex];
-        const sum = raid.gateData.gold.reduce((sum, gold, index) => sum + (checks[index] ? gold : 0), 0);
-        return characterSum + sum;
+    let total = 0;
+    raids.forEach((raid) => {
+      if (raidVisibility[raids.indexOf(raid)]) {
+        total += raid.gateData.gold.reduce((sum, gold, index) => {
+          if (checkedStates[characterIndex]?.[raid.path]?.[index]) {
+            return sum + gold;
+          }
+          return sum;
+        }, 0);
       }
-      return characterSum; // If raid is not visible, don't include its gold
-    }, 0);
-    return total + additionalGold[characterIndex]; // Returns the numeric total gold for a character
+    });
+    return total + additionalGold[characterIndex];
   };
+  
 
   const handleToggleSettingsDialog = () => {
     setSettingsDialogOpen(!settingsDialogOpen);
@@ -484,32 +477,31 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                     <TableCell key={characterIndex} sx={{ textAlign: 'center' }}>
                       <FormGroup row className='justify-center'>
                         {groupedRaids.map((raid: Raid) => {
-                          const mode = raid.path.includes('-hard') ? 'hard' : 'normal';
                           return (
                             <div key={raid.path} className='min-w-36 text-left'>
-                              <IconButton onClick={() => handleToggle(raid.path, mode)} size="small">
+                              <IconButton onClick={() => handleToggle(raid.path)} size="small">
                                 <ExpandMoreIcon />
                               </IconButton>
                               <FormControlLabel
                                 control={
                                   <Checkbox
-                                    checked={checkedStates[characterIndex]?.[raid.path + mode]?.every(Boolean) || false}
-                                    indeterminate={checkedStates[characterIndex]?.[raid.path + mode]?.some(Boolean) && !checkedStates[characterIndex]?.[raid.path + mode]?.every(Boolean)}
-                                    onChange={() => handleMainCheckboxChange(raid.path, mode, characterIndex)}
+                                    checked={checkedStates[characterIndex]?.[raid.path]?.every(Boolean) || false}
+                                    indeterminate={checkedStates[characterIndex]?.[raid.path]?.some(Boolean) && !checkedStates[characterIndex]?.[raid.path]?.every(Boolean)}
+                                    onChange={() => handleMainCheckboxChange(raid.path, characterIndex)}
                                   />
                                 }
-                                label={mode.charAt(0).toUpperCase() + mode.slice(1)}
+                                label={raid.path.endsWith("-hard") ? "Hard" : "Normal"}
                                 sx={{ textAlign: 'center' }} // Center the labels
                               />
-                              <Collapse in={open[raid.path + mode]} timeout="auto" unmountOnExit>
+                              <Collapse in={open[raid.path]} timeout="auto" unmountOnExit>
                                 <div style={{ marginLeft: '40px' }}>
                                   {raid.gateData.gold.map((_, gateIndex: number) => (
                                     <FormControlLabel className='flex justify-center items-center'
                                       key={`${raid.path}-gate-${gateIndex}`}
                                       control={
                                         <Checkbox
-                                          checked={checkedStates[characterIndex]?.[raid.path + mode]?.[gateIndex] || false}
-                                          onChange={() => handleGateCheckboxChange(raid.path, mode, characterIndex, gateIndex)}
+                                          checked={checkedStates[characterIndex]?.[raid.path]?.[gateIndex] || false}
+                                          onChange={() => handleGateCheckboxChange(raid.path, characterIndex, gateIndex)}
                                           className='flex justify-center items-center'
                                         />
                                       }
