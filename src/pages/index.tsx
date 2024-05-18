@@ -82,7 +82,7 @@ export default function Home() {
         </ul>
       </div>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
-        <h1 className='text-primary-text-color text-center text-[48px]'>Please do not Remove Thaemine or Echnida Raids or you will get incorrect Calculations. Working on a Fix!</h1>
+        <h1 className='text-primary-text-color text-center text-[48px]'>Fixed Removing Thaemine or Echnida Raids! If You are Having Issues please click Trash Can to Delete Data and Reset!</h1>
         <hr className="my-8" />
         <h2 className='text-primary-text-color text-center text-[48px]'>Boss Rewards for Box and Clear are the same so they are not added twice</h2>
         <Timeline position="alternate-reverse">
@@ -107,6 +107,8 @@ export default function Home() {
             "Added a Popup to confirm to clear data so you don't accidently delete it :)",
             "Adding Chaos Stones to Raid Grid",
             "Fixed bug that Additional Gold was Adding Twice to Total Gold",
+            "Rewrote Gold Calculator Special Key to Calculate Gold for Each Raid",
+            "Fixed Thaemine and Echnida Raid Removal Issues for Gold Calculator!"
           ].reverse().map((content, index) => (
             <TimelineItem key={index}>
               <TimelineSeparator>

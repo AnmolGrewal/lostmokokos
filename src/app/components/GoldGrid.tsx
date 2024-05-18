@@ -206,19 +206,17 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const calculateCharacterTotalGold = (characterIndex: number) => {
     let total = 0;
     raids.forEach((raid) => {
-      if (raidVisibility[raids.indexOf(raid)]) {
-        total += raid.gateData.gold.reduce((sum, gold, index) => {
-          if (checkedStates[characterIndex]?.[raid.path]?.[index]) {
-            return sum + gold;
-          }
-          return sum;
-        }, 0);
-      }
+      total += raid.gateData.gold.reduce((sum, gold, index) => {
+        if (checkedStates[characterIndex]?.[raid.path]?.[index]) {
+          return sum + gold;
+        }
+        return sum;
+      }, 0);
     });
+    console.log(total);
     return total + additionalGold[characterIndex];
   };
   
-
   const handleToggleSettingsDialog = () => {
     setSettingsDialogOpen(!settingsDialogOpen);
   };
