@@ -71,7 +71,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
     const label = Object.keys(raidGroups)[labelIndex];
     const updatedVisibility = raidVisibility.map((visible, i) => i === labelIndex ? !visible : visible);
     setRaidVisibility(updatedVisibility);
-    localStorage.setItem('raidVisibility', JSON.stringify(updatedVisibility));
+    localStorage.setItem('raidVisibility1', JSON.stringify(updatedVisibility));
   
     // If the raid is being hidden, set all associated check states to false
     if (!updatedVisibility[labelIndex]) {
@@ -91,12 +91,12 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
 
   useEffect(() => {
     const loadInitialData = () => {
-      const savedRaidVisibility = JSON.parse(localStorage.getItem('raidVisibility') || '[]');
-      const savedCharacterCount = parseInt(localStorage.getItem('characterCount') || '1', 10);
-      const savedCharacterNames = JSON.parse(localStorage.getItem('characterNames') || '[]');
-      const defaultCharacterNames = Array(savedCharacterCount).fill('Character').map((name, index) => `${name} ${index + 1}`);
-      const savedCheckedStates = JSON.parse(localStorage.getItem('checkedStates') || '[]');
-      const savedAdditionalGold = JSON.parse(localStorage.getItem('additionalGold') || '[]');
+      const savedRaidVisibility = JSON.parse(localStorage.getItem('raidVisibility1') || '[]');
+      const savedCharacterCount = parseInt(localStorage.getItem('characterCount1') || '1', 10);
+      const savedCharacterNames = JSON.parse(localStorage.getItem('characterNames1') || '[]');
+      const defaultCharacterNames = Array(savedCharacterCount).fill('Character1').map((name, index) => `${name} ${index + 1}`);
+      const savedCheckedStates = JSON.parse(localStorage.getItem('checkedStates1') || '[]');
+      const savedAdditionalGold = JSON.parse(localStorage.getItem('additionalGold1') || '[]');
       const defaultAdditionalGold = new Array(savedCharacterCount).fill(0);
   
       setRaidVisibility(savedRaidVisibility.length ? savedRaidVisibility : raids.map(() => true));
@@ -116,10 +116,10 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
 
   useEffect(() => {
     // Save all character related data to localStorage
-    localStorage.setItem('characterCount', characterCount.toString());
-    localStorage.setItem('characterNames', JSON.stringify(characterNames));
-    localStorage.setItem('checkedStates', JSON.stringify(checkedStates));
-    localStorage.setItem('additionalGold', JSON.stringify(additionalGold));
+    localStorage.setItem('characterCount1', characterCount.toString());
+    localStorage.setItem('characterNames1', JSON.stringify(characterNames));
+    localStorage.setItem('checkedStates1', JSON.stringify(checkedStates));
+    localStorage.setItem('additionalGold1', JSON.stringify(additionalGold));
   }, [characterCount, characterNames, checkedStates, additionalGold]);
 
   const handleAddCharacter = () => {
