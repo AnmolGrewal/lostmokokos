@@ -94,7 +94,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
       const savedRaidVisibility = JSON.parse(localStorage.getItem('raidVisibility1') || '[]');
       const savedCharacterCount = parseInt(localStorage.getItem('characterCount1') || '1', 10);
       const savedCharacterNames = JSON.parse(localStorage.getItem('characterNames1') || '[]');
-      const defaultCharacterNames = Array(savedCharacterCount).fill('Character1').map((name, index) => `${name} ${index + 1}`);
+      const defaultCharacterNames = Array(savedCharacterCount).fill('Character').map((name, index) => `${name} ${index + 1}`);
       const savedCheckedStates = JSON.parse(localStorage.getItem('checkedStates1') || '[]');
       const savedAdditionalGold = JSON.parse(localStorage.getItem('additionalGold1') || '[]');
       const defaultAdditionalGold = new Array(savedCharacterCount).fill(0);
