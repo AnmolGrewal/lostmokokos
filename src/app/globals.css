@@ -35,9 +35,7 @@
 }
 
 *::-webkit-scrollbar-track {
-  background: var(
-    --secondary-background-color
-  ); /* color of the track. It can be transparent or match the page background */
+  background: var(--secondary-background-color); /* color of the track. It can be transparent or match the page background */
   /* border-radius: 10px; optional: roundness of the track */
 }
 
@@ -53,9 +51,7 @@
 }
 
 *::-webkit-scrollbar-corner {
-  background: var(
-    --secondary-background-color
-  ); /* Optional: color of the corner where both scrollbars meet */
+  background: var(--secondary-background-color); /* Optional: color of the corner where both scrollbars meet */
 }
 
 .main-content {
@@ -82,9 +78,7 @@ body {
 }
 
 html {
-  background-color: var(
-    --primary-background-color
-  ); /* Default background color */
+  background-color: var(--primary-background-color); /* Default background color */
 }
 
 body {
