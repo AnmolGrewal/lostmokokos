@@ -160,9 +160,9 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
         savedCheckedStates.length
           ? savedCheckedStates
           : Array.from(
-              { length: savedCharacterCount },
-              initializeNewCharacterState,
-            ),
+            { length: savedCharacterCount },
+            initializeNewCharacterState,
+          ),
       );
 
       if (savedAdditionalGold.length === savedCharacterCount) {
