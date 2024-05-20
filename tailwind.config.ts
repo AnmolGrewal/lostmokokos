@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-import colors from './tailwind-colors';
+import colors from "./tailwind-colors";
 
 const config: Config = {
   content: [

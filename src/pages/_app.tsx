@@ -1,25 +1,25 @@
-import '../../src/app/globals.css';
-import type { AppProps } from 'next/app';
-import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
-import ContentSelector from '../app/components/ContentSelector';
-import { SpeedInsights } from "@vercel/speed-insights/next"
-import { Analytics } from "@vercel/analytics/react"
-import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google'
+import "../../src/app/globals.css";
+import type { AppProps } from "next/app";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
+import ContentSelector from "../app/components/ContentSelector";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/react";
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 
 // Dynamically import a component, disabling server-side rendering for it
-const ClockBar = dynamic(() => import('../app/components/ClockBar'), {
-  ssr: false
+const ClockBar = dynamic(() => import("../app/components/ClockBar"), {
+  ssr: false,
 });
 
-const NavigationBar = dynamic(() => import('../app/components/NavigationBar'), {
-  ssr: false
+const NavigationBar = dynamic(() => import("../app/components/NavigationBar"), {
+  ssr: false,
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
-  const isRaidPage = router.pathname.startsWith('/raids/');
+  const isRaidPage = router.pathname.startsWith("/raids/");
 
   return (
     <div className="flex flex-col min-h-screen bg-primary-background-color">
@@ -28,9 +28,11 @@ function MyApp({ Component, pageProps }: AppProps) {
         <NavigationBar currentPath={router.pathname} />
       </header>
       <main className="flex-grow">
-        {isRaidPage && <div className="min-w-full overflow-hidden">
-          <ContentSelector currentPath={router.asPath} />
-        </div>}
+        {isRaidPage && (
+          <div className="min-w-full overflow-hidden">
+            <ContentSelector currentPath={router.asPath} />
+          </div>
+        )}
         <Component {...pageProps} />
         <Analytics />
         <SpeedInsights />

@@ -1,40 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { Helmet } from 'react-helmet';
-import Timeline from '@mui/lab/Timeline';
-import TimelineItem from '@mui/lab/TimelineItem';
-import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import TimelineConnector from '@mui/lab/TimelineConnector';
-import TimelineContent from '@mui/lab/TimelineContent';
-import TimelineDot from '@mui/lab/TimelineDot';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
+import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { Helmet } from "react-helmet";
+import Timeline from "@mui/lab/Timeline";
+import TimelineItem from "@mui/lab/TimelineItem";
+import TimelineSeparator from "@mui/lab/TimelineSeparator";
+import TimelineConnector from "@mui/lab/TimelineConnector";
+import TimelineContent from "@mui/lab/TimelineContent";
+import TimelineDot from "@mui/lab/TimelineDot";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
 
 export default function Home() {
   const [todos, setTodos] = useState<string[]>([]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
 
   useEffect(() => {
-    const storedTodos = localStorage.getItem('todos');
+    const storedTodos = localStorage.getItem("todos");
     if (storedTodos) {
       setTodos(JSON.parse(storedTodos));
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
+    localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
   const handleAddTodo = () => {
     if (input) {
-      setTodos(todos => [...todos, input]);
-      setInput('');
+      setTodos((todos) => [...todos, input]);
+      setInput("");
     }
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       event.preventDefault(); // Prevent form from submitting
       handleAddTodo();
     }
@@ -49,12 +49,21 @@ export default function Home() {
     <main className="main-content bg-primary-background-color text-white min-h-screen">
       <Helmet>
         <title>Lost Mokokos</title>
-        <meta name="description" content="Lost Ark Information for all your needs" />
+        <meta
+          name="description"
+          content="Lost Ark Information for all your needs"
+        />
       </Helmet>
       <h1 className="text-4xl text-center mt-4 mb-4">Lost Mokokos</h1>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
         <h2 className="text-lg text-primary-text-color">Todo List</h2>
-        <form className="flex gap-2 mb-4" onSubmit={(e) => { e.preventDefault(); handleAddTodo(); }}>
+        <form
+          className="flex gap-2 mb-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleAddTodo();
+          }}
+        >
           <input
             type="text"
             className="flex-grow p-2 border rounded bg-primary-background-color text-white"
@@ -74,7 +83,10 @@ export default function Home() {
           {todos.map((todo, index) => (
             <li key={index} className="flex justify-between items-center">
               {todo}
-              <button className="text-red-500" onClick={() => handleRemoveTodo(index)}>
+              <button
+                className="text-red-500"
+                onClick={() => handleRemoveTodo(index)}
+              >
                 <FontAwesomeIcon icon={faTimes} />
               </button>
             </li>
@@ -82,9 +94,15 @@ export default function Home() {
         </ul>
       </div>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
-        <h1 className='text-primary-text-color text-center text-[48px]'>Fixed Removing Thaemine or Echnida Raids! If You are Having Issues please click Trash Can to Delete Data and Reset!</h1>
+        <h1 className="text-primary-text-color text-center text-[48px]">
+          Fixed Removing Thaemine or Echnida Raids! If You are Having Issues
+          please click Trash Can to Delete Data and Reset!
+        </h1>
         <hr className="my-8" />
-        <h2 className='text-primary-text-color text-center text-[48px]'>Boss Rewards for Box and Clear are the same so they are not added twice</h2>
+        <h2 className="text-primary-text-color text-center text-[48px]">
+          Boss Rewards for Box and Clear are the same so they are not added
+          twice
+        </h2>
         <Timeline position="alternate-reverse">
           {[
             "Updated Manage Raids styling to work properly for Active, Inactive and Hover over Raid Chips and Help Text",
@@ -108,20 +126,25 @@ export default function Home() {
             "Adding Chaos Stones to Raid Grid",
             "Fixed bug that Additional Gold was Adding Twice to Total Gold",
             "Rewrote Gold Calculator Special Key to Calculate Gold for Each Raid",
-            "Fixed Thaemine and Echnida Raid Removal Issues for Gold Calculator!"
-          ].reverse().map((content, index) => (
-            <TimelineItem key={index}>
-              <TimelineSeparator>
-                <TimelineDot />
-                <TimelineConnector />
-              </TimelineSeparator>
-              <TimelineContent>
-                <Paper elevation={3} className="p-3 bg-primary-background-color text-primary-text-color">
-                  <Typography>{content}</Typography>
-                </Paper>
-              </TimelineContent>
-            </TimelineItem>
-          ))}
+            "Fixed Thaemine and Echnida Raid Removal Issues for Gold Calculator!",
+          ]
+            .reverse()
+            .map((content, index) => (
+              <TimelineItem key={index}>
+                <TimelineSeparator>
+                  <TimelineDot />
+                  <TimelineConnector />
+                </TimelineSeparator>
+                <TimelineContent>
+                  <Paper
+                    elevation={3}
+                    className="p-3 bg-primary-background-color text-primary-text-color"
+                  >
+                    <Typography>{content}</Typography>
+                  </Paper>
+                </TimelineContent>
+              </TimelineItem>
+            ))}
         </Timeline>
       </div>
     </main>

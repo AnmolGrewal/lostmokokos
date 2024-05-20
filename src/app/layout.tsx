@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import React from 'react';
+import React from "react";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -25,7 +25,9 @@ export default function RootLayout({
         <meta name="description" content={metadata.description ?? ""} />
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className={`size-full ${inter.className} bg-primary-background-color`}>
+      <body
+        className={`size-full ${inter.className} bg-primary-background-color`}
+      >
         <div id="root">{children}</div>
       </body>
     </html>

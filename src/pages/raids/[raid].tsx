@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import Head from 'next/head';
-import RaidGrid from '../../app/components/RaidGrid';
-import raidsInfo, { Raid } from '../../data/raidsInfo';
-import utilities from '@/utils/utilities';
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import Head from "next/head";
+import RaidGrid from "../../app/components/RaidGrid";
+import raidsInfo, { Raid } from "../../data/raidsInfo";
+import utilities from "@/utils/utilities";
 
 const RaidPage: React.FC = () => {
   const router = useRouter();
@@ -12,12 +12,15 @@ const RaidPage: React.FC = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
-    const defaultRaid = '/raids/thaemine';
-    const savedPath = typeof window !== 'undefined' ? localStorage.getItem('currentRaidPath') : null;
+    const defaultRaid = "/raids/thaemine";
+    const savedPath =
+      typeof window !== "undefined"
+        ? localStorage.getItem("currentRaidPath")
+        : null;
     const currentRaid = savedPath || defaultRaid;
 
-    if (raid && typeof raid === 'string') {
-      localStorage.setItem('currentRaidPath', `/raids/${raid}`);
+    if (raid && typeof raid === "string") {
+      localStorage.setItem("currentRaidPath", `/raids/${raid}`);
     } else {
       router.push(currentRaid);
     }
@@ -28,10 +31,10 @@ const RaidPage: React.FC = () => {
       setScrollPosition(window.pageYOffset);
     };
 
-    router.events.on('routeChangeStart', handleRouteChangeStart);
+    router.events.on("routeChangeStart", handleRouteChangeStart);
 
     return () => {
-      router.events.off('routeChangeStart', handleRouteChangeStart);
+      router.events.off("routeChangeStart", handleRouteChangeStart);
     };
   }, [router]);
 
@@ -46,20 +49,31 @@ const RaidPage: React.FC = () => {
   }
 
   const raidString = Array.isArray(raid) ? raid[0] : raid;
-  const currentRaidData = raidsInfo.find((r: Raid) => r.path === `/raids/${raidString}`);
+  const currentRaidData = raidsInfo.find(
+    (r: Raid) => r.path === `/raids/${raidString}`,
+  );
   const raidLabel = raidString ? utilities.capitalize(raidString) : "Raid";
 
   // Enhanced check for hard version
-  const hasHardVersion = raidsInfo.some((r: Raid) => r.path === `/raids/${raidString}-hard`) || raidString.endsWith('-hard');
+  const hasHardVersion =
+    raidsInfo.some((r: Raid) => r.path === `/raids/${raidString}-hard`) ||
+    raidString.endsWith("-hard");
 
   return (
-    <div className='bg-primary-background-color'>
+    <div className="bg-primary-background-color">
       <Head>
         <title>{raidLabel} - Raid Details</title>
-        <meta name="description" content={`Learn more about the ${raidLabel} raid`} />
+        <meta
+          name="description"
+          content={`Learn more about the ${raidLabel} raid`}
+        />
       </Head>
       {currentRaidData && (
-        <RaidGrid key={currentRaidData.path} raid={currentRaidData} hasHardVersion={hasHardVersion} />
+        <RaidGrid
+          key={currentRaidData.path}
+          raid={currentRaidData}
+          hasHardVersion={hasHardVersion}
+        />
       )}
     </div>
   );
