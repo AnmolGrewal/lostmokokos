@@ -117,11 +117,11 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
     : 0;
   const rewardsSecondTotal = raid.gateData.gateRewards
     ? raid.gateData.gateRewards.reduce((acc, curr) => {
-        if (curr.length > 1) {
-          return acc + curr[1];
-        }
-        return acc;
-      }, 0)
+      if (curr.length > 1) {
+        return acc + curr[1];
+      }
+      return acc;
+    }, 0)
     : 0;
   const honorShardsTotal = raid?.gateData?.honorShards?.reduce(
     (total, shards) => total + shards,
