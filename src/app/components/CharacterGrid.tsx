@@ -380,7 +380,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   return (
     <div>
       <h2 className="text-primary-text-color text-2xl mt-2 text-center">
-        {'Gold Calculator'}
+        {'Character Sheet'}
         <IconButton
           onClick={handleAddCharacter}
           size="small"
