@@ -19,18 +19,35 @@ import {
   Collapse,
   FormControlLabel,
   FormGroup,
+  Rating
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Raid } from '../../data/raidsInfo';
 import SettingsIcon from '@mui/icons-material/Settings';
+import PestControlIcon from '@mui/icons-material/PestControl';
+import PeopleIcon from '@mui/icons-material/People';
+import BalconyIcon from '@mui/icons-material/Balcony';
 import Chip from '@mui/material/Chip';
 import { clsx } from 'clsx';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import TitleIcon from '@mui/icons-material/Title';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { styled } from '@mui/material/styles';
+
+const StyledRating = styled(Rating)(({ theme }) => ({
+  '& .MuiRating-iconFilled': {
+    color: theme.palette.text.primary,
+  },
+  '& .MuiRating-iconEmpty': {
+    color: theme.palette.action.disabled,
+  },
+  '& .MuiRating-icon': {
+    fontSize: '40px',
+  },
+}));
 
 interface GoldGridProps {
   raids: Raid[];
@@ -68,6 +85,10 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const [additionalGoldDialogOpen, setAdditionalGoldDialogOpen] = useState<boolean>(false);
   const [currentEditingIndex, setCurrentEditingIndex] = useState<number>(-1);
   const [tempAdditionalGold, setTempAdditionalGold] = useState<number>(0);
+
+  const [chaosGateRatings, setChaosGateRatings] = useState<number[]>(new Array(characterCount).fill(0));
+  const [guardianRaidRatings, setGuardianRaidRatings] = useState<number[]>(new Array(characterCount).fill(0));
+  const [guildWeekliesRatings, setGuildWeekliesRatings] = useState<number[]>(new Array(characterCount).fill(0));
 
   const handleOpenAdditionalGoldDialog = (index: number) => {
     setCurrentEditingIndex(index);
@@ -121,6 +142,27 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
       const savedCheckedStates = JSON.parse(localStorage.getItem('checkedStates1') || '[]');
       const savedAdditionalGold = JSON.parse(localStorage.getItem('additionalGold1') || '[]');
       const defaultAdditionalGold = new Array(savedCharacterCount).fill(0);
+      const savedChaosGateRatings = JSON.parse(localStorage.getItem('chaosGateRatings1') || '[]');
+      const savedGuardianRaidRatings = JSON.parse(localStorage.getItem('guardianRaidRatings1') || '[]');
+      const savedGuildWeekliesRatings = JSON.parse(localStorage.getItem('guildWeekliesRatings1') || '[]');
+
+      if (savedChaosGateRatings.length === savedCharacterCount) {
+        setChaosGateRatings(savedChaosGateRatings);
+      } else {
+        setChaosGateRatings(new Array(savedCharacterCount).fill(0));
+      }
+
+      if (savedGuardianRaidRatings.length === savedCharacterCount) {
+        setGuardianRaidRatings(savedGuardianRaidRatings);
+      } else {
+        setGuardianRaidRatings(new Array(savedCharacterCount).fill(0));
+      }
+
+      if (savedGuildWeekliesRatings.length === savedCharacterCount) {
+        setGuildWeekliesRatings(savedGuildWeekliesRatings);
+      } else {
+        setGuildWeekliesRatings(new Array(savedCharacterCount).fill(0));
+      }
 
       setRaidVisibility(savedRaidVisibility.length ? savedRaidVisibility : raids.map(() => true));
       setCharacterCount(savedCharacterCount);
@@ -145,7 +187,10 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
     localStorage.setItem('characterNames1', JSON.stringify(characterNames));
     localStorage.setItem('checkedStates1', JSON.stringify(checkedStates));
     localStorage.setItem('additionalGold1', JSON.stringify(additionalGold));
-  }, [characterCount, characterNames, checkedStates, additionalGold]);
+    localStorage.setItem('chaosGateRatings1', JSON.stringify(chaosGateRatings));
+    localStorage.setItem('guardianRaidRatings1', JSON.stringify(guardianRaidRatings));
+    localStorage.setItem('guildWeekliesRatings1', JSON.stringify(guildWeekliesRatings));
+  }, [characterCount, characterNames, checkedStates, additionalGold, chaosGateRatings, guardianRaidRatings, guildWeekliesRatings]);
 
   const handleAddCharacter = () => {
     const newCharacterName = `Character ${characterCount + 1}`;
@@ -240,7 +285,6 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
         return sum;
       }, 0);
     });
-    console.log(total);
     return total + additionalGold[characterIndex];
   };
 
@@ -687,7 +731,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      marginRight: '43px',
+                      marginRight: '28px',
                     }}
                   >
                     <IconButton onClick={() => handleOpenAdditionalGoldDialog(index)}>
@@ -699,6 +743,79 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                 </TableCell>
               ))}
             </TableRow>
+            <TableRow className="even-row">
+              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
+                <div className="flex items-center">
+                  <BalconyIcon sx={{ marginRight: '8px', fontSize: '40px', '& path': { fill: 'var(--primary-text-color)' } }} />
+                  Chaos Gate
+                </div>
+              </TableCell>
+              {[...Array(characterCount)].map((_, index) => (
+                <TableCell key={index} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
+                  <StyledRating
+                    name={`chaos-gate-${index}`}
+                    value={chaosGateRatings[index]}
+                    onChange={(event, newValue) => {
+                      const newRatings = [...chaosGateRatings];
+                      newRatings[index] = newValue || 0;
+                      setChaosGateRatings(newRatings);
+                    }}
+                    max={2}
+                    icon={<BalconyIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color)' } }} />}
+                    emptyIcon={<BalconyIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color-opacity)' } }} />}
+                  />
+                </TableCell>
+              ))}
+            </TableRow>
+            <TableRow>
+              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
+                <div className="flex items-center">
+                  <PestControlIcon sx={{ marginRight: '8px', fontSize: '40px', '& path': { fill: 'var(--primary-text-color)' } }} />
+                  Guardian Raid
+                </div>
+              </TableCell>
+              {[...Array(characterCount)].map((_, index) => (
+                <TableCell key={index} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
+                  <StyledRating
+                    name={`guardian-raid-${index}`}
+                    value={guardianRaidRatings[index]}
+                    onChange={(event, newValue) => {
+                      const newRatings = [...guardianRaidRatings];
+                      newRatings[index] = newValue || 0;
+                      setGuardianRaidRatings(newRatings);
+                    }}
+                    max={1}
+                    icon={<PestControlIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color)' } }} />}
+                    emptyIcon={<PestControlIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color-opacity)' } }} />}
+                  />
+                </TableCell>
+              ))}
+            </TableRow>
+            <TableRow className="even-row">
+              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
+                <div className="flex items-center">
+                  <PeopleIcon sx={{ marginRight: '8px', fontSize: '40px', '& path': { fill: 'var(--primary-text-color)' } }} />
+                  Guild Weeklies
+                </div>
+              </TableCell>
+              {[...Array(characterCount)].map((_, index) => (
+                <TableCell key={index} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
+                  <StyledRating
+                    name={`guild-weeklies-${index}`}
+                    value={guildWeekliesRatings[index]}
+                    onChange={(event, newValue) => {
+                      const newRatings = [...guildWeekliesRatings];
+                      newRatings[index] = newValue || 0;
+                      setGuildWeekliesRatings(newRatings);
+                    }}
+                    max={3}
+                    icon={<PeopleIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color)' } }} />}
+                    emptyIcon={<PeopleIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color-opacity)' } }} />}
+                  />
+                </TableCell>
+              ))}
+            </TableRow>
+
             <TableRow key={`total-gold-row`}>
               <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
                 Gold Per Character
