@@ -86,7 +86,7 @@ export default function Home() {
       </div>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
         <h1 className="text-primary-text-color text-center text-[48px]">
-          Added Daily and Weekly Todo!!!! Chaos Gates, Guardian Raids and Guild Weeklies! That automatically resets daily and weekly!
+          Added Daily and Weekly Todo!!!! Chaos Gates, Una Tasks, Guardian Raids and Guild Weeklies! That automatically resets daily and weekly!
         </h1>
         <hr className="my-8" />
         <h1 className="text-primary-text-color text-center text-[48px]">

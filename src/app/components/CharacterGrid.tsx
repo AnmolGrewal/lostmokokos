@@ -98,7 +98,26 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const [guildWeekliesVisibility, setGuildWeekliesVisibility] = useState<boolean>(true);
 
   const { dailyResetTime, weeklyResetTime } = useClockBar();
-  console.log(dailyResetTime, weeklyResetTime);
+  
+  useEffect(() => {
+    const storedChaosGatesVisibility = localStorage.getItem('chaosGateVisibility');
+    const storedUnaTasksVisibility = localStorage.getItem('unaTaskVisibility');
+    const storedGuildWeekliesVisibility = localStorage.getItem('guardianRaidVisibility');
+    const storedGuardianRaidsVisibility = localStorage.getItem('guildWeekliesVisibility');
+  
+    if (storedChaosGatesVisibility !== null) {
+      setChaosGateVisibility(JSON.parse(storedChaosGatesVisibility));
+    }
+    if (storedUnaTasksVisibility !== null) {
+      setUnaTaskVisibility(JSON.parse(storedUnaTasksVisibility));
+    }
+    if (storedGuildWeekliesVisibility !== null) {
+      setGuardianRaidVisibility(JSON.parse(storedGuildWeekliesVisibility));
+    }
+    if (storedGuardianRaidsVisibility !== null) {
+      setGuildWeekliesVisibility(JSON.parse(storedGuardianRaidsVisibility));
+    }
+  }, []);
 
   useEffect(() => {
     const resetDailyCharacterTasks = () => {
