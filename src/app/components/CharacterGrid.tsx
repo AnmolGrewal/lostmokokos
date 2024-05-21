@@ -62,7 +62,7 @@ interface CharacterState {
   [key: string]: boolean[];
 }
 
-const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
+const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const initializeNewCharacterState = useCallback((): CharacterState => {
     let newState: CharacterState = {};
     raids.forEach((raid) => {
@@ -960,4 +960,4 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   );
 };
 
-export default GoldGrid;
+export default CharacterGrid;

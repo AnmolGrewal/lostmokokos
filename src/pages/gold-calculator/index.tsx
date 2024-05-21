@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import GoldGrid from '../../app/components/CharacterGrid';
+import CharacterGrid from '../../app/components/CharacterGrid';
 import raidsInfo from '../../data/raidsInfo';
 
 const GoldCalculatorIndexPage: React.FC = () => {
@@ -14,7 +14,7 @@ const GoldCalculatorIndexPage: React.FC = () => {
         <title>Gold Calculator</title>
         <meta name="description" content="Gold Income Calculator based on Raids for Lost Ark" />
       </Helmet>
-      <GoldGrid raids={raidsInfo} />
+      <CharacterGrid raids={raidsInfo} />
     </div>
   );
 };
