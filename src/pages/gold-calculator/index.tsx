@@ -1,22 +1,14 @@
 import React, { useEffect } from 'react';
-import { Helmet } from 'react-helmet';
-import CharacterGrid from '../../app/components/CharacterGrid';
-import raidsInfo from '../../data/raidsInfo';
+import { useRouter } from 'next/router';
 
-const GoldCalculatorIndexPage: React.FC = () => {
+const GoldCharacterIndexPage: React.FC = () => {
+  const router = useRouter();
+
   useEffect(() => {
-    document.title = 'Gold Calculator';
-  }, []);
+    router.replace('/characters');
+  }, [router]);
 
-  return (
-    <div className="bg-primary-background-color">
-      <Helmet>
-        <title>Gold Calculator</title>
-        <meta name="description" content="Gold Income Calculator based on Raids for Lost Ark" />
-      </Helmet>
-      <CharacterGrid raids={raidsInfo} />
-    </div>
-  );
+  return null;
 };
 
-export default GoldCalculatorIndexPage;
+export default GoldCharacterIndexPage;

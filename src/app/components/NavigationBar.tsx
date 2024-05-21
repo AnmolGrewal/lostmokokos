@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // eslint-disable-next-line no-unused-vars
-import { faHome, faDungeon, faCoins } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faDungeon, faPersonShelter } from '@fortawesome/free-solid-svg-icons';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 
@@ -13,7 +13,7 @@ const NavigationBar = ({ currentPath }: NavigationBarProps) => {
   const navItems = [
     { path: '/', label: 'Home', icon: faHome },
     { path: '/raids', label: 'Raids', icon: faDungeon },
-    { path: '/gold-calculator', label: 'Gold Calculator', icon: faCoins },
+    { path: '/characters', label: 'Character Sheet', icon: faPersonShelter },
   ];
 
   const router = useRouter();
