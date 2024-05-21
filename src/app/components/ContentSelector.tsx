@@ -69,7 +69,18 @@ const ContentSelector = ({ currentPath }: { currentPath: string }) => {
     <div className="relative size-full bg-primary-background-color">
       <div className="flex flex-shrink-0 overflow-x-auto scroll-smooth p-4 pl-8 justify-evenly" ref={scrollContainerRef}>
         {contentItems.map((item, index) => (
-          <Link key={index} href={item.path} className={clsx('block p-2 rounded-lg transition duration-300 ease-in-out transform shrink-0', currentPath === item.path || currentPath === `${item.path}-hard` ? 'bg-primary-background-selection-color scale-105' : 'bg-chip-background-color', currentPath !== item.path && currentPath !== `${item.path}-hard` && 'hover:bg-primary-background-hover-color hover:scale-105', index !== 0 && 'ml-4')}>
+          <Link
+            key={index}
+            href={item.path}
+            className={clsx(
+              'block p-2 rounded-lg transition duration-300 ease-in-out transform shrink-0',
+              currentPath === item.path || currentPath === `${item.path}-hard`
+                ? 'bg-primary-background-selection-color scale-105'
+                : 'bg-chip-background-color',
+              currentPath !== item.path && currentPath !== `${item.path}-hard` && 'hover:bg-primary-background-hover-color hover:scale-105',
+              index !== 0 && 'ml-4'
+            )}
+          >
             <img
               src={item.imgSrc}
               alt={item.label}

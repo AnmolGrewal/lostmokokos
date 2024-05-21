@@ -125,7 +125,10 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
           {hasHardVersion && (
             <div className="flex flex-row h-8">
               <Link href={raid.path.endsWith('-hard') ? raid.path.replace('-hard', '') : `${raid.path}-hard`}>
-                <FontAwesomeIcon icon={faSkull} className={clsx('text-red-500', 'ml-2', { 'opacity-25': !raid.path.endsWith('-hard') }, 'skull-icon')} />
+                <FontAwesomeIcon
+                  icon={faSkull}
+                  className={clsx('text-red-500', 'ml-2', { 'opacity-25': !raid.path.endsWith('-hard') }, 'skull-icon')}
+                />
               </Link>
               {!raid.path.endsWith('-hard') && (
                 <IconButton
@@ -247,7 +250,11 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                   {row.category}
                 </TableCell>
                 {row.values.map((value, columnIndex) => (
-                  <TableCell key={columnIndex} align="center" className={row.category === 'Box Cost' && columnIndex >= 0 ? 'box-cost-cell' : ''}>
+                  <TableCell
+                    key={columnIndex}
+                    align="center"
+                    className={row.category === 'Box Cost' && columnIndex >= 0 ? 'box-cost-cell' : ''}
+                  >
                     <div
                       style={{
                         display: 'flex',
@@ -309,10 +316,17 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                     <TableCell key={index}>
                       <div className="raid-table-cell min-w-max">
                         {rewards.map((reward, rewardIndex) => (
-                          <div key={rewardIndex} className="reward-cell flex flex-row flex-shrink-0 justify-center items-center text-2xl w-fit">
+                          <div
+                            key={rewardIndex}
+                            className="reward-cell flex flex-row flex-shrink-0 justify-center items-center text-2xl w-fit"
+                          >
                             <div className="reward-count">{reward}</div>
                             <Tooltip title={`${raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][rewardIndex]}`} placement="top">
-                              <img src={raid.gateRewardImgSrc && raid.gateRewardImgSrc[0][rewardIndex]} alt={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][rewardIndex]} className="reward-img" />
+                              <img
+                                src={raid.gateRewardImgSrc && raid.gateRewardImgSrc[0][rewardIndex]}
+                                alt={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][rewardIndex]}
+                                className="reward-img"
+                              />
                             </Tooltip>
                           </div>
                         ))}
@@ -323,14 +337,24 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                   <div className="raid-table-cell min-w-max">
                     <div className="reward-cell flex flex-row flex-shrink-0 justify-center items-center text-2xl w-fit">
                       <div className="reward-count">{rewardsFirstTotal}</div>
-                      <img src={raid.gateRewardImgSrc && raid.gateRewardImgSrc[0][0]} alt={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][0]} title={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][0]} className="reward-img" />
+                      <img
+                        src={raid.gateRewardImgSrc && raid.gateRewardImgSrc[0][0]}
+                        alt={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][0]}
+                        title={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][0]}
+                        className="reward-img"
+                      />
                     </div>
                   </div>
                   {rewardsSecondTotal > 0 && (
                     <div className="raid-table-cell min-w-max">
                       <div className="reward-cell flex flex-row flex-shrink-0 justify-center items-center text-2xl w-fit">
                         <div className="reward-count">{rewardsSecondTotal}</div>
-                        <img src={raid.gateRewardImgSrc && raid.gateRewardImgSrc[0][1]} alt={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][1]} title={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][1]} className="reward-img" />
+                        <img
+                          src={raid.gateRewardImgSrc && raid.gateRewardImgSrc[0][1]}
+                          alt={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][1]}
+                          title={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][1]}
+                          className="reward-img"
+                        />
                       </div>
                     </div>
                   )}
@@ -438,7 +462,9 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                     {stones > 0 && (
                       <div className="flex flex-row raid-table-cell-row">
                         <div className="reward-count">{stones}</div>
-                        <img src={imagesData.destructionStones} alt="Destruction Stones" className="honor-shard-img" />
+                        <Tooltip title="Destruction Stone" placement="top">
+                          <img src={imagesData.destructionStones} alt="Destruction Stones" className="honor-shard-img" />
+                        </Tooltip>
                       </div>
                     )}
                   </TableCell>
@@ -446,11 +472,14 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                 <TableCell align="right" sx={{ fontSize: '24px' }} className="min-w-max">
                   <div className="flex flex-row raid-table-cell-row min-w-max">
                     <div className="reward-count">{destructionStonesTotal}</div>
-                    <img src={imagesData.destructionStones} alt="Destruction Stones" className="honor-shard-img" />
+                    <Tooltip title="Destruction Stone" placement="top">
+                      <img src={imagesData.destructionStones} alt="Destruction Stones" className="honor-shard-img" />
+                    </Tooltip>
                   </div>
                 </TableCell>
               </TableRow>
             )}
+
             {/* Box Destruction Stones Row Total */}
             {raid?.gateData?.boxDestructionStones && (
               <TableRow className="even-row min-w-max">
@@ -462,7 +491,9 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                     {stones > 0 && (
                       <div className="flex flex-row raid-table-cell-row">
                         <div className="reward-count">{stones}</div>
-                        <img src={imagesData.destructionStones} alt="Destruction Stones" className="honor-shard-img" />
+                        <Tooltip title="Destruction Stone" placement="top">
+                          <img src={imagesData.destructionStones} alt="Destruction Stones" className="honor-shard-img" />
+                        </Tooltip>
                       </div>
                     )}
                   </TableCell>
@@ -470,16 +501,21 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                 <TableCell align="right" sx={{ fontSize: '24px' }} className="min-w-max">
                   <div className="flex flex-row raid-table-cell-row min-w-max">
                     <div className="reward-count">{boxDestructionStonesTotal}</div>
-                    <img src={imagesData.destructionStones} alt="Destruction Stones" className="honor-shard-img" />
+                    <Tooltip title="Destruction Stone" placement="top">
+                      <img src={imagesData.destructionStones} alt="Destruction Stones" className="honor-shard-img" />
+                    </Tooltip>
                   </div>
                 </TableCell>
               </TableRow>
             )}
+
             {/* Destruction Stones Earnable row */}
             {(raid?.gateData?.destructionStones || raid?.gateData?.boxDestructionStones) && (
               <TableRow>
                 <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
-                  Destruction Stones Earnable: {(destructionStonesTotal ?? 0) + (raid?.gateData?.boxDestructionStones?.reduce((total, stones) => total + stones, 0) ?? 0)}
+                  Destruction Stones Earnable:{' '}
+                  {(destructionStonesTotal ?? 0) +
+                    (raid?.gateData?.boxDestructionStones?.reduce((total, stones) => total + stones, 0) ?? 0)}
                 </TableCell>
               </TableRow>
             )}

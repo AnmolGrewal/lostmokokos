@@ -30,7 +30,11 @@ const NavigationBar = ({ currentPath }: NavigationBarProps) => {
             href={item.path}
             key={item.label}
             passHref
-            className={clsx('flex items-center px-3 py-1 rounded-full transition-all duration-300 ease-in-out', isActive(item.path) ? 'bg-primary-background-selection-color' : 'bg-chip-background-color', !isActive(item.path) && 'hover:bg-primary-background-hover-color hover:scale-105 cursor-pointer')}
+            className={clsx(
+              'flex items-center px-3 py-1 rounded-full transition-all duration-300 ease-in-out',
+              isActive(item.path) ? 'bg-primary-background-selection-color' : 'bg-chip-background-color',
+              !isActive(item.path) && 'hover:bg-primary-background-hover-color hover:scale-105 cursor-pointer'
+            )}
             onClick={(e) => {
               if (isActive(item.path)) {
                 e.preventDefault(); // Prevent link navigation if item is already selected

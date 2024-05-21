@@ -1,6 +1,25 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect, useCallback } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Checkbox, Collapse, FormControlLabel, FormGroup } from '@mui/material';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Checkbox,
+  Collapse,
+  FormControlLabel,
+  FormGroup,
+} from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -106,7 +125,9 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
       setRaidVisibility(savedRaidVisibility.length ? savedRaidVisibility : raids.map(() => true));
       setCharacterCount(savedCharacterCount);
       setCharacterNames(savedCharacterNames.length ? savedCharacterNames : defaultCharacterNames);
-      setCheckedStates(savedCheckedStates.length ? savedCheckedStates : Array.from({ length: savedCharacterCount }, initializeNewCharacterState));
+      setCheckedStates(
+        savedCheckedStates.length ? savedCheckedStates : Array.from({ length: savedCharacterCount }, initializeNewCharacterState)
+      );
 
       if (savedAdditionalGold.length === savedCharacterCount) {
         setAdditionalGold(savedAdditionalGold);
@@ -451,7 +472,18 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {Object.keys(raidGroups).map((label, index) => (
-              <Chip key={index} label={label} onClick={() => toggleRaidVisibility(index)} className={clsx('!flex !items-center !px-3 !py-1 !rounded-full !transition-all !duration-300 !ease-in-out raid-chip', raidVisibility[index] ? '!bg-primary-background-selection-color !active-raid' : '!bg-chip-background-color', !raidVisibility[index] && '!hover:bg-primary-background-hover-color !hover:scale-105 !cursor-pointer', '!text-white !m-1')} variant="outlined" />
+              <Chip
+                key={index}
+                label={label}
+                onClick={() => toggleRaidVisibility(index)}
+                className={clsx(
+                  '!flex !items-center !px-3 !py-1 !rounded-full !transition-all !duration-300 !ease-in-out raid-chip',
+                  raidVisibility[index] ? '!bg-primary-background-selection-color !active-raid' : '!bg-chip-background-color',
+                  !raidVisibility[index] && '!hover:bg-primary-background-hover-color !hover:scale-105 !cursor-pointer',
+                  '!text-white !m-1'
+                )}
+                variant="outlined"
+              />
             ))}
           </div>
         </DialogContent>
@@ -574,7 +606,12 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                         flexShrink: 0,
                       }}
                     >
-                      <img key={groupedRaids[0].path} src={groupedRaids[0].imgSrc} alt={groupedRaids[0].label} style={{ width: '40px', height: '40px' }} />
+                      <img
+                        key={groupedRaids[0].path}
+                        src={groupedRaids[0].imgSrc}
+                        alt={groupedRaids[0].label}
+                        style={{ width: '40px', height: '40px' }}
+                      />
                       <div className="shrink-0">{label}</div>
                     </div>
                   </TableCell>
@@ -588,14 +625,35 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                                 <ExpandMoreIcon />
                               </IconButton>
                               <FormControlLabel
-                                control={<Checkbox checked={checkedStates[characterIndex]?.[raid.path]?.every(Boolean) || false} indeterminate={checkedStates[characterIndex]?.[raid.path]?.some(Boolean) && !checkedStates[characterIndex]?.[raid.path]?.every(Boolean)} onChange={() => handleMainCheckboxChange(raid.path, characterIndex)} />}
+                                control={
+                                  <Checkbox
+                                    checked={checkedStates[characterIndex]?.[raid.path]?.every(Boolean) || false}
+                                    indeterminate={
+                                      checkedStates[characterIndex]?.[raid.path]?.some(Boolean) &&
+                                      !checkedStates[characterIndex]?.[raid.path]?.every(Boolean)
+                                    }
+                                    onChange={() => handleMainCheckboxChange(raid.path, characterIndex)}
+                                  />
+                                }
                                 label={raid.path.endsWith('-hard') ? 'Hard' : 'Normal'}
                                 sx={{ textAlign: 'center' }} // Center the labels
                               />
                               <Collapse in={open[raid.path]} timeout="auto" unmountOnExit>
                                 <div style={{ marginLeft: '40px' }}>
                                   {raid.gateData.gold.map((_, gateIndex: number) => (
-                                    <FormControlLabel className="flex justify-center items-center" key={`${raid.path}-gate-${gateIndex}`} control={<Checkbox checked={checkedStates[characterIndex]?.[raid.path]?.[gateIndex] || false} onChange={() => handleGateCheckboxChange(raid.path, characterIndex, gateIndex)} className="flex justify-center items-center" />} label={`Gate ${gateIndex + 1}`} style={{ display: 'flex' }} />
+                                    <FormControlLabel
+                                      className="flex justify-center items-center"
+                                      key={`${raid.path}-gate-${gateIndex}`}
+                                      control={
+                                        <Checkbox
+                                          checked={checkedStates[characterIndex]?.[raid.path]?.[gateIndex] || false}
+                                          onChange={() => handleGateCheckboxChange(raid.path, characterIndex, gateIndex)}
+                                          className="flex justify-center items-center"
+                                        />
+                                      }
+                                      label={`Gate ${gateIndex + 1}`}
+                                      style={{ display: 'flex' }}
+                                    />
                                   ))}
                                 </div>
                               </Collapse>
