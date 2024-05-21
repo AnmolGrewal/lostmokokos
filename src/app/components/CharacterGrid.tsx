@@ -653,7 +653,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
             <p className="text-sm text-center mb-4">Manage Todo</p>
             <div className="grid grid-cols-1 gap-4">
               <Chip
-                label="Chaos Gate"
+                label="Chaos Dungeon"
                 onClick={() => {
                   setChaosGateVisibility(!chaosGateVisibility);
                   localStorage.setItem('chaosGateVisibility', JSON.stringify(!chaosGateVisibility));
@@ -928,7 +928,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
                   <div className="flex items-center">
                     <BalconyIcon sx={{ marginRight: '8px', fontSize: '40px', '& path': { fill: 'var(--primary-text-color)' } }} />
-                    Chaos Gate
+                    Chaos Dungeon
                   </div>
                 </TableCell>
                 {[...Array(characterCount)].map((_, index) => (
