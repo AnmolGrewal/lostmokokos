@@ -35,6 +35,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import TitleIcon from '@mui/icons-material/Title';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import { styled } from '@mui/material/styles';
 import {useClockBar} from './useClockBar';
 
@@ -88,9 +89,11 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const [tempAdditionalGold, setTempAdditionalGold] = useState<number>(0);
 
   const [chaosGateRatings, setChaosGateRatings] = useState<number[]>(new Array(characterCount).fill(0));
+  const [unaTaskRatings, setUnaTaskRatings] = useState<number[]>(new Array(characterCount).fill(0));
   const [guardianRaidRatings, setGuardianRaidRatings] = useState<number[]>(new Array(characterCount).fill(0));
   const [guildWeekliesRatings, setGuildWeekliesRatings] = useState<number[]>(new Array(characterCount).fill(0));
   const [chaosGateVisibility, setChaosGateVisibility] = useState<boolean>(true);
+  const [unaTaskVisibility, setUnaTaskVisibility] = useState<boolean>(true);
   const [guardianRaidVisibility, setGuardianRaidVisibility] = useState<boolean>(true);
   const [guildWeekliesVisibility, setGuildWeekliesVisibility] = useState<boolean>(true);
 
@@ -98,12 +101,14 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
   console.log(dailyResetTime, weeklyResetTime);
 
   useEffect(() => {
-    const resetChaosGateAndGuardianRaid = () => {
+    const resetDailyCharacterTasks = () => {
       const resetRatings = new Array(characterCount).fill(0);
       setChaosGateRatings(resetRatings);
       setGuardianRaidRatings(resetRatings);
+      setUnaTaskRatings(resetRatings);
       localStorage.setItem('chaosGateRatings', JSON.stringify(resetRatings));
       localStorage.setItem('guardianRaidRatings', JSON.stringify(resetRatings));
+      localStorage.setItem('unaTaskRatings', JSON.stringify(resetRatings));
       localStorage.setItem('lastDailyReset', dailyResetTime.toString());
     };
     
@@ -120,7 +125,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
       const storedWeeklyResetTime = parseInt(localStorage.getItem('weeklyResetTime') || '0', 10);
 
       if (currentTime >= storedDailyResetTime) {
-        resetChaosGateAndGuardianRaid();
+        resetDailyCharacterTasks();
         const newDailyResetTime = dailyResetTime;
         localStorage.setItem('dailyResetTime', newDailyResetTime.toString());
         localStorage.setItem('lastDailyReset', newDailyResetTime.toString());
@@ -206,11 +211,13 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
       const savedCheckedStates = JSON.parse(localStorage.getItem('checkedStates1') || '[]');
       const savedAdditionalGold = JSON.parse(localStorage.getItem('additionalGold1') || '[]');
       const defaultAdditionalGold = new Array(savedCharacterCount).fill(0);
-      const savedChaosGateRatings = JSON.parse(localStorage.getItem('chaosGateRatings1') || '[]');
-      const savedGuardianRaidRatings = JSON.parse(localStorage.getItem('guardianRaidRatings1') || '[]');
-      const savedGuildWeekliesRatings = JSON.parse(localStorage.getItem('guildWeekliesRatings1') || '[]');
+      const savedChaosGateRatings = JSON.parse(localStorage.getItem('chaosGateRatings') || '[]');
+      const savedUnaTaskRatings = JSON.parse(localStorage.getItem('unaTaskRatings') || '[]');
+      const savedGuardianRaidRatings = JSON.parse(localStorage.getItem('guardianRaidRatings') || '[]');
+      const savedGuildWeekliesRatings = JSON.parse(localStorage.getItem('guildWeekliesRatings') || '[]');
 
       setChaosGateRatings(savedChaosGateRatings.length === savedCharacterCount ? savedChaosGateRatings : new Array(savedCharacterCount).fill(0));
+      setUnaTaskRatings(savedUnaTaskRatings.length === savedCharacterCount ? savedUnaTaskRatings : new Array(savedCharacterCount).fill(0));
       setGuardianRaidRatings(savedGuardianRaidRatings.length === savedCharacterCount ? savedGuardianRaidRatings : new Array(savedCharacterCount).fill(0));
       setGuildWeekliesRatings(savedGuildWeekliesRatings.length === savedCharacterCount ? savedGuildWeekliesRatings : new Array(savedCharacterCount).fill(0));
 
@@ -237,10 +244,11 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
     localStorage.setItem('characterNames1', JSON.stringify(characterNames));
     localStorage.setItem('checkedStates1', JSON.stringify(checkedStates));
     localStorage.setItem('additionalGold1', JSON.stringify(additionalGold));
-    localStorage.setItem('chaosGateRatings1', JSON.stringify(chaosGateRatings));
-    localStorage.setItem('guardianRaidRatings1', JSON.stringify(guardianRaidRatings));
-    localStorage.setItem('guildWeekliesRatings1', JSON.stringify(guildWeekliesRatings));
-  }, [characterCount, characterNames, checkedStates, additionalGold, chaosGateRatings, guardianRaidRatings, guildWeekliesRatings]);  
+    localStorage.setItem('chaosGateRatings', JSON.stringify(chaosGateRatings));
+    localStorage.setItem('unaTaskRatings', JSON.stringify(unaTaskRatings));
+    localStorage.setItem('guardianRaidRatings', JSON.stringify(guardianRaidRatings));
+    localStorage.setItem('guildWeekliesRatings', JSON.stringify(guildWeekliesRatings));
+  }, [characterCount, characterNames, checkedStates, additionalGold, chaosGateRatings, guardianRaidRatings, guildWeekliesRatings, unaTaskRatings]);  
 
   const handleAddCharacter = () => {
     const newCharacterName = `Character ${characterCount + 1}`;
@@ -252,6 +260,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
       return newGoldArray;
     });
     setChaosGateRatings((prev) => [...prev, 0]);
+    setUnaTaskRatings((prev) => [...prev, 0]);
     setGuardianRaidRatings((prev) => [...prev, 0]);
     setGuildWeekliesRatings((prev) => [...prev, 0]);
   };  
@@ -263,6 +272,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
       setCheckedStates((prev) => prev.slice(0, -1));
       setAdditionalGold((prev) => prev.slice(0, -1));
       setChaosGateRatings((prev) => prev.slice(0, -1));
+      setUnaTaskRatings((prev) => prev.slice(0, -1));
       setGuardianRaidRatings((prev) => prev.slice(0, -1));
       setGuildWeekliesRatings((prev) => prev.slice(0, -1));
     }
@@ -349,9 +359,11 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
     setSettingsDialogOpen(!settingsDialogOpen);
     if (!settingsDialogOpen) {
       const savedChaosGateVisibility = JSON.parse(localStorage.getItem('chaosGateVisibility') || 'true');
+      const savedUnaTaskVisibility = JSON.parse(localStorage.getItem('unaTaskVisibility') || 'true');
       const savedGuardianRaidVisibility = JSON.parse(localStorage.getItem('guardianRaidVisibility') || 'true');
       const savedGuildWeekliesVisibility = JSON.parse(localStorage.getItem('guildWeekliesVisibility') || 'true');
       setChaosGateVisibility(savedChaosGateVisibility);
+      setUnaTaskVisibility(savedUnaTaskVisibility);
       setGuardianRaidVisibility(savedGuardianRaidVisibility);
       setGuildWeekliesVisibility(savedGuildWeekliesVisibility);
     }
@@ -377,6 +389,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
     setCheckedStates([initializeNewCharacterState()]);
     setAdditionalGold(new Array(newCharacterCount).fill(0));
     setChaosGateRatings(new Array(newCharacterCount).fill(0));
+    setUnaTaskRatings(new Array(newCharacterCount).fill(0));
     setGuardianRaidRatings(new Array(newCharacterCount).fill(0));
     setGuildWeekliesRatings(new Array(newCharacterCount).fill(0));
     handleToggleConfirmClearDialog();
@@ -390,6 +403,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
   
     // Clear ratings for chaos, guardian, and weekly from localStorage
     localStorage.removeItem('chaosRating');
+    localStorage.removeItem('unaTaskRating');
     localStorage.removeItem('guardianRating');
     localStorage.removeItem('weeklyRating');
   
@@ -629,6 +643,20 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
                   '!flex !items-center !px-3 !py-1 !rounded-full !transition-all !duration-300 !ease-in-out raid-chip',
                   chaosGateVisibility ? '!bg-primary-background-selection-color !active-raid' : '!bg-chip-background-color',
                   !chaosGateVisibility && '!hover:bg-primary-background-hover-color !hover:scale-105 !cursor-pointer',
+                  '!text-white !m-1'
+                )}
+                variant="outlined"
+              />
+              <Chip
+                label="Una Task"
+                onClick={() => {
+                  setUnaTaskVisibility(!unaTaskVisibility);
+                  localStorage.setItem('unaTaskVisibility', JSON.stringify(!unaTaskVisibility));
+                }}
+                className={clsx(
+                  '!flex !items-center !px-3 !py-1 !rounded-full !transition-all !duration-300 !ease-in-out raid-chip',
+                  unaTaskVisibility ? '!bg-primary-background-selection-color !active-raid' : '!bg-chip-background-color',
+                  !unaTaskVisibility && '!hover:bg-primary-background-hover-color !hover:scale-105 !cursor-pointer',
                   '!text-white !m-1'
                 )}
                 variant="outlined"
@@ -898,6 +926,33 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
                       max={2}
                       icon={<BalconyIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color)' } }} />}
                       emptyIcon={<BalconyIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color-opacity)' } }} />}
+                    />
+                  </TableCell>
+                ))}
+              </TableRow>
+            )}
+            {unaTaskVisibility && (
+              <TableRow>
+                <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
+                  <div className="flex items-center">
+                    <TaskAltIcon sx={{ marginRight: '8px', fontSize: '40px', '& path': { fill: 'var(--primary-text-color)' } }} />
+                    Una Tasks
+                  </div>
+                </TableCell>
+                {[...Array(characterCount)].map((_, index) => (
+                  <TableCell key={index} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
+                    <StyledRating
+                      name={`una-task-${index}`}
+                      value={unaTaskRatings[index]}
+                      onChange={(event, newValue) => {
+                        const newRatings = [...unaTaskRatings];
+                        newRatings[index] = newValue || 0;
+                        setUnaTaskRatings(newRatings);
+                        localStorage.setItem('unaTaskRatings', JSON.stringify(newRatings));
+                      }}
+                      max={3}
+                      icon={<TaskAltIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color)' } }} />}
+                      emptyIcon={<TaskAltIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color-opacity)' } }} />}
                     />
                   </TableCell>
                 ))}
