@@ -370,11 +370,32 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
   };
 
   const handleClearAllDataConfirmed = () => {
-    setCharacterCount(1);
+    const newCharacterCount = 1;
+  
+    setCharacterCount(newCharacterCount);
     setCharacterNames(['Character 1']);
     setCheckedStates([initializeNewCharacterState()]);
-    setAdditionalGold(new Array(1).fill(0));
+    setAdditionalGold(new Array(newCharacterCount).fill(0));
+    setChaosGateRatings(new Array(newCharacterCount).fill(0));
+    setGuardianRaidRatings(new Array(newCharacterCount).fill(0));
+    setGuildWeekliesRatings(new Array(newCharacterCount).fill(0));
     handleToggleConfirmClearDialog();
+  
+    // Clear specific localStorage items
+    localStorage.removeItem('characterCount1');
+    localStorage.removeItem('characterNames1');
+    localStorage.removeItem('checkedStates1');
+    localStorage.removeItem('additionalGold1');
+    // localStorage.removeItem('raidVisibility1');
+  
+    // Clear ratings for chaos, guardian, and weekly from localStorage
+    localStorage.removeItem('chaosRating');
+    localStorage.removeItem('guardianRating');
+    localStorage.removeItem('weeklyRating');
+  
+    // Clear daily reset time and weekly reset time from localStorage
+    localStorage.removeItem('dailyResetTime');
+    localStorage.removeItem('weeklyResetTime');
   };
 
   return (
