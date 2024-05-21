@@ -77,15 +77,16 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
   const rewardsFirstTotal = raid.gateData.gateRewards ? raid.gateData.gateRewards.reduce((acc, curr) => acc + curr[0], 0) : 0;
   const rewardsSecondTotal = raid.gateData.gateRewards
     ? raid.gateData.gateRewards.reduce((acc, curr) => {
-        if (curr.length > 1) {
-          return acc + curr[1];
-        }
-        return acc;
-      }, 0)
+      if (curr.length > 1) {
+        return acc + curr[1];
+      }
+      return acc;
+    }, 0)
     : 0;
   const honorShardsTotal = raid?.gateData?.honorShards?.reduce((total, shards) => total + shards, 0);
   const boxHonorShardsTotal = raid?.gateData?.boxHonorShards?.reduce((total, shards) => total + shards, 0);
   const chaosStonesTotal = raid?.gateData?.chaosStones?.reduce((total, stones) => total + stones, 0);
+  const destructionStonesTotal = raid?.gateData?.destructionStones?.reduce((total, stones) => total + stones, 0);
 
   const handleCellClick = (rowIndex: number, columnIndex: number) => {
     setDimmed((currentDimmed) => {
@@ -399,6 +400,30 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                   <div className="flex flex-row raid-table-cell-row min-w-max">
                     <div className="reward-count">{chaosStonesTotal}</div>
                     <img src={imagesData.chaosStones} alt="Honor Shard" className="honor-shard-img" />
+                  </div>
+                </TableCell>
+              </TableRow>
+            )}
+            {/* Destruction Stones Row Total */}
+            {destructionStonesTotal && destructionStonesTotal > 0 && (
+              <TableRow className="min-w-max">
+                <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
+                  Destruction Stones
+                </TableCell>
+                {raid?.gateData?.destructionStones?.map((stones, index) => (
+                  <TableCell key={index} align="center" sx={{ fontSize: '24px' }}>
+                    {stones > 0 && (
+                      <div className="flex flex-row raid-table-cell-row">
+                        <div className="reward-count">{stones}</div>
+                        <img src={imagesData.destructionStones} alt="Destruction Stones" className="honor-shard-img" />
+                      </div>
+                    )}
+                  </TableCell>
+                ))}
+                <TableCell align="right" sx={{ fontSize: '24px' }} className="min-w-max">
+                  <div className="flex flex-row raid-table-cell-row min-w-max">
+                    <div className="reward-count">{destructionStonesTotal}</div>
+                    <img src={imagesData.destructionStones} alt="Destruction Stones" className="honor-shard-img" />
                   </div>
                 </TableCell>
               </TableRow>
