@@ -193,6 +193,7 @@ export default function Home() {
             'Fixed Thaemine and Echnida Raid Removal Issues for Gold Calculator!',
             'Adding Destruction Stones to Raid Grid, Boxs and Clears',
             'Adding Contact Me Support for Requests and Bug Reporting!',
+            'Fixed Title Tab Issues for Hard Mode for Raids Page',
           ]
             .reverse()
             .map((content, index) => (

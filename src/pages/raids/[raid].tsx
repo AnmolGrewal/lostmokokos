@@ -47,7 +47,11 @@ const RaidPage: React.FC = () => {
 
   const raidString = Array.isArray(raid) ? raid[0] : raid;
   const currentRaidData = raidsInfo.find((r: Raid) => r.path === `/raids/${raidString}`);
-  const raidLabel = raidString ? utilities.capitalize(raidString) : 'Raid';
+  const raidLabel = raidString
+    ? raidString.includes('-hard')
+      ? `${utilities.capitalize(raidString.replace('-hard', ''))} Hard`
+      : utilities.capitalize(raidString)
+    : 'Raid';
 
   // Enhanced check for hard version
   const hasHardVersion = raidsInfo.some((r: Raid) => r.path === `/raids/${raidString}-hard`) || raidString.endsWith('-hard');
