@@ -34,6 +34,18 @@
   }
 }
 
+@media (min-width: 861px) {
+  .accessory-row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 16px; /* Adjust the gap as needed */
+  }
+
+  .accessory-item {
+    flex: 1; /* Make each item grow to fit the available space */
+  }
+}
+
 *::-webkit-scrollbar {
   width: 12px; /* width of the entire scrollbar */
 }

@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect } from 'react';
 import { Autocomplete, Chip, Slider, TextField, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -124,105 +123,109 @@ const EngravingCalculator: React.FC = () => {
   
       const renderAccessory = (accessoryData: typeof engravingItems[0] | undefined, accessoryIndex: number) => {
         if (!accessoryData) return null;
-      
+  
         if (!accessoryEngravings[accessoryIndex]) {
           accessoryEngravings[accessoryIndex] = Array(accessoryData.values.length).fill('');
         }
         if (!accessoryLevels[accessoryIndex]) {
           accessoryLevels[accessoryIndex] = Array(accessoryData.values.length).fill(0);
         }
-      
+  
         return (
           <div key={accessoryIndex} className="bg-secondary-background-color p-4 mt-4 rounded-lg flex flex-shrink-0 flex-col">
             <div className="flex items-center space-x-4">
               <img src={accessoryData.image} alt={accessoryData.label} className="w-10 h-10 flex-shrink-0" />
               <span className="text-lg text-primary-text-color w-20 flex-shrink-0 accessory-label">{accessoryData.label}</span>
             </div>
-            {accessoryData.values.map((values, engravingIndex) => (
-              <div key={engravingIndex} className="flex flex-col mt-4">
-                <Autocomplete
-                  options={engravingIndex === 2 ? negativeEngravings.map((engraving) => engraving.label) : selectedEngravings}
-                  value={accessoryEngravings[accessoryIndex][engravingIndex] || null}
-                  onChange={handleAccessoryEngravingChange(accessoryIndex, engravingIndex)}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={`Engraving ${engravingIndex + 1}`}
-                      InputLabelProps={{
-                        style: { color: 'var(--primary-text-label-color)', width: 'w-full' },
-                      }}
-                      InputProps={{
-                        ...params.InputProps,
-                        style: {
-                          color: 'var(--primary-text-color)',
-                          backgroundColor: 'var(--primary-background-color)',
-                        },
-                        endAdornment: (
-                          <>
-                            {params.InputProps.endAdornment}
-                          </>
-                        ),
-                      }}
-                    />
-                  )}
-                  sx={{
-                    '& .MuiAutocomplete-listbox': {
-                      backgroundColor: 'var(--primary-background-color)',
-                      color: 'var(--primary-text-color)',
-                    },
-                    '& .MuiAutocomplete-endAdornment .MuiSvgIcon-root': {
-                      color: 'var(--primary-text-label-color)',
-                    },
-                  }}
-                />
-                {accessoryEngravings[accessoryIndex][engravingIndex] && (
-                  <>
-                    <div className="flex items-center justify-center mt-2">
-                      <Slider
-                        value={accessoryLevels[accessoryIndex][engravingIndex]}
-                        onChange={handleAccessoryLevelChange(accessoryIndex, engravingIndex)}
-                        min={Math.min(...values)}
-                        max={Math.max(...values)}
-                        step={null}
-                        marks={values.map((value) => ({ value, label: '' }))}
-                        valueLabelDisplay="auto"
-                        className="w-11/12"
-                        sx={{
-                          color: 'var(--primary-text-color)',
-                          '& .MuiSlider-rail': {
+            <div className="accessory-row">
+              {accessoryData.values.map((values, engravingIndex) => (
+                <div key={engravingIndex} className="flex flex-col mt-4 flex-1">
+                  <Autocomplete
+                    options={engravingIndex === 2 ? negativeEngravings.map((engraving) => engraving.label) : selectedEngravings}
+                    value={accessoryEngravings[accessoryIndex][engravingIndex] || null}
+                    onChange={handleAccessoryEngravingChange(accessoryIndex, engravingIndex)}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label={`Engraving ${engravingIndex + 1}`}
+                        InputLabelProps={{
+                          style: { color: 'var(--primary-text-label-color)', width: 'w-full' },
+                        }}
+                        InputProps={{
+                          ...params.InputProps,
+                          style: {
+                            color: 'var(--primary-text-color)',
                             backgroundColor: 'var(--primary-background-color)',
                           },
-                          '& .MuiSlider-track': {
-                            backgroundColor: 'var(--secondary-background-color)',
-                          },
-                          '& .MuiSlider-thumb': {
-                            backgroundColor: 'var(--primary-text-color)',
-                          },
+                          endAdornment: (
+                            <>
+                              {params.InputProps.endAdornment}
+                            </>
+                          ),
                         }}
                       />
-                    </div>
-                    <div className="text-center text-primary-text-label-color mt-1">
-                      {accessoryLevels[accessoryIndex][engravingIndex]}
-                    </div>
-                  </>
-                )}
-              </div>
-            ))}
+                    )}
+                    sx={{
+                      '& .MuiAutocomplete-listbox': {
+                        backgroundColor: 'var(--primary-background-color)',
+                        color: 'var(--primary-text-color)',
+                      },
+                      '& .MuiAutocomplete-endAdornment .MuiSvgIcon-root': {
+                        color: 'var(--primary-text-label-color)',
+                      },
+                    }}
+                  />
+                  {accessoryEngravings[accessoryIndex][engravingIndex] && (
+                    <>
+                      <div className="flex items-center justify-center mt-2">
+                        <Slider
+                          value={accessoryLevels[accessoryIndex][engravingIndex]}
+                          onChange={handleAccessoryLevelChange(accessoryIndex, engravingIndex)}
+                          min={Math.min(...values)}
+                          max={Math.max(...values)}
+                          step={null}
+                          marks={values.map((value) => ({ value, label: '' }))}
+                          valueLabelDisplay="auto"
+                          className="w-11/12"
+                          sx={{
+                            color: 'var(--primary-text-color)',
+                            '& .MuiSlider-rail': {
+                              backgroundColor: 'var(--primary-background-color)',
+                            },
+                            '& .MuiSlider-track': {
+                              backgroundColor: 'var(--secondary-background-color)',
+                            },
+                            '& .MuiSlider-thumb': {
+                              backgroundColor: 'var(--primary-text-color)',
+                            },
+                          }}
+                        />
+                      </div>
+                      <div className="text-center text-primary-text-label-color mt-1">
+                        {accessoryLevels[accessoryIndex][engravingIndex]}
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         );
       };
   
       accessoryRows.push(
-        <div key={i} className="grid grid-cols-1 gap-4">
+        <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {renderAccessory(accessoryData, i)}
+          {i + 1 < accessoryOrder.length && renderAccessory(engravingItems.find((item) => item.label === accessoryOrder[i + 1]), i + 1)}
         </div>
       );
+      i++; // Increment i to skip the next accessory since it's already rendered
     }
   
     // Add the Total Engravings section to the last column of the last row
     if (accessoryRows.length > 0) {
       accessoryRows.push(
-        <div key="total-engravings" className="grid grid-cols-1 gap-4">
+        <div key="total-engravings" className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-secondary-background-color p-4 mt-4 rounded-lg flex flex-shrink-0 flex-col">
             <h2 className="text-primary-text-color text-2xl text-center">Total Engravings</h2>
             <div className="flex flex-wrap justify-center">
@@ -234,7 +237,8 @@ const EngravingCalculator: React.FC = () => {
     }
   
     return accessoryRows;
-  };  
+  };
+  
 
   const renderTotalEngravings = () => {
     return Object.entries(totalEngravings).map(([label, total], index) => (
