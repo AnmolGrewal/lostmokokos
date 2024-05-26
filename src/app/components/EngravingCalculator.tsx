@@ -50,7 +50,7 @@ const EngravingCalculator: React.FC = () => {
         }
   
         return (
-          <div key={accessoryIndex} className="bg-secondary-background-color p-4 mb-4 rounded-lg">
+          <div key={accessoryIndex} className="bg-secondary-background-color p-4 mt-4 rounded-lg">
             <div className="flex items-center space-x-4">
               <img src={accessoryData.image} alt={accessoryData.label} className="w-10 h-10" />
               <span className="text-lg text-primary-text-color">{accessoryData.label}</span>
@@ -159,7 +159,7 @@ const EngravingCalculator: React.FC = () => {
               }}
             />
           )}
-          className="mt-4"
+          className=""
         />
       </div>
       {renderAccessoryRows()}
