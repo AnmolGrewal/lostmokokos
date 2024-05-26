@@ -75,7 +75,12 @@ export default function Home() {
         <title>Lost Mokokos</title>
         <meta name="description" content="Lost Ark Information for all your needs" />
       </Helmet>
-      <h1 className="text-4xl text-center mt-4 mb-4">Lost Mokokos</h1>
+      <h1 className="text-4xl text-center mt-4 mb-4 text-[48px]">Lost Mokokos</h1>
+      <h2 className="text-primary-text-color text-center text-2xl">
+        Fresh Update! Added Engraving Calculator! Check it out!
+        <br />
+        Will be adding Weekly Unas as well to Character Sheet and Rest Soon!
+      </h2>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
         <h2 className="text-lg text-primary-text-color">Todo List</h2>
         <form
@@ -152,13 +157,6 @@ export default function Home() {
         </form>
       </div>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
-        <h1 className="text-primary-text-color text-center text-[48px]">
-          Fresh Update! Added Engraving Calculator! Check it out!
-          <br />
-          Fixing Bugs on it just wanted it out for now
-          <br />
-          Will be adding Weekly Unas as well to Character Sheet and Rest Soon!
-        </h1>
         <hr className="my-8" />
         <Timeline position="alternate-reverse">
           {[
