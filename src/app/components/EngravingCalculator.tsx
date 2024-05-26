@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect } from 'react';
 import { Autocomplete, Chip, Slider, TextField } from '@mui/material';
 import { engravings, engravingItems, negativeEngravings } from '../../data/engravings';
@@ -81,7 +82,7 @@ const EngravingCalculator: React.FC = () => {
         }
   
         return (
-          <div key={accessoryIndex} className="bg-secondary-background-color p-4 mt-4 rounded-lg">
+          <div key={accessoryIndex} className="bg-secondary-background-color p-4 mt-4 rounded-lg flex flex-shrink-0 flex-col">
             <div className="flex items-center space-x-4">
               <img src={accessoryData.image} alt={accessoryData.label} className="w-10 h-10 flex-shrink-0" />
               <span className="text-lg text-primary-text-color w-20 flex-shrink-0">{accessoryData.label}</span>
@@ -169,7 +170,7 @@ const EngravingCalculator: React.FC = () => {
 
   const renderTotalEngravings = () => {
     return Object.entries(totalEngravings).map(([label, total], index) => (
-      <div key={index} className="flex flex-col items-center justify-center w-1/5 p-2">
+      <div key={index} className="flex flex-col items-center justify-center basis-1/5 p-2 border border-primary-text-color bg-primary-background-color rounded-lg">
         <span className="text-primary-text-color">{label}</span>
         <span className="text-primary-text-color">{total}</span>
       </div>
@@ -178,8 +179,13 @@ const EngravingCalculator: React.FC = () => {
 
   return (
     <div className="bg-primary-background-color p-4 min-h-screen" style={{ width: 'calc(100vw)' }}>
-      <h2 className="text-primary-text-color text-2xl mt-2 text-center">Engravings</h2>
-      <div className="bg-secondary-background-color p-4 rounded-lg">
+      <div className="bg-secondary-background-color p-4 mt-4 rounded-lg">
+        <h2 className="text-primary-text-color text-2xl text-center">Total Engravings</h2>
+        <div className="flex flex-wrap justify-center">
+          {renderTotalEngravings()}
+        </div>
+      </div>
+      <div className="bg-secondary-background-color p-4 rounded-lg mt-4">
         <Autocomplete
           multiple
           options={engravings.map((engraving) => engraving.label)}
@@ -232,12 +238,6 @@ const EngravingCalculator: React.FC = () => {
       </div>
       <div className="mt-4">
         {renderAccessoryRows()}
-      </div>
-      <div className="bg-secondary-background-color p-4 mt-4 rounded-lg">
-        <h2 className="text-primary-text-color text-2xl text-center">Total Engravings</h2>
-        <div className="flex flex-wrap justify-center">
-          {renderTotalEngravings()}
-        </div>
       </div>
     </div>
   );
