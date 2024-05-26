@@ -4,12 +4,48 @@ import { Autocomplete, Chip, Slider, TextField, IconButton, Dialog, DialogAction
 import DeleteIcon from '@mui/icons-material/Delete';
 import { engravings, engravingItems, negativeEngravings } from '../../data/engravings';
 
+interface Engravings {
+  selectedEngravings: string[];
+  accessoryEngravings: string[][];
+  accessoryLevels: number[][];
+  totalEngravings: { [key: string]: number };
+}
+
 const EngravingCalculator: React.FC = () => {
   const [selectedEngravings, setSelectedEngravings] = useState<string[]>([]);
   const [accessoryEngravings, setAccessoryEngravings] = useState<string[][]>([]);
   const [accessoryLevels, setAccessoryLevels] = useState<number[][]>([]);
   const [totalEngravings, setTotalEngravings] = useState<{ [key: string]: number }>({});
   const [confirmClearDialogOpen, setConfirmClearDialogOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    const loadEngravings = () => {
+      const savedData = localStorage.getItem('engravings');
+      if (savedData) {
+        const parsedData: Engravings = JSON.parse(savedData);
+        setSelectedEngravings(parsedData.selectedEngravings);
+        setAccessoryEngravings(parsedData.accessoryEngravings);
+        setAccessoryLevels(parsedData.accessoryLevels);
+        setTotalEngravings(parsedData.totalEngravings);
+      }
+    };
+
+    loadEngravings();
+  }, []);
+
+  useEffect(() => {
+    const saveEngravings = () => {
+      const data: Engravings = {
+        selectedEngravings,
+        accessoryEngravings,
+        accessoryLevels,
+        totalEngravings,
+      };
+      localStorage.setItem('engravings', JSON.stringify(data));
+    };
+
+    saveEngravings();
+  }, [selectedEngravings, accessoryEngravings, accessoryLevels, totalEngravings]);
 
   useEffect(() => {
     const calculateTotalEngravings = () => {
@@ -28,10 +64,8 @@ const EngravingCalculator: React.FC = () => {
   }, [accessoryEngravings, accessoryLevels]);
 
   const handleEngravingChange = (event: React.ChangeEvent<{}>, value: string[]) => {
-    // Find deleted engravings
     const deletedEngravings = selectedEngravings.filter(engraving => !value.includes(engraving));
 
-    // Update accessoryEngravings and accessoryLevels to remove deleted engravings
     const newAccessoryEngravings = accessoryEngravings.map(engravingList =>
       engravingList.map(engraving => (deletedEngravings.includes(engraving) ? '' : engraving))
     );
@@ -94,7 +128,6 @@ const EngravingCalculator: React.FC = () => {
       const renderAccessory = (accessoryData: typeof engravingItems[0] | undefined, accessoryIndex: number) => {
         if (!accessoryData) return null;
   
-        // Initialize accessoryEngravings and accessoryLevels for the current accessory if not already initialized
         if (!accessoryEngravings[accessoryIndex]) {
           accessoryEngravings[accessoryIndex] = Array(accessoryData.values.length).fill('');
         }
@@ -191,7 +224,7 @@ const EngravingCalculator: React.FC = () => {
 
   const renderTotalEngravings = () => {
     return Object.entries(totalEngravings).map(([label, total], index) => (
-      <div key={index} className="flex flex-col items-center justify-center basis-1/5 p-2 border border-primary-text-color bg-primary-background-color rounded-lg">
+      <div key={index} className="flex flex-col items-center justify-center basis-1/5 p-2 border border-primary-text-color bg-primary-background-color rounded-lg m-7">
         <span className="text-primary-text-color">{label}</span>
         <span className="text-primary-text-color">{total}</span>
       </div>
