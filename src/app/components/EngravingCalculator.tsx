@@ -256,12 +256,12 @@ const EngravingCalculator: React.FC = () => {
 
   return (
     <div className="bg-primary-background-color p-4 size-full flex flex-1 flex-shrink-0 flex-col justify-center">
-      <div className="bg-secondary-background-color p-4 rounded-lg mt-4 flex flex-1 flex-shrink-0 flex-row justify-center align-middle">
+      <div className="bg-secondary-background-color p-4 rounded-lg mt-4 flex flex-1 flex-shrink-0 flex-row justify-center align-middle items-center">
         <Autocomplete
           multiple
           options={engravings.map((engraving) => engraving.label)}
           value={selectedEngravings}
-          className='w-full mr-2 min-h-[60px] flex flex-1 flex-shrink-0 flex-row justify-center align-middle'
+          className='w-full mr-2 min-h-[60px] flex flex-1 flex-shrink-0 flex-row justify-center align-middle items-center'
           onChange={handleEngravingChange}
           renderTags={(value: string[], getTagProps) =>
             value.map((option: string, index: number) => {
