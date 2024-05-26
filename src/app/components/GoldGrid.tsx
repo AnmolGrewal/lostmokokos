@@ -36,6 +36,7 @@ import TitleIcon from '@mui/icons-material/Title';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from '@mui/material/styles';
+import {useClockBar} from './useClockBar';
 
 const StyledRating = styled(Rating)(({ theme }) => ({
   '& .MuiRating-iconFilled': {
@@ -89,6 +90,69 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const [chaosGateRatings, setChaosGateRatings] = useState<number[]>(new Array(characterCount).fill(0));
   const [guardianRaidRatings, setGuardianRaidRatings] = useState<number[]>(new Array(characterCount).fill(0));
   const [guildWeekliesRatings, setGuildWeekliesRatings] = useState<number[]>(new Array(characterCount).fill(0));
+  const [chaosGateVisibility, setChaosGateVisibility] = useState<boolean>(true);
+  const [guardianRaidVisibility, setGuardianRaidVisibility] = useState<boolean>(true);
+  const [guildWeekliesVisibility, setGuildWeekliesVisibility] = useState<boolean>(true);
+
+  const { dailyResetTime, weeklyResetTime } = useClockBar();
+  console.log(dailyResetTime, weeklyResetTime);
+
+  useEffect(() => {
+    const resetChaosGateAndGuardianRaid = () => {
+      const resetRatings = new Array(characterCount).fill(0);
+      setChaosGateRatings(resetRatings);
+      setGuardianRaidRatings(resetRatings);
+      localStorage.setItem('chaosGateRatings', JSON.stringify(resetRatings));
+      localStorage.setItem('guardianRaidRatings', JSON.stringify(resetRatings));
+      localStorage.setItem('lastDailyReset', dailyResetTime.toString());
+    };
+    
+    const resetGuildWeeklies = () => {
+      const resetRatings = new Array(characterCount).fill(0);
+      setGuildWeekliesRatings(resetRatings);
+      localStorage.setItem('guildWeekliesRatings', JSON.stringify(resetRatings));
+      localStorage.setItem('lastWeeklyReset', weeklyResetTime.toString());
+    };
+  
+    const checkResetTimes = () => {
+      const currentTime = Date.now();
+      const storedDailyResetTime = parseInt(localStorage.getItem('dailyResetTime') || '0', 10);
+      const storedWeeklyResetTime = parseInt(localStorage.getItem('weeklyResetTime') || '0', 10);
+
+      if (currentTime >= storedDailyResetTime) {
+        resetChaosGateAndGuardianRaid();
+        const newDailyResetTime = dailyResetTime;
+        localStorage.setItem('dailyResetTime', newDailyResetTime.toString());
+        localStorage.setItem('lastDailyReset', newDailyResetTime.toString());
+      }
+      if (currentTime >= storedWeeklyResetTime) {
+        resetGuildWeeklies();
+        const newWeeklyResetTime = weeklyResetTime;
+        localStorage.setItem('weeklyResetTime', newWeeklyResetTime.toString());
+        localStorage.setItem('lastWeeklyReset', newWeeklyResetTime.toString());
+      }
+    };
+
+    const initializeResetTimes = () => {
+      const storedDailyResetTime = localStorage.getItem('dailyResetTime');
+      const storedWeeklyResetTime = localStorage.getItem('weeklyResetTime');
+
+      if (!storedDailyResetTime) {
+        localStorage.setItem('dailyResetTime', dailyResetTime.toString());
+      }
+      if (!storedWeeklyResetTime) {
+        localStorage.setItem('weeklyResetTime', weeklyResetTime.toString());
+      }
+    };
+
+    initializeResetTimes();
+    checkResetTimes();
+    const timer = setInterval(checkResetTimes, 300000); // Check every 5 minutes
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [characterCount, dailyResetTime, weeklyResetTime]);
 
   const handleOpenAdditionalGoldDialog = (index: number) => {
     setCurrentEditingIndex(index);
@@ -146,23 +210,9 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
       const savedGuardianRaidRatings = JSON.parse(localStorage.getItem('guardianRaidRatings1') || '[]');
       const savedGuildWeekliesRatings = JSON.parse(localStorage.getItem('guildWeekliesRatings1') || '[]');
 
-      if (savedChaosGateRatings.length === savedCharacterCount) {
-        setChaosGateRatings(savedChaosGateRatings);
-      } else {
-        setChaosGateRatings(new Array(savedCharacterCount).fill(0));
-      }
-
-      if (savedGuardianRaidRatings.length === savedCharacterCount) {
-        setGuardianRaidRatings(savedGuardianRaidRatings);
-      } else {
-        setGuardianRaidRatings(new Array(savedCharacterCount).fill(0));
-      }
-
-      if (savedGuildWeekliesRatings.length === savedCharacterCount) {
-        setGuildWeekliesRatings(savedGuildWeekliesRatings);
-      } else {
-        setGuildWeekliesRatings(new Array(savedCharacterCount).fill(0));
-      }
+      setChaosGateRatings(savedChaosGateRatings.length === savedCharacterCount ? savedChaosGateRatings : new Array(savedCharacterCount).fill(0));
+      setGuardianRaidRatings(savedGuardianRaidRatings.length === savedCharacterCount ? savedGuardianRaidRatings : new Array(savedCharacterCount).fill(0));
+      setGuildWeekliesRatings(savedGuildWeekliesRatings.length === savedCharacterCount ? savedGuildWeekliesRatings : new Array(savedCharacterCount).fill(0));
 
       setRaidVisibility(savedRaidVisibility.length ? savedRaidVisibility : raids.map(() => true));
       setCharacterCount(savedCharacterCount);
@@ -190,7 +240,7 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
     localStorage.setItem('chaosGateRatings1', JSON.stringify(chaosGateRatings));
     localStorage.setItem('guardianRaidRatings1', JSON.stringify(guardianRaidRatings));
     localStorage.setItem('guildWeekliesRatings1', JSON.stringify(guildWeekliesRatings));
-  }, [characterCount, characterNames, checkedStates, additionalGold, chaosGateRatings, guardianRaidRatings, guildWeekliesRatings]);
+  }, [characterCount, characterNames, checkedStates, additionalGold, chaosGateRatings, guardianRaidRatings, guildWeekliesRatings]);  
 
   const handleAddCharacter = () => {
     const newCharacterName = `Character ${characterCount + 1}`;
@@ -201,7 +251,10 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
       const newGoldArray = [...prev, 0];
       return newGoldArray;
     });
-  };
+    setChaosGateRatings((prev) => [...prev, 0]);
+    setGuardianRaidRatings((prev) => [...prev, 0]);
+    setGuildWeekliesRatings((prev) => [...prev, 0]);
+  };  
 
   const handleRemoveCharacter = () => {
     if (characterCount > 1) {
@@ -209,8 +262,12 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
       setCharacterNames((prev) => prev.slice(0, -1));
       setCheckedStates((prev) => prev.slice(0, -1));
       setAdditionalGold((prev) => prev.slice(0, -1));
+      setChaosGateRatings((prev) => prev.slice(0, -1));
+      setGuardianRaidRatings((prev) => prev.slice(0, -1));
+      setGuildWeekliesRatings((prev) => prev.slice(0, -1));
     }
   };
+  
 
   const handleOpenEditDialog = (index: number) => {
     setEditingCharacterIndex(index);
@@ -290,6 +347,14 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
 
   const handleToggleSettingsDialog = () => {
     setSettingsDialogOpen(!settingsDialogOpen);
+    if (!settingsDialogOpen) {
+      const savedChaosGateVisibility = JSON.parse(localStorage.getItem('chaosGateVisibility') || 'true');
+      const savedGuardianRaidVisibility = JSON.parse(localStorage.getItem('guardianRaidVisibility') || 'true');
+      const savedGuildWeekliesVisibility = JSON.parse(localStorage.getItem('guildWeekliesVisibility') || 'true');
+      setChaosGateVisibility(savedChaosGateVisibility);
+      setGuardianRaidVisibility(savedGuardianRaidVisibility);
+      setGuildWeekliesVisibility(savedGuildWeekliesVisibility);
+    }
   };
 
   const [helpDialogOpen, setHelpDialogOpen] = useState<boolean>(false);
@@ -530,6 +595,53 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
               />
             ))}
           </div>
+          <div className="mt-8">
+            <p className="text-sm text-center mb-4">Manage Todo</p>
+            <div className="grid grid-cols-1 gap-4">
+              <Chip
+                label="Chaos Gate"
+                onClick={() => {
+                  setChaosGateVisibility(!chaosGateVisibility);
+                  localStorage.setItem('chaosGateVisibility', JSON.stringify(!chaosGateVisibility));
+                }}
+                className={clsx(
+                  '!flex !items-center !px-3 !py-1 !rounded-full !transition-all !duration-300 !ease-in-out raid-chip',
+                  chaosGateVisibility ? '!bg-primary-background-selection-color !active-raid' : '!bg-chip-background-color',
+                  !chaosGateVisibility && '!hover:bg-primary-background-hover-color !hover:scale-105 !cursor-pointer',
+                  '!text-white !m-1'
+                )}
+                variant="outlined"
+              />
+              <Chip
+                label="Guardian Raid"
+                onClick={() => {
+                  setGuardianRaidVisibility(!guardianRaidVisibility);
+                  localStorage.setItem('guardianRaidVisibility', JSON.stringify(!guardianRaidVisibility));
+                }}
+                className={clsx(
+                  '!flex !items-center !px-3 !py-1 !rounded-full !transition-all !duration-300 !ease-in-out raid-chip',
+                  guardianRaidVisibility ? '!bg-primary-background-selection-color !active-raid' : '!bg-chip-background-color',
+                  !guardianRaidVisibility && '!hover:bg-primary-background-hover-color !hover:scale-105 !cursor-pointer',
+                  '!text-white !m-1'
+                )}
+                variant="outlined"
+              />
+              <Chip
+                label="Guild Weeklies"
+                onClick={() => {
+                  setGuildWeekliesVisibility(!guildWeekliesVisibility);
+                  localStorage.setItem('guildWeekliesVisibility', JSON.stringify(!guildWeekliesVisibility));
+                }}
+                className={clsx(
+                  '!flex !items-center !px-3 !py-1 !rounded-full !transition-all !duration-300 !ease-in-out raid-chip',
+                  guildWeekliesVisibility ? '!bg-primary-background-selection-color !active-raid' : '!bg-chip-background-color',
+                  !guildWeekliesVisibility && '!hover:bg-primary-background-hover-color !hover:scale-105 !cursor-pointer',
+                  '!text-white !m-1'
+                )}
+                variant="outlined"
+              />
+            </div>
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleToggleSettingsDialog} sx={{ color: 'inherit' }}>
@@ -743,79 +855,87 @@ const GoldGrid: React.FC<GoldGridProps> = ({ raids }) => {
                 </TableCell>
               ))}
             </TableRow>
-            <TableRow className="even-row">
-              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
-                <div className="flex items-center">
-                  <BalconyIcon sx={{ marginRight: '8px', fontSize: '40px', '& path': { fill: 'var(--primary-text-color)' } }} />
-                  Chaos Gate
-                </div>
-              </TableCell>
-              {[...Array(characterCount)].map((_, index) => (
-                <TableCell key={index} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
-                  <StyledRating
-                    name={`chaos-gate-${index}`}
-                    value={chaosGateRatings[index]}
-                    onChange={(event, newValue) => {
-                      const newRatings = [...chaosGateRatings];
-                      newRatings[index] = newValue || 0;
-                      setChaosGateRatings(newRatings);
-                    }}
-                    max={2}
-                    icon={<BalconyIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color)' } }} />}
-                    emptyIcon={<BalconyIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color-opacity)' } }} />}
-                  />
+            {chaosGateVisibility && (
+              <TableRow className="even-row">
+                <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
+                  <div className="flex items-center">
+                    <BalconyIcon sx={{ marginRight: '8px', fontSize: '40px', '& path': { fill: 'var(--primary-text-color)' } }} />
+                    Chaos Gate
+                  </div>
                 </TableCell>
-              ))}
-            </TableRow>
-            <TableRow>
-              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
-                <div className="flex items-center">
-                  <PestControlIcon sx={{ marginRight: '8px', fontSize: '40px', '& path': { fill: 'var(--primary-text-color)' } }} />
-                  Guardian Raid
-                </div>
-              </TableCell>
-              {[...Array(characterCount)].map((_, index) => (
-                <TableCell key={index} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
-                  <StyledRating
-                    name={`guardian-raid-${index}`}
-                    value={guardianRaidRatings[index]}
-                    onChange={(event, newValue) => {
-                      const newRatings = [...guardianRaidRatings];
-                      newRatings[index] = newValue || 0;
-                      setGuardianRaidRatings(newRatings);
-                    }}
-                    max={1}
-                    icon={<PestControlIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color)' } }} />}
-                    emptyIcon={<PestControlIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color-opacity)' } }} />}
-                  />
+                {[...Array(characterCount)].map((_, index) => (
+                  <TableCell key={index} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
+                    <StyledRating
+                      name={`chaos-gate-${index}`}
+                      value={chaosGateRatings[index]}
+                      onChange={(event, newValue) => {
+                        const newRatings = [...chaosGateRatings];
+                        newRatings[index] = newValue || 0;
+                        setChaosGateRatings(newRatings);
+                        localStorage.setItem('chaosGateRatings', JSON.stringify(newRatings));
+                      }}
+                      max={2}
+                      icon={<BalconyIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color)' } }} />}
+                      emptyIcon={<BalconyIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color-opacity)' } }} />}
+                    />
+                  </TableCell>
+                ))}
+              </TableRow>
+            )}
+            {guardianRaidVisibility && (
+              <TableRow>
+                <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
+                  <div className="flex items-center">
+                    <PestControlIcon sx={{ marginRight: '8px', fontSize: '40px', '& path': { fill: 'var(--primary-text-color)' } }} />
+                    Guardian Raid
+                  </div>
                 </TableCell>
-              ))}
-            </TableRow>
-            <TableRow className="even-row">
-              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
-                <div className="flex items-center">
-                  <PeopleIcon sx={{ marginRight: '8px', fontSize: '40px', '& path': { fill: 'var(--primary-text-color)' } }} />
-                  Guild Weeklies
-                </div>
-              </TableCell>
-              {[...Array(characterCount)].map((_, index) => (
-                <TableCell key={index} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
-                  <StyledRating
-                    name={`guild-weeklies-${index}`}
-                    value={guildWeekliesRatings[index]}
-                    onChange={(event, newValue) => {
-                      const newRatings = [...guildWeekliesRatings];
-                      newRatings[index] = newValue || 0;
-                      setGuildWeekliesRatings(newRatings);
-                    }}
-                    max={3}
-                    icon={<PeopleIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color)' } }} />}
-                    emptyIcon={<PeopleIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color-opacity)' } }} />}
-                  />
+                {[...Array(characterCount)].map((_, index) => (
+                  <TableCell key={index} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
+                    <StyledRating
+                      name={`guardian-raid-${index}`}
+                      value={guardianRaidRatings[index]}
+                      onChange={(event, newValue) => {
+                        const newRatings = [...guardianRaidRatings];
+                        newRatings[index] = newValue || 0;
+                        setGuardianRaidRatings(newRatings);
+                        localStorage.setItem('guardianRaidRatings', JSON.stringify(newRatings));
+                      }}
+                      max={1}
+                      icon={<PestControlIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color)' } }} />}
+                      emptyIcon={<PestControlIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color-opacity)' } }} />}
+                    />
+                  </TableCell>
+                ))}
+              </TableRow>
+            )}
+            {guildWeekliesVisibility && (
+              <TableRow className="even-row">
+                <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
+                  <div className="flex items-center">
+                    <PeopleIcon sx={{ marginRight: '8px', fontSize: '40px', '& path': { fill: 'var(--primary-text-color)' } }} />
+                    Guild Weeklies
+                  </div>
                 </TableCell>
-              ))}
-            </TableRow>
-
+                {[...Array(characterCount)].map((_, index) => (
+                  <TableCell key={index} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
+                    <StyledRating
+                      name={`guild-weeklies-${index}`}
+                      value={guildWeekliesRatings[index]}
+                      onChange={(event, newValue) => {
+                        const newRatings = [...guildWeekliesRatings];
+                        newRatings[index] = newValue || 0;
+                        setGuildWeekliesRatings(newRatings);
+                        localStorage.setItem('guildWeekliesRatings', JSON.stringify(newRatings));
+                      }}
+                      max={3}
+                      icon={<PeopleIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color)' } }} />}
+                      emptyIcon={<PeopleIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color-opacity)' } }} />}
+                    />
+                  </TableCell>
+                ))}
+              </TableRow>
+            )}
             <TableRow key={`total-gold-row`}>
               <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
                 Gold Per Character
