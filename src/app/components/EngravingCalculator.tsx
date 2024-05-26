@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import React, { useState } from 'react';
 import { Autocomplete, Chip, Slider, TextField } from '@mui/material';
 import { engravings, engravingItems, negativeEngravings } from '../../data/engravings';
@@ -73,10 +72,23 @@ const EngravingCalculator: React.FC = () => {
                             color: 'var(--primary-text-color)',
                             backgroundColor: 'var(--primary-background-color)',
                           },
+                          endAdornment: (
+                            <>
+                              {params.InputProps.endAdornment}
+                            </>
+                          ),
                         }}
-                        // className="flex-grow"
                       />
                     )}
+                    sx={{
+                      '& .MuiAutocomplete-listbox': {
+                        backgroundColor: 'var(--primary-background-color)',
+                        color: 'var(--primary-text-color)',
+                      },
+                      '& .MuiAutocomplete-endAdornment .MuiSvgIcon-root': {
+                        color: 'var(--primary-text-label-color)',
+                      },
+                    }}
                   />
                   <div className="flex items-center justify-center mt-2">
                     <Slider
@@ -158,10 +170,23 @@ const EngravingCalculator: React.FC = () => {
                   color: 'var(--primary-text-color)',
                   backgroundColor: 'var(--primary-background-color)',
                 },
+                endAdornment: (
+                  <>
+                    {params.InputProps.endAdornment}
+                  </>
+                ),
               }}
             />
           )}
-          className=""
+          sx={{
+            '& .MuiAutocomplete-listbox': {
+              backgroundColor: 'var(--primary-background-color)',
+              color: 'var(--primary-text-color)',
+            },
+            '& .MuiAutocomplete-endAdornment .MuiSvgIcon-root': {
+              color: 'var(--primary-text-label-color)',
+            },
+          }}
         />
       </div>
       <div className="mt-4">
