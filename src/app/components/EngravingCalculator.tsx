@@ -166,10 +166,6 @@ const EngravingCalculator: React.FC = () => {
                       />
                     )}
                     sx={{
-                      '& .MuiAutocomplete-listbox': {
-                        backgroundColor: 'var(--primary-background-color)',
-                        color: 'var(--primary-text-color)',
-                      },
                       '& .MuiAutocomplete-endAdornment .MuiSvgIcon-root': {
                         color: 'var(--primary-text-label-color)',
                       },
@@ -296,10 +292,6 @@ const EngravingCalculator: React.FC = () => {
             />
           )}
           sx={{
-            '& .MuiAutocomplete-listbox': {
-              backgroundColor: 'var(--primary-background-color)',
-              color: 'var(--primary-text-color)',
-            },
             '& .MuiAutocomplete-endAdornment .MuiSvgIcon-root': {
               color: 'var(--primary-text-label-color)',
             },

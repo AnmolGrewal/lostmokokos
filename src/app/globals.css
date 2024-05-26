@@ -153,3 +153,21 @@ body {
   height: 48px;
   object-fit: contain;
 }
+
+.MuiAutocomplete-option, .MuiAutocomplete-noOptions {
+  background-color: var(--secondary-background-color);
+  color: var(--primary-text-label-color);
+  width: 100%;
+}
+
+.MuiAutocomplete-option:hover {
+  background-color: var(--primary-background-hover-color) !important;
+}
+
+.MuiAutocomplete-option[aria-selected="true"] {
+  background-color: var(--primary-background-hover-color) !important;
+}
+
+.MuiAutocomplete-listbox {
+  background-color: var(--secondary-background-color);
+}
