@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from 'react';
 import { Autocomplete, Chip, Slider, TextField } from '@mui/material';
-import { engravings, engravingItems } from '../../data/engravings';
+import { engravings, engravingItems, negativeEngravings } from '../../data/engravings';
 
 const EngravingCalculator: React.FC = () => {
   const [selectedEngravings, setSelectedEngravings] = useState<string[]>([]);
@@ -52,12 +52,12 @@ const EngravingCalculator: React.FC = () => {
         return (
           <div key={accessoryIndex} className="bg-secondary-background-color p-4 mt-4 rounded-lg">
             <div className="flex items-center space-x-4">
-              <img src={accessoryData.image} alt={accessoryData.label} className="w-10 h-10" />
-              <span className="text-lg text-primary-text-color">{accessoryData.label}</span>
+              <img src={accessoryData.image} alt={accessoryData.label} className="w-10 h-10 flex-shrink-0" />
+              <span className="text-lg text-primary-text-color w-20 flex-shrink-0">{accessoryData.label}</span>
               {accessoryData.values.map((values, engravingIndex) => (
-                <div key={engravingIndex} className="flex flex-col">
+                <div key={engravingIndex} className="flex flex-col flex-grow flex-shrink-0">
                   <Autocomplete
-                    options={selectedEngravings}
+                    options={engravingIndex === 2 ? negativeEngravings.map((engraving) => engraving.label) : selectedEngravings}
                     value={accessoryEngravings[accessoryIndex][engravingIndex] || null}
                     onChange={handleAccessoryEngravingChange(accessoryIndex, engravingIndex)}
                     renderInput={(params) => (
@@ -65,7 +65,7 @@ const EngravingCalculator: React.FC = () => {
                         {...params}
                         label={`Engraving ${engravingIndex + 1}`}
                         InputLabelProps={{
-                          style: { color: 'var(--primary-text-label-color)' },
+                          style: { color: 'var(--primary-text-label-color)', width: 'w-full' },
                         }}
                         InputProps={{
                           ...params.InputProps,
@@ -74,35 +74,37 @@ const EngravingCalculator: React.FC = () => {
                             backgroundColor: 'var(--primary-background-color)',
                           },
                         }}
+                        // className="flex-grow"
                       />
                     )}
-                    className="w-48"
                   />
-                  <Slider
-                    value={accessoryLevels[accessoryIndex][engravingIndex]}
-                    onChange={handleAccessoryLevelChange(accessoryIndex, engravingIndex)}
-                    min={Math.min(...values)}
-                    max={Math.max(...values)}
-                    step={null}
-                    marks={values.map((value) => ({ value, label: value.toString() }))}
-                    valueLabelDisplay="auto"
-                    className="mt-2"
-                    sx={{
-                      color: 'var(--primary-text-color)',
-                      '& .MuiSlider-rail': {
-                        backgroundColor: 'var(--primary-background-color)',
-                      },
-                      '& .MuiSlider-track': {
-                        backgroundColor: 'var(--primary-background-selection-color)',
-                      },
-                      '& .MuiSlider-thumb': {
-                        backgroundColor: 'var(--primary-text-color)',
-                      },
-                      '& .MuiSlider-markLabel': {
-                        color: 'var(--primary-text-label-color)',
-                      },
-                    }}
-                  />
+                  <div className="flex items-center justify-center mt-2">
+                    <Slider
+                      value={accessoryLevels[accessoryIndex][engravingIndex]}
+                      onChange={handleAccessoryLevelChange(accessoryIndex, engravingIndex)}
+                      min={Math.min(...values)}
+                      max={Math.max(...values)}
+                      step={null}
+                      marks={values.map((value) => ({ value, label: '' }))}
+                      valueLabelDisplay="auto"
+                      className="w-11/12"
+                      sx={{
+                        color: 'var(--primary-text-color)',
+                        '& .MuiSlider-rail': {
+                          backgroundColor: 'var(--primary-background-color)',
+                        },
+                        '& .MuiSlider-track': {
+                          backgroundColor: 'var(--secondary-background-color)',
+                        },
+                        '& .MuiSlider-thumb': {
+                          backgroundColor: 'var(--primary-text-color)',
+                        },
+                      }}
+                    />
+                  </div>
+                  <div className="text-center text-primary-text-label-color mt-1">
+                    {accessoryLevels[accessoryIndex][engravingIndex]}
+                  </div>
                 </div>
               ))}
             </div>
@@ -111,7 +113,7 @@ const EngravingCalculator: React.FC = () => {
       };
   
       accessoryRows.push(
-        <div key={i} className="grid grid-cols-2 gap-4">
+        <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {renderAccessory(accessoryData1, i)}
           {renderAccessory(accessoryData2, i + 1)}
         </div>
@@ -122,7 +124,7 @@ const EngravingCalculator: React.FC = () => {
   };  
 
   return (
-    <div className="bg-primary-background-color p-4">
+    <div className="bg-primary-background-color p-4 min-h-screen" style={{ width: 'calc(100vw)' }}>
       <h2 className="text-primary-text-color text-2xl mt-2 text-center">Engravings</h2>
       <div className="bg-secondary-background-color p-4 rounded-lg">
         <Autocomplete
@@ -162,7 +164,9 @@ const EngravingCalculator: React.FC = () => {
           className=""
         />
       </div>
-      {renderAccessoryRows()}
+      <div className="mt-4">
+        {renderAccessoryRows()}
+      </div>
     </div>
   );
 };
