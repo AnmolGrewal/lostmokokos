@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import GoldGrid from '../../app/components/GoldGrid';
+import GoldGrid from '../../app/components/CharacterGrid';
 import raidsInfo from '../../data/raidsInfo';
 
 const GoldCalculatorIndexPage: React.FC = () => {
