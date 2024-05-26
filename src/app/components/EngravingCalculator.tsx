@@ -177,33 +177,37 @@ const EngravingCalculator: React.FC = () => {
                       },
                     }}
                   />
-                  <div className="flex items-center justify-center mt-2">
-                    <Slider
-                      value={accessoryLevels[accessoryIndex][engravingIndex]}
-                      onChange={handleAccessoryLevelChange(accessoryIndex, engravingIndex)}
-                      min={Math.min(...values)}
-                      max={Math.max(...values)}
-                      step={null}
-                      marks={values.map((value) => ({ value, label: '' }))}
-                      valueLabelDisplay="auto"
-                      className="w-11/12"
-                      sx={{
-                        color: 'var(--primary-text-color)',
-                        '& .MuiSlider-rail': {
-                          backgroundColor: 'var(--primary-background-color)',
-                        },
-                        '& .MuiSlider-track': {
-                          backgroundColor: 'var(--secondary-background-color)',
-                        },
-                        '& .MuiSlider-thumb': {
-                          backgroundColor: 'var(--primary-text-color)',
-                        },
-                      }}
-                    />
-                  </div>
-                  <div className="text-center text-primary-text-label-color mt-1">
-                    {accessoryLevels[accessoryIndex][engravingIndex]}
-                  </div>
+                  {accessoryEngravings[accessoryIndex][engravingIndex] && (
+                    <>
+                      <div className="flex items-center justify-center mt-2">
+                        <Slider
+                          value={accessoryLevels[accessoryIndex][engravingIndex]}
+                          onChange={handleAccessoryLevelChange(accessoryIndex, engravingIndex)}
+                          min={Math.min(...values)}
+                          max={Math.max(...values)}
+                          step={null}
+                          marks={values.map((value) => ({ value, label: '' }))}
+                          valueLabelDisplay="auto"
+                          className="w-11/12"
+                          sx={{
+                            color: 'var(--primary-text-color)',
+                            '& .MuiSlider-rail': {
+                              backgroundColor: 'var(--primary-background-color)',
+                            },
+                            '& .MuiSlider-track': {
+                              backgroundColor: 'var(--secondary-background-color)',
+                            },
+                            '& .MuiSlider-thumb': {
+                              backgroundColor: 'var(--primary-text-color)',
+                            },
+                          }}
+                        />
+                      </div>
+                      <div className="text-center text-primary-text-label-color mt-1">
+                        {accessoryLevels[accessoryIndex][engravingIndex]}
+                      </div>
+                    </>
+                  )}
                 </div>
               ))}
             </div>
