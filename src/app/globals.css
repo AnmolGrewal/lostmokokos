@@ -23,6 +23,9 @@
   :root {
     --header-height: 60px; /* Smaller header on mobile devices */
   }
+  .accessory-label {
+    display: none;
+  }
 }
 
 @media (max-width: 767px) {

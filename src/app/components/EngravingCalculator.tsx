@@ -139,7 +139,7 @@ const EngravingCalculator: React.FC = () => {
           <div key={accessoryIndex} className="bg-secondary-background-color p-4 mt-4 rounded-lg flex flex-shrink-0 flex-col">
             <div className="flex items-center space-x-4">
               <img src={accessoryData.image} alt={accessoryData.label} className="w-10 h-10 flex-shrink-0" />
-              <span className="text-lg text-primary-text-color w-20 flex-shrink-0">{accessoryData.label}</span>
+              <span className="text-lg text-primary-text-color w-20 flex-shrink-0 accessory-label">{accessoryData.label}</span>
               {accessoryData.values.map((values, engravingIndex) => (
                 <div key={engravingIndex} className="flex flex-col flex-1 flex-shrink-0">
                   <Autocomplete
