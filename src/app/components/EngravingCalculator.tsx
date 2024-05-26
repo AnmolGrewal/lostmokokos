@@ -234,7 +234,7 @@ const EngravingCalculator: React.FC = () => {
         {renderAccessoryRows()}
       </div>
       <div className="bg-secondary-background-color p-4 mt-4 rounded-lg">
-        <h2 className="text-primary-text-color text-2xl mt-2 text-center">Total Engravings</h2>
+        <h2 className="text-primary-text-color text-2xl text-center">Total Engravings</h2>
         <div className="flex flex-wrap justify-center">
           {renderTotalEngravings()}
         </div>
