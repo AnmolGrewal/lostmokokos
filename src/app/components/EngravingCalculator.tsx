@@ -224,8 +224,10 @@ const EngravingCalculator: React.FC = () => {
   
     // Add the Total Engravings section to the last column of the last row
     if (accessoryRows.length > 0) {
-      accessoryRows.push(
-        <div key="total-engravings" className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      const lastRow = accessoryRows[accessoryRows.length - 1];
+      accessoryRows[accessoryRows.length - 1] = (
+        <div key={lastRow.key} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {lastRow.props.children}
           <div className="bg-secondary-background-color p-4 mt-4 rounded-lg flex flex-shrink-0 flex-col">
             <h2 className="text-primary-text-color text-2xl text-center">Total Engravings</h2>
             <div className="flex flex-wrap justify-center">
@@ -237,8 +239,7 @@ const EngravingCalculator: React.FC = () => {
     }
   
     return accessoryRows;
-  };
-  
+  };  
 
   const renderTotalEngravings = () => {
     return Object.entries(totalEngravings).map(([label, total], index) => (
