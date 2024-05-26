@@ -25,7 +25,22 @@ const EngravingCalculator: React.FC = () => {
   }, [accessoryEngravings, accessoryLevels]);
 
   const handleEngravingChange = (event: React.ChangeEvent<{}>, value: string[]) => {
+    // Find deleted engravings
+    const deletedEngravings = selectedEngravings.filter(engraving => !value.includes(engraving));
+
+    // Update accessoryEngravings and accessoryLevels to remove deleted engravings
+    const newAccessoryEngravings = accessoryEngravings.map(engravingList =>
+      engravingList.map(engraving => (deletedEngravings.includes(engraving) ? '' : engraving))
+    );
+    const newAccessoryLevels = accessoryLevels.map((levelList, accessoryIndex) =>
+      levelList.map((level, engravingIndex) =>
+        deletedEngravings.includes(accessoryEngravings[accessoryIndex][engravingIndex]) ? 0 : level
+      )
+    );
+
     setSelectedEngravings(value);
+    setAccessoryEngravings(newAccessoryEngravings);
+    setAccessoryLevels(newAccessoryLevels);
   };
 
   const handleAccessoryEngravingChange = (accessoryIndex: number, engravingIndex: number) => (
@@ -163,13 +178,8 @@ const EngravingCalculator: React.FC = () => {
 
   return (
     <div className="bg-primary-background-color p-4 min-h-screen" style={{ width: 'calc(100vw)' }}>
-      <div className="bg-secondary-background-color p-4 mt-4 rounded-lg">
-        <h2 className="text-primary-text-color text-2xl mt-2 text-center">Total Engravings</h2>
-        <div className="flex flex-wrap justify-center">
-          {renderTotalEngravings()}
-        </div>
-      </div>
-      <div className="bg-secondary-background-color p-4 rounded-lg mt-4">
+      <h2 className="text-primary-text-color text-2xl mt-2 text-center">Engravings</h2>
+      <div className="bg-secondary-background-color p-4 rounded-lg">
         <Autocomplete
           multiple
           options={engravings.map((engraving) => engraving.label)}
@@ -222,6 +232,12 @@ const EngravingCalculator: React.FC = () => {
       </div>
       <div className="mt-4">
         {renderAccessoryRows()}
+      </div>
+      <div className="bg-secondary-background-color p-4 mt-4 rounded-lg">
+        <h2 className="text-primary-text-color text-2xl mt-2 text-center">Total Engravings</h2>
+        <div className="flex flex-wrap justify-center">
+          {renderTotalEngravings()}
+        </div>
       </div>
     </div>
   );
