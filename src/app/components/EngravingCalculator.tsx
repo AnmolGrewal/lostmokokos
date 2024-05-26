@@ -87,7 +87,7 @@ const EngravingCalculator: React.FC = () => {
               <img src={accessoryData.image} alt={accessoryData.label} className="w-10 h-10 flex-shrink-0" />
               <span className="text-lg text-primary-text-color w-20 flex-shrink-0">{accessoryData.label}</span>
               {accessoryData.values.map((values, engravingIndex) => (
-                <div key={engravingIndex} className="flex flex-col flex-grow flex-shrink-0">
+                <div key={engravingIndex} className="flex flex-col flex-1 flex-shrink-0">
                   <Autocomplete
                     options={engravingIndex === 2 ? negativeEngravings.map((engraving) => engraving.label) : selectedEngravings}
                     value={accessoryEngravings[accessoryIndex][engravingIndex] || null}

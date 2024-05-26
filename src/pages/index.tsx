@@ -154,6 +154,10 @@ export default function Home() {
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
         <h1 className="text-primary-text-color text-center text-[48px]">
           Fresh Update! Added Engraving Calculator! Check it out!
+          <br />
+          Fixing Bugs on it just wanted it out for now
+          <br />
+          Will be adding Weekly Unas as well to Character Sheet and Rest Soon!
         </h1>
         <hr className="my-8" />
         <Timeline position="alternate-reverse">
