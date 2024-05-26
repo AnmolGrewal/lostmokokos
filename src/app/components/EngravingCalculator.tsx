@@ -115,7 +115,7 @@ const EngravingCalculator: React.FC = () => {
   };
 
   const renderAccessoryRows = () => {
-    const accessoryOrder = ['Book', 'Book', 'Ability Stone', 'Necklace', 'Earring', 'Earring', 'Ring', 'Ring'];
+    const accessoryOrder = ['Books', 'Ability Stone', 'Necklace', 'Earring', 'Earring', 'Ring', 'Ring'];
     const accessoryRows = [];
   
     for (let i = 0; i < accessoryOrder.length; i += 2) {
@@ -219,12 +219,31 @@ const EngravingCalculator: React.FC = () => {
       );
     }
   
+    // Add the Total Engravings section to the last column of the last row
+    if (accessoryRows.length > 0) {
+      const lastRow = accessoryRows[accessoryRows.length - 1];
+      accessoryRows[accessoryRows.length - 1] = (
+        <div key="last-row" className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {lastRow.props.children[0]}
+          <div className="grid grid-cols-1 gap-4">
+            {lastRow.props.children[1]}
+            <div className="bg-secondary-background-color p-4 mt-4 rounded-lg flex flex-shrink-0 flex-col">
+              <h2 className="text-primary-text-color text-2xl text-center">Total Engravings</h2>
+              <div className="flex flex-wrap justify-center">
+                {renderTotalEngravings()}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  
     return accessoryRows;
   };
 
   const renderTotalEngravings = () => {
     return Object.entries(totalEngravings).map(([label, total], index) => (
-      <div key={index} className="flex flex-col items-center justify-center basis-1/5 p-2 border border-primary-text-color bg-primary-background-color rounded-lg m-7">
+      <div key={index} className="flex flex-col items-center justify-center p-2 border border-primary-text-color bg-primary-background-color rounded-lg m-2">
         <span className="text-primary-text-color">{label}</span>
         <span className="text-primary-text-color">{total}</span>
       </div>
@@ -233,25 +252,6 @@ const EngravingCalculator: React.FC = () => {
 
   return (
     <div className="bg-primary-background-color p-4 size-full">
-      <div className="bg-secondary-background-color p-4 mt-4 rounded-lg flex items-center justify-between">
-        <h2 className="text-primary-text-color text-2xl text-center">Total Engravings</h2>
-        <IconButton
-          onClick={handleToggleConfirmClearDialog}
-          size="small"
-          sx={{
-            color: 'var(--primary-text-color)',
-            bgcolor: 'var(--image-background-color)',
-            borderRadius: '50%',
-            p: '5px',
-            '&:hover': { bgcolor: 'var(--primary-background-hover-color)' },
-          }}
-        >
-          <DeleteIcon />
-        </IconButton>
-      </div>
-      <div className="flex flex-wrap justify-center">
-        {renderTotalEngravings()}
-      </div>
       <div className="bg-secondary-background-color p-4 rounded-lg mt-4">
         <Autocomplete
           multiple
@@ -303,6 +303,19 @@ const EngravingCalculator: React.FC = () => {
             },
           }}
         />
+        <IconButton
+          onClick={handleToggleConfirmClearDialog}
+          size="small"
+          sx={{
+            color: 'var(--primary-text-color)',
+            bgcolor: 'var(--image-background-color)',
+            borderRadius: '50%',
+            p: '5px',
+            '&:hover': { bgcolor: 'var(--primary-background-hover-color)' },
+          }}
+        >
+          <DeleteIcon />
+        </IconButton>
       </div>
       <div className="mt-4">
         {renderAccessoryRows()}

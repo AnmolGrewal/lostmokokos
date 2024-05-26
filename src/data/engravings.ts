@@ -148,7 +148,7 @@ const engravingItems: EngravingItem[] = [
   },
   {
     image: imagesData.book,
-    label: 'Book',
+    label: 'Books',
     values: [[3, 6, 9, 12], [3, 6, 9, 12]],
   },
 ];
