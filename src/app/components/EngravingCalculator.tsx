@@ -255,12 +255,13 @@ const EngravingCalculator: React.FC = () => {
   };
 
   return (
-    <div className="bg-primary-background-color p-4 size-full">
-      <div className="bg-secondary-background-color p-4 rounded-lg mt-4">
+    <div className="bg-primary-background-color p-4 size-full flex flex-1 flex-shrink-0 flex-col justify-center">
+      <div className="bg-secondary-background-color p-4 rounded-lg mt-4 flex flex-1 flex-shrink-0 flex-row justify-center align-middle">
         <Autocomplete
           multiple
           options={engravings.map((engraving) => engraving.label)}
           value={selectedEngravings}
+          className='w-full mr-2 min-h-[60px] flex flex-1 flex-shrink-0 flex-row justify-center align-middle'
           onChange={handleEngravingChange}
           renderTags={(value: string[], getTagProps) =>
             value.map((option: string, index: number) => {
@@ -288,6 +289,7 @@ const EngravingCalculator: React.FC = () => {
                 style: {
                   color: 'var(--primary-text-color)',
                   backgroundColor: 'var(--primary-background-color)',
+                  minHeight: '60px',
                 },
                 endAdornment: (
                   <>
@@ -313,6 +315,8 @@ const EngravingCalculator: React.FC = () => {
           sx={{
             color: 'var(--primary-text-color)',
             bgcolor: 'var(--image-background-color)',
+            width: '48px',
+            height: '48px',
             borderRadius: '50%',
             p: '5px',
             '&:hover': { bgcolor: 'var(--primary-background-hover-color)' },
