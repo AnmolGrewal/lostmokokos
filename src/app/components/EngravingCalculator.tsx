@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Autocomplete, Chip, Slider, TextField } from '@mui/material';
 import { engravings, engravingItems, negativeEngravings } from '../../data/engravings';
 
@@ -6,6 +6,23 @@ const EngravingCalculator: React.FC = () => {
   const [selectedEngravings, setSelectedEngravings] = useState<string[]>([]);
   const [accessoryEngravings, setAccessoryEngravings] = useState<string[][]>([]);
   const [accessoryLevels, setAccessoryLevels] = useState<number[][]>([]);
+  const [totalEngravings, setTotalEngravings] = useState<{ [key: string]: number }>({});
+
+  useEffect(() => {
+    const calculateTotalEngravings = () => {
+      const totals: { [key: string]: number } = {};
+      accessoryEngravings.forEach((engravingList, accessoryIndex) => {
+        engravingList.forEach((engraving, engravingIndex) => {
+          if (engraving) {
+            totals[engraving] = (totals[engraving] || 0) + accessoryLevels[accessoryIndex][engravingIndex];
+          }
+        });
+      });
+      setTotalEngravings(totals);
+    };
+
+    calculateTotalEngravings();
+  }, [accessoryEngravings, accessoryLevels]);
 
   const handleEngravingChange = (event: React.ChangeEvent<{}>, value: string[]) => {
     setSelectedEngravings(value);
@@ -133,12 +150,26 @@ const EngravingCalculator: React.FC = () => {
     }
   
     return accessoryRows;
-  };  
+  };
+
+  const renderTotalEngravings = () => {
+    return Object.entries(totalEngravings).map(([label, total], index) => (
+      <div key={index} className="flex flex-col items-center justify-center w-1/5 p-2">
+        <span className="text-primary-text-color">{label}</span>
+        <span className="text-primary-text-color">{total}</span>
+      </div>
+    ));
+  };
 
   return (
     <div className="bg-primary-background-color p-4 min-h-screen" style={{ width: 'calc(100vw)' }}>
-      <h2 className="text-primary-text-color text-2xl mt-2 text-center">Engravings</h2>
-      <div className="bg-secondary-background-color p-4 rounded-lg">
+      <div className="bg-secondary-background-color p-4 mt-4 rounded-lg">
+        <h2 className="text-primary-text-color text-2xl mt-2 text-center">Total Engravings</h2>
+        <div className="flex flex-wrap justify-center">
+          {renderTotalEngravings()}
+        </div>
+      </div>
+      <div className="bg-secondary-background-color p-4 rounded-lg mt-4">
         <Autocomplete
           multiple
           options={engravings.map((engraving) => engraving.label)}
