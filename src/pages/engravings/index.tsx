@@ -8,10 +8,10 @@ const CharacterSheetIndexPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="bg-primary-background-color">
+    <div className="bg-primary-background-color min-w-fit size-full flex">
       <Helmet>
         <title>Engravings</title>
-        <meta name="description" content="Engravings Tool for Lost Ark" />
+        <meta name="description" content="Engravings Calculator for Lost Ark" />
       </Helmet>
       <EngravingCalculator />
     </div>
