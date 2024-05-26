@@ -153,20 +153,9 @@ export default function Home() {
       </div>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
         <h1 className="text-primary-text-color text-center text-[48px]">
-          Added Daily and Weekly Todo!!!! Chaos Gates, Una Tasks, Guardian Raids and Guild Weeklies! That automatically resets daily and weekly!
+          Fresh Update! Added Engraving Calculator! Check it out!
         </h1>
         <hr className="my-8" />
-        <h1 className="text-primary-text-color text-center text-[48px]">
-          Added Raid Info for Boss Drops, Chaos Stones, Destruction Stones and tooltips.
-        </h1>
-        <hr className="my-8" />
-        <h1 className="text-primary-text-color text-center text-[48px]">
-          Fixed Removing Thaemine or Echnida Raids! If You are Having Issues please click Trash Can to Delete Data and Reset!
-        </h1>
-        <hr className="my-8" />
-        <h2 className="text-primary-text-color text-center text-[48px]">
-          Boss Rewards for Box and Clear are the same so they are not added twice
-        </h2>
         <Timeline position="alternate-reverse">
           {[
             'Updated Manage Raids styling to work properly for Active, Inactive and Hover over Raid Chips and Help Text',
@@ -194,6 +183,10 @@ export default function Home() {
             'Adding Destruction Stones to Raid Grid, Boxs and Clears',
             'Adding Contact Me Support for Requests and Bug Reporting!',
             'Fixed Title Tab Issues for Hard Mode for Raids Page',
+            'Boss Rewards for Box and Clear are the same so they are not added twice',
+            'Fixed Removing Thaemine or Echnida Raids! If You are Having Issues please click Trash Can to Delete Data and Reset!',
+            'Added Raid Info for Boss Drops, Chaos Stones, Destruction Stones and tooltips.',
+            'Added Daily and Weekly Todo!!!! Chaos Gates, Una Tasks, Guardian Raids and Guild Weeklies! That automatically resets daily and weekly!',
           ]
             .reverse()
             .map((content, index) => (
