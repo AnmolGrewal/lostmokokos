@@ -133,9 +133,9 @@ const EngravingCalculator: React.FC = () => {
   
         return (
           <div key={accessoryIndex} className="bg-secondary-background-color p-4 mt-4 rounded-lg flex flex-shrink-0 flex-col">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-4 justify-center">
               <img src={accessoryData.image} alt={accessoryData.label} className="w-10 h-10 flex-shrink-0" />
-              <span className="text-lg text-primary-text-color w-20 flex-shrink-0 accessory-label">{accessoryData.label}</span>
+              <span className="text-lg text-primary-text-color min-w-fit flex-shrink-0 accessory-label">{accessoryData.label}</span>
             </div>
             <div className="accessory-row">
               {accessoryData.values.map((values, engravingIndex) => (
