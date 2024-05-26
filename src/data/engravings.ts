@@ -155,25 +155,20 @@ const engravingItems: EngravingItem[] = [
 
 interface NegativeEngraving {
   label: string;
-  values: number[];
 }
 
 const negativeEngravings: NegativeEngraving[] = [
   {
     label: 'Defence Reduction',
-    values: [1, 2, 3],
   },
   {
     label: 'Attack Power Reduction',
-    values: [1, 2, 3],
   },
   {
     label: 'Move Speed Reduction',
-    values: [1, 2, 3],
   },
   {
     label: 'Attack Speed Reduction',
-    values: [1, 2, 3],
   },
 ];
 
