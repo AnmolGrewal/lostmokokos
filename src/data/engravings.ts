@@ -1,3 +1,4 @@
+import imagesData from './imageLinks';
 interface Engraving {
   image: string;
   label: string;
@@ -101,3 +102,55 @@ const engravings: Engraving[] = [
   { image: '', label: 'Vital Point Strike' },
   { image: '', label: 'Wind Fury' },
 ];
+
+interface EngravingItem {
+  image: string;
+  label: string;
+  values: number[][];
+}
+
+const engravingItems: EngravingItem[] = [
+  {
+    image: imagesData.ring,
+    label: 'Ring',
+    values: [
+      [1, 2, 3, 4, 5, 6],
+      [1, 2, 3, 4, 5, 6],
+      [0, -1, -2, -3],
+    ],
+  },
+  {
+    image: imagesData.necklace,
+    label: 'Necklace',
+    values: [
+      [1, 2, 3, 4, 5, 6],
+      [1, 2, 3, 4, 5, 6],
+      [0, -1, -2, -3],
+    ],
+  },
+  {
+    image: imagesData.earring,
+    label: 'Earring',
+    values: [
+      [1, 2, 3, 4, 5, 6],
+      [1, 2, 3, 4, 5, 6],
+      [0, -1, -2, -3],
+    ],
+  },
+  {
+    image: imagesData.abilityStone,
+    label: 'Ability Stone',
+    values: [
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      [0, -1, -2, -3, -4, -5, -6, -7, -8, -9, -10],
+    ],
+  },
+  {
+    image: imagesData.book,
+    label: 'Book',
+    values: [[3], [6], [9], [12]],
+  },
+];
+
+export { engravings, engravingItems };
