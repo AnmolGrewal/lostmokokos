@@ -23,18 +23,16 @@
   :root {
     --header-height: 60px; /* Smaller header on mobile devices */
   }
-  .accessory-label {
-    display: none;
-  }
 }
 
+/* Hiding Text on Nav Bar */
 @media (max-width: 767px) {
   .hide-on-small {
     display: none;
   }
 }
 
-@media (min-width: 861px) {
+@media (min-width: 1050px) {
   .accessory-row {
     display: flex;
     flex-wrap: nowrap;
