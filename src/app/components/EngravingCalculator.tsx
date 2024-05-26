@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect } from 'react';
-import { Autocomplete, Chip, Slider, TextField } from '@mui/material';
+import { Autocomplete, Chip, Slider, TextField, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { engravings, engravingItems, negativeEngravings } from '../../data/engravings';
 
 const EngravingCalculator: React.FC = () => {
@@ -8,6 +9,7 @@ const EngravingCalculator: React.FC = () => {
   const [accessoryEngravings, setAccessoryEngravings] = useState<string[][]>([]);
   const [accessoryLevels, setAccessoryLevels] = useState<number[][]>([]);
   const [totalEngravings, setTotalEngravings] = useState<{ [key: string]: number }>({});
+  const [confirmClearDialogOpen, setConfirmClearDialogOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const calculateTotalEngravings = () => {
@@ -49,14 +51,33 @@ const EngravingCalculator: React.FC = () => {
     value: string | null,
   ) => {
     const newAccessoryEngravings = [...accessoryEngravings];
+    const newAccessoryLevels = [...accessoryLevels];
+
     newAccessoryEngravings[accessoryIndex][engravingIndex] = value || '';
+    if (!value) {
+      newAccessoryLevels[accessoryIndex][engravingIndex] = 0;
+    }
+
     setAccessoryEngravings(newAccessoryEngravings);
+    setAccessoryLevels(newAccessoryLevels);
   };
 
   const handleAccessoryLevelChange = (accessoryIndex: number, engravingIndex: number) => (event: Event, value: number | number[]) => {
     const newAccessoryLevels = [...accessoryLevels];
     newAccessoryLevels[accessoryIndex][engravingIndex] = value as number;
     setAccessoryLevels(newAccessoryLevels);
+  };
+
+  const handleToggleConfirmClearDialog = () => {
+    setConfirmClearDialogOpen(!confirmClearDialogOpen);
+  };
+
+  const handleClearAllDataConfirmed = () => {
+    setSelectedEngravings([]);
+    setAccessoryEngravings([]);
+    setAccessoryLevels([]);
+    setTotalEngravings({});
+    handleToggleConfirmClearDialog();
   };
 
   const renderAccessoryRows = () => {
@@ -178,12 +199,25 @@ const EngravingCalculator: React.FC = () => {
   };
 
   return (
-    <div className="bg-primary-background-color p-4 min-h-screen" style={{ width: 'calc(100vw)' }}>
-      <div className="bg-secondary-background-color p-4 mt-4 rounded-lg">
+    <div className="bg-primary-background-color p-4 size-full">
+      <div className="bg-secondary-background-color p-4 mt-4 rounded-lg flex items-center justify-between">
         <h2 className="text-primary-text-color text-2xl text-center">Total Engravings</h2>
-        <div className="flex flex-wrap justify-center">
-          {renderTotalEngravings()}
-        </div>
+        <IconButton
+          onClick={handleToggleConfirmClearDialog}
+          size="small"
+          sx={{
+            color: 'var(--primary-text-color)',
+            bgcolor: 'var(--image-background-color)',
+            borderRadius: '50%',
+            p: '5px',
+            '&:hover': { bgcolor: 'var(--primary-background-hover-color)' },
+          }}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </div>
+      <div className="flex flex-wrap justify-center">
+        {renderTotalEngravings()}
       </div>
       <div className="bg-secondary-background-color p-4 rounded-lg mt-4">
         <Autocomplete
@@ -199,7 +233,8 @@ const EngravingCalculator: React.FC = () => {
                   key={key}
                   label={option}
                   {...tagProps}
-                  className="bg-chip-background-color text-chip-text-color"
+                  className="bg-chip-background-color text-chip-text-color text-lg mr-2 mt-2"
+                  deleteIcon={<DeleteIcon style={{ color: 'var(--primary-text-label-color)' }} />}
                 />
               );
             })
@@ -239,6 +274,30 @@ const EngravingCalculator: React.FC = () => {
       <div className="mt-4">
         {renderAccessoryRows()}
       </div>
+
+      <Dialog
+        open={confirmClearDialogOpen}
+        onClose={handleToggleConfirmClearDialog}
+        sx={{
+          '& .MuiPaper-root': {
+            backgroundColor: 'var(--chip-background-color)',
+            color: 'var(--primary-text-color)',
+          },
+        }}
+      >
+        <DialogTitle sx={{ color: 'var(--primary-text-label-color)' }}>Confirm Clear All Data</DialogTitle>
+        <DialogContent>
+          <p>Are you sure you want to clear all data and reset to default?</p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleToggleConfirmClearDialog} sx={{ color: 'inherit' }}>
+            Cancel
+          </Button>
+          <Button onClick={handleClearAllDataConfirmed} sx={{ color: 'inherit' }}>
+            Clear All Data
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
