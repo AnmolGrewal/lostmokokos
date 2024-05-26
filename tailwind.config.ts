@@ -13,6 +13,9 @@ const config: Config = {
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
       },
+      screens: {
+        'sm-md': { 'max': '1165px' }, // Custom screen size for 1025px or smaller
+      },
     },
   },
   plugins: [],

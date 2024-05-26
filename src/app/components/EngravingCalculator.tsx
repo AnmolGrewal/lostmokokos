@@ -216,7 +216,7 @@ const EngravingCalculator: React.FC = () => {
       };
   
       accessoryRows.push(
-        <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div key={i} className="grid grid-cols-1 sm-md:grid-cols-1 md:grid-cols-2 gap-4">
           {renderAccessory(accessoryData1, i)}
           {renderAccessory(accessoryData2, i + 1)}
         </div>
@@ -227,7 +227,7 @@ const EngravingCalculator: React.FC = () => {
     if (accessoryRows.length > 0) {
       const lastRow = accessoryRows[accessoryRows.length - 1];
       accessoryRows[accessoryRows.length - 1] = (
-        <div key="last-row" className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div key="last-row" className="grid grid-cols-1 sm-md:grid-cols-1 md:grid-cols-2 gap-4">
           {lastRow.props.children[0]}
           <div className="grid grid-cols-1 gap-4">
             {lastRow.props.children[1]}
@@ -243,7 +243,7 @@ const EngravingCalculator: React.FC = () => {
     }
   
     return accessoryRows;
-  };
+  };  
 
   const renderTotalEngravings = () => {
     return Object.entries(totalEngravings).map(([label, total], index) => (
