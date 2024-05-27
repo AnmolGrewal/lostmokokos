@@ -30,6 +30,14 @@ const EngravingCalculator: React.FC = () => {
   const [confirmDeleteDialogOpen, setConfirmDeleteDialogOpen] = useState<boolean>(false);
   const [presetToDelete, setPresetToDelete] = useState<string | null>(null);
   const [currentTab, setCurrentTab] = useState(0);
+  const [optimizerValues, setOptimizerValues] = useState<{ [key: string]: number }>({});
+
+  const handleOptimizerSliderChange = (engraving: string, value: number | number[]) => {
+    setOptimizerValues((prevValues) => ({
+      ...prevValues,
+      [engraving]: value as number,
+    }));
+  };  
 
   const addNewPreset = useCallback(() => {
     const newIndex = presets.length > 0 ? Math.max(...presets.map(p => p.index)) + 1 : 1;
@@ -422,6 +430,57 @@ const EngravingCalculator: React.FC = () => {
     setCurrentTab(newValue);
   };
 
+  const renderOptimizer = () => {
+    const rows = [];
+    for (let i = 0; i < selectedEngravings.length; i += 3) {
+      rows.push(selectedEngravings.slice(i, i + 3));
+    }
+  
+    return (
+      <div className="mt-4">
+        {rows.map((row, rowIndex) => (
+          <div key={rowIndex} className="bg-secondary-background-color p-4 mt-4 rounded-lg flex flex-wrap justify-center">
+            {row.map((engraving, index) => (
+              <div key={index} className="flex flex-col items-center mb-4 mx-2 flex-1">
+                <span className="text-primary-text-color text-lg">{engraving}</span>
+                <Slider
+                  value={optimizerValues[engraving] || 0}
+                  onChange={(event, value) => handleOptimizerSliderChange(engraving, value)}
+                  min={0}
+                  max={3}
+                  step={1}
+                  marks={[
+                    { value: 0, label: '' },
+                    { value: 1, label: '' },
+                    { value: 2, label: '' },
+                    { value: 3, label: '' },
+                  ]}
+                  valueLabelDisplay="auto"
+                  className="w-11/12"
+                  sx={{
+                    color: 'var(--primary-text-color)',
+                    '& .MuiSlider-rail': {
+                      backgroundColor: 'var(--primary-background-color)',
+                    },
+                    '& .MuiSlider-track': {
+                      backgroundColor: 'var(--secondary-background-color)',
+                    },
+                    '& .MuiSlider-thumb': {
+                      backgroundColor: 'var(--primary-text-color)',
+                    },
+                  }}
+                />
+                <div className="text-center text-primary-text-label-color mt-1">
+                  {optimizerValues[engraving] || 0}
+                </div>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="bg-primary-background-color p-4 size-full flex flex-1 flex-shrink-0 flex-col justify-center">
       <div className="bg-secondary-background-color p-4 rounded-lg mt-4 flex flex-1 flex-shrink-0 flex-row justify-center align-middle items-center">
@@ -555,9 +614,10 @@ const EngravingCalculator: React.FC = () => {
       >
         <Tab label="Accessories" />
         <Tab label="Grid" />
+        <Tab label="Optimizer" />
       </Tabs>
       {currentTab === 0 && (
-        <div className="mt-4">
+        <div>
           {renderAccessoryRows()}
         </div>
       )}
@@ -570,6 +630,7 @@ const EngravingCalculator: React.FC = () => {
           negativeEngravings={negativeEngravings}
         />
       )}
+      {currentTab === 2 && renderOptimizer()}
       <ClearDialog
         open={confirmClearDialogOpen}
         onClose={handleToggleConfirmClearDialog}
