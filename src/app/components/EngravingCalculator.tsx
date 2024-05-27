@@ -398,8 +398,8 @@ const EngravingCalculator: React.FC = () => {
   
     return (
       <>
-        <div className='flex flex-col'>
-          <div className='flex flex-row'>
+        <div className="flex flex-col">
+          <div className="flex flex-wrap justify-center">
             {Object.entries(currentPreset.engravings.totalEngravings).map(([label, total], index) => (
               <div key={index} className="flex flex-col items-center justify-center p-2 border border-primary-text-color bg-primary-background-color rounded-lg m-2">
                 <span className="text-primary-text-color">{label}</span>
