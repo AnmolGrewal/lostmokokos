@@ -371,16 +371,48 @@ const EngravingCalculator: React.FC = () => {
     return accessoryRows;
   };  
 
+  const calculateTotalEngravingSummary = (totalEngravings: { [key: string]: number }) => {
+    const engravingCounts: { [key: string]: number } = {};
+  
+    // eslint-disable-next-line no-unused-vars
+    Object.entries(totalEngravings).forEach(([label, total]) => {
+      const count = Math.floor(total / 5);
+      if (count > 0) {
+        engravingCounts[count.toString()] = (engravingCounts[count.toString()] || 0) + 1;
+      }
+    });
+  
+    const summary = Object.entries(engravingCounts)
+      .sort((a, b) => parseInt(b[0]) - parseInt(a[0]))
+      .map(([count, quantity]) => `${quantity}x${count}`)
+      .join(' + ');
+  
+    return summary;
+  };
+  
   const renderTotalEngravings = () => {
     const currentPreset = presets.find((preset) => preset.name === selectedPreset);
     if (!currentPreset) return null;
   
-    return Object.entries(currentPreset.engravings.totalEngravings).map(([label, total], index) => (
-      <div key={index} className="flex flex-col items-center justify-center p-2 border border-primary-text-color bg-primary-background-color rounded-lg m-2">
-        <span className="text-primary-text-color">{label}</span>
-        <span className="text-primary-text-color">{total}</span>
-      </div>
-    ));
+    const totalEngravingSummary = calculateTotalEngravingSummary(currentPreset.engravings.totalEngravings);
+  
+    return (
+      <>
+        <div className='flex flex-col'>
+          <div className='flex flex-row'>
+            {Object.entries(currentPreset.engravings.totalEngravings).map(([label, total], index) => (
+              <div key={index} className="flex flex-col items-center justify-center p-2 border border-primary-text-color bg-primary-background-color rounded-lg m-2">
+                <span className="text-primary-text-color">{label}</span>
+                <span className="text-primary-text-color">{total}</span>
+              </div>
+            ))}
+          </div>
+          {totalEngravingSummary && (
+            <div className="text-primary-text-color text-center mt-4 text-2xl">Engravings: {totalEngravingSummary}</div>
+          )}
+        </div>
+      </>
+    );
   };  
 
   return (
