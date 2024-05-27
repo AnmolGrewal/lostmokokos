@@ -133,35 +133,56 @@ const EngravingCalculator: React.FC = () => {
   ) => {
     const newAccessoryEngravings = [...accessoryEngravings];
     const newAccessoryLevels = [...accessoryLevels];
-
+  
     newAccessoryEngravings[accessoryIndex][engravingIndex] = value || '';
     if (!value) {
       newAccessoryLevels[accessoryIndex][engravingIndex] = 0;
     }
-
+  
     setAccessoryEngravings(newAccessoryEngravings);
     setAccessoryLevels(newAccessoryLevels);
-
+  
+    const newTotalEngravings = calculateTotalEngravings(newAccessoryEngravings, newAccessoryLevels);
+    setTotalEngravings(newTotalEngravings);
+  
     updateCurrentPreset({
       selectedEngravings,
       accessoryEngravings: newAccessoryEngravings,
       accessoryLevels: newAccessoryLevels,
-      totalEngravings,
+      totalEngravings: newTotalEngravings,
     });
-  };
+  };  
 
   const handleAccessoryLevelChange = (accessoryIndex: number, engravingIndex: number) => (event: Event, value: number | number[]) => {
     const newAccessoryLevels = [...accessoryLevels];
     newAccessoryLevels[accessoryIndex][engravingIndex] = value as number;
     setAccessoryLevels(newAccessoryLevels);
-
+  
+    const newTotalEngravings = calculateTotalEngravings(accessoryEngravings, newAccessoryLevels);
+    setTotalEngravings(newTotalEngravings);
+  
     updateCurrentPreset({
       selectedEngravings,
       accessoryEngravings,
       accessoryLevels: newAccessoryLevels,
-      totalEngravings,
+      totalEngravings: newTotalEngravings,
     });
   };
+
+  const calculateTotalEngravings = (engravings: string[][], levels: number[][]) => {
+    const newTotalEngravings: { [key: string]: number } = {};
+  
+    engravings.forEach((accessoryEngravings, accessoryIndex) => {
+      accessoryEngravings.forEach((engraving, engravingIndex) => {
+        if (engraving) {
+          const level = levels[accessoryIndex][engravingIndex];
+          newTotalEngravings[engraving] = (newTotalEngravings[engraving] || 0) + level;
+        }
+      });
+    });
+  
+    return newTotalEngravings;
+  };  
 
   const updateCurrentPreset = (engravings: Engravings) => {
     const updatedPresets = presets.map((preset) => {
@@ -351,13 +372,16 @@ const EngravingCalculator: React.FC = () => {
   };  
 
   const renderTotalEngravings = () => {
-    return Object.entries(totalEngravings).map(([label, total], index) => (
+    const currentPreset = presets.find((preset) => preset.name === selectedPreset);
+    if (!currentPreset) return null;
+  
+    return Object.entries(currentPreset.engravings.totalEngravings).map(([label, total], index) => (
       <div key={index} className="flex flex-col items-center justify-center p-2 border border-primary-text-color bg-primary-background-color rounded-lg m-2">
         <span className="text-primary-text-color">{label}</span>
         <span className="text-primary-text-color">{total}</span>
       </div>
     ));
-  };
+  };  
 
   return (
     <div className="bg-primary-background-color p-4 size-full flex flex-1 flex-shrink-0 flex-col justify-center">
