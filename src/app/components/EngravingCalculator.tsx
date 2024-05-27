@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect, useCallback } from 'react';
-import { Autocomplete, Chip, Slider, TextField, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
+import { Autocomplete, Chip, Slider, TextField, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, Button, Tab, Tabs } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { engravings, engravingItems, negativeEngravings } from '../../data/engravings';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
@@ -28,6 +28,7 @@ const EngravingCalculator: React.FC = () => {
   const [confirmClearDialogOpen, setConfirmClearDialogOpen] = useState<boolean>(false);
   const [confirmDeleteDialogOpen, setConfirmDeleteDialogOpen] = useState<boolean>(false);
   const [presetToDelete, setPresetToDelete] = useState<string | null>(null);
+  const [currentTab, setCurrentTab] = useState(0);
 
   const addNewPreset = useCallback(() => {
     const newIndex = presets.length > 0 ? Math.max(...presets.map(p => p.index)) + 1 : 1;
@@ -545,6 +546,10 @@ const EngravingCalculator: React.FC = () => {
     );
   };  
 
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setCurrentTab(newValue);
+  };
+
   return (
     <div className="bg-primary-background-color p-4 size-full flex flex-1 flex-shrink-0 flex-col justify-center">
       <div className="bg-secondary-background-color p-4 rounded-lg mt-4 flex flex-1 flex-shrink-0 flex-row justify-center align-middle items-center">
@@ -657,9 +662,38 @@ const EngravingCalculator: React.FC = () => {
           <DeleteIcon />
         </IconButton>
       </div>
-      <div className="mt-4">{renderAccessoryRows()}</div>
-      {/* Add the engraving table */}
-      <div className="mt-4">{renderEngravingTable()}</div>
+      <Tabs
+        value={currentTab}
+        onChange={handleTabChange}
+        aria-label="Accessory and Grid Tabs"
+        className='mt-4 flex justify-center items-center'
+        sx={{
+          '& .MuiTab-root': {
+            color: 'var(--primary-text-label-color)',
+            fontSize: '24px',
+          },
+          '& .Mui-selected': {
+            color: 'var(--primary-text-label-color)',
+            fontWeight: 'bold',
+          },
+          '& .MuiTabs-indicator': {
+            backgroundColor: 'var(--primary-text-label-color)',
+          },
+        }}
+      >
+        <Tab label="Accessories" />
+        <Tab label="Grid" />
+      </Tabs>
+      {currentTab === 0 && (
+        <div className="mt-4">
+          {renderAccessoryRows()}
+        </div>
+      )}
+      {currentTab === 1 && (
+        <div className="mt-4">
+          {renderEngravingTable()}
+        </div>
+      )}
       <Dialog
         open={confirmClearDialogOpen}
         onClose={handleToggleConfirmClearDialog}
