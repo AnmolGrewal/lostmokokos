@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect, useCallback } from 'react';
 import { Autocomplete, Chip, Slider, TextField, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -12,6 +13,7 @@ interface Engravings {
 
 interface Preset {
   name: string;
+  index: number;
   engravings: Engravings;
 }
 
@@ -23,11 +25,15 @@ const EngravingCalculator: React.FC = () => {
   const [accessoryLevels, setAccessoryLevels] = useState<number[][]>([]);
   const [totalEngravings, setTotalEngravings] = useState<{ [key: string]: number }>({});
   const [confirmClearDialogOpen, setConfirmClearDialogOpen] = useState<boolean>(false);
+  const [confirmDeleteDialogOpen, setConfirmDeleteDialogOpen] = useState<boolean>(false);
+  const [presetToDelete, setPresetToDelete] = useState<string | null>(null);
 
   const addNewPreset = useCallback(() => {
-    const newPresetName = presets.length > 0 ? `Preset ${presets.length + 1}` : 'Preset 1';
+    const newIndex = presets.length > 0 ? Math.max(...presets.map(p => p.index)) + 1 : 1;
+    const newPresetName = `Preset ${newIndex}`;
     const newPreset: Preset = {
       name: newPresetName,
+      index: newIndex,
       engravings: {
         selectedEngravings: [],
         accessoryEngravings: [],
@@ -65,6 +71,7 @@ const EngravingCalculator: React.FC = () => {
       } else {
         const defaultPreset: Preset = {
           name: 'Default',
+          index: 1,
           engravings: {
             selectedEngravings: [],
             accessoryEngravings: [],
@@ -185,6 +192,37 @@ const EngravingCalculator: React.FC = () => {
       totalEngravings: {},
     });
     handleToggleConfirmClearDialog();
+  };
+
+  const handleToggleConfirmDeleteDialog = (presetName: string) => {
+    setPresetToDelete(presetName);
+    setConfirmDeleteDialogOpen(!confirmDeleteDialogOpen);
+  };
+
+  const handleDeletePresetConfirmed = () => {
+    if (presetToDelete) {
+      const updatedPresets = presets.filter((preset) => preset.name !== presetToDelete);
+      setPresets(updatedPresets);
+      if (updatedPresets.length > 0) {
+        setSelectedPreset(updatedPresets[0].name);
+        loadEngravings(updatedPresets[0].engravings);
+      } else {
+        const defaultPreset: Preset = {
+          name: 'Default',
+          index: 1,
+          engravings: {
+            selectedEngravings: [],
+            accessoryEngravings: [],
+            accessoryLevels: [],
+            totalEngravings: {},
+          },
+        };
+        setPresets([defaultPreset]);
+        setSelectedPreset(defaultPreset.name);
+        loadEngravings(defaultPreset.engravings);
+      }
+      handleToggleConfirmDeleteDialog('');
+    }
   };
 
   const renderAccessoryRows = () => {
@@ -348,6 +386,23 @@ const EngravingCalculator: React.FC = () => {
             />
           )}
         />
+        {selectedPreset !== 'Default' && (
+          <IconButton
+            onClick={() => handleToggleConfirmDeleteDialog(selectedPreset)}
+            size="small"
+            sx={{
+              color: 'var(--primary-text-color)',
+              bgcolor: 'var(--image-background-color)',
+              width: '48px',
+              height: '48px',
+              borderRadius: '50%',
+              p: '5px',
+              '&:hover': { bgcolor: 'var(--primary-background-hover-color)' },
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+        )}
       </div>
       <div className="bg-secondary-background-color p-4 rounded-lg mt-4 flex flex-1 flex-shrink-0 flex-row justify-center align-middle items-center">
         <Autocomplete
@@ -412,7 +467,6 @@ const EngravingCalculator: React.FC = () => {
         </IconButton>
       </div>
       <div className="mt-4">{renderAccessoryRows()}</div>
-
       <Dialog
         open={confirmClearDialogOpen}
         onClose={handleToggleConfirmClearDialog}
@@ -433,6 +487,30 @@ const EngravingCalculator: React.FC = () => {
           </Button>
           <Button onClick={handleClearAllDataConfirmed} sx={{ color: 'inherit' }}>
             Clear All Data
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={confirmDeleteDialogOpen}
+        onClose={() => handleToggleConfirmDeleteDialog('')}
+        sx={{
+          '& .MuiPaper-root': {
+            backgroundColor: 'var(--chip-background-color)',
+            color: 'var(--primary-text-color)',
+          },
+        }}
+      >
+        <DialogTitle sx={{ color: 'var(--primary-text-label-color)' }}>Confirm Delete Preset</DialogTitle>
+        <DialogContent>
+          <p>Are you sure you want to delete the preset &quot;{presetToDelete}&quot;?</p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleToggleConfirmDeleteDialog('')} sx={{ color: 'inherit' }}>
+            Cancel
+          </Button>
+          <Button onClick={handleDeletePresetConfirmed} sx={{ color: 'inherit' }}>
+            Delete
           </Button>
         </DialogActions>
       </Dialog>
