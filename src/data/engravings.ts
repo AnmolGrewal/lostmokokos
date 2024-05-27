@@ -173,3 +173,4 @@ const negativeEngravings: NegativeEngraving[] = [
 ];
 
 export { engravings, engravingItems, negativeEngravings };
+export type { Engraving, EngravingItem, NegativeEngraving };

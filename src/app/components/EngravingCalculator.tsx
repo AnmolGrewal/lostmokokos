@@ -3,7 +3,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Autocomplete, Chip, Slider, TextField, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, Button, Tab, Tabs } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { engravings, engravingItems, negativeEngravings } from '../../data/engravings';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import EngravingGrid from './EngravingGrid';
+
 
 interface Engravings {
   selectedEngravings: string[];
@@ -417,135 +418,6 @@ const EngravingCalculator: React.FC = () => {
     );
   };  
 
-  const renderEngravingTable = () => {
-    const accessoryOrder = ['Books', 'Ability Stone', 'Necklace', 'Earring', 'Earring', 'Ring', 'Ring'];
-  
-    const calculateColumnTotal = (engravingIndex: number) => {
-      let total = 0;
-      accessoryOrder.forEach((_, accessoryIndex) => {
-        const currentAccessoryEngravings = accessoryEngravings[accessoryIndex] || [];
-        const currentAccessoryLevels = accessoryLevels[accessoryIndex] || [];
-        const engravingIndexInAccessory = currentAccessoryEngravings.findIndex(
-          (accessoryEngraving) => accessoryEngraving === selectedEngravings[engravingIndex]
-        );
-        if (engravingIndexInAccessory !== -1) {
-          total += currentAccessoryLevels[engravingIndexInAccessory];
-        }
-      });
-      return total > 0 ? `+${total}` : '';
-    };
-  
-    return (
-      <TableContainer
-        component={Paper}
-        sx={{
-          width: '100%',
-          backgroundColor: 'var(--chip-background-color)',
-          color: 'var(--primary-text-color)',
-          '.MuiTableCell-root': {
-            color: 'var(--primary-text-color)',
-            borderBottom: '2px solid var(--primary-text-label-color)',
-            paddingLeft: '2px',
-            paddingRight: '2px',
-          },
-        }}
-      >
-        <Table aria-label="engraving table">
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontWeight: 'bold', fontSize: '24px' }}></TableCell>
-              {selectedEngravings.map((engraving, index) => (
-                <TableCell
-                  key={index}
-                  sx={{
-                    fontWeight: 'bold',
-                    fontSize: '24px',
-                    textAlign: 'center',
-                  }}
-                >
-                  {engraving}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {accessoryOrder.map((accessory, accessoryIndex) => {
-              const currentAccessoryEngravings = accessoryEngravings[accessoryIndex] || [];
-              const currentAccessoryLevels = accessoryLevels[accessoryIndex] || [];
-  
-              return (
-                <TableRow key={accessoryIndex} className={accessoryIndex % 2 === 0 ? 'even-row' : ''}>
-                  <TableCell
-                    component="th"
-                    scope="row"
-                    sx={{
-                      textAlign: 'left',
-                      fontSize: '24px',
-                      position: 'relative',
-                      width: 'fit-content',
-                      flexShrink: 0,
-                      minWidth: '150px',
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        flexShrink: 0,
-                      }}
-                    >
-                      <img
-                        src={engravingItems.find((item) => item.label === accessory)?.image}
-                        alt={accessory}
-                        style={{ width: '40px', height: '40px' }}
-                      />
-                      <div className="shrink-0 ml-2">{accessory}</div>
-                    </div>
-                  </TableCell>
-                  {selectedEngravings.map((engraving, engravingIndex) => {
-                    const engravingIndexInAccessory = currentAccessoryEngravings.findIndex(
-                      (accessoryEngraving) => accessoryEngraving === engraving
-                    );
-                    const engravingValue =
-                      engravingIndexInAccessory !== -1 ? `+${currentAccessoryLevels[engravingIndexInAccessory]}` : '';
-  
-                    return (
-                      <TableCell key={engravingIndex} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
-                        <span style={{ visibility: engravingValue ? 'visible' : 'hidden' }}>{engravingValue}</span>
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-                
-              );
-            })}
-            <TableRow>
-              <TableCell
-                component="th"
-                scope="row"
-                sx={{
-                  textAlign: 'left',
-                  fontSize: '24px',
-                  fontWeight: 'bold',
-                }}
-              >
-                Totals:
-              </TableCell>
-              {selectedEngravings.map((_, engravingIndex) => {
-                const columnTotal = calculateColumnTotal(engravingIndex);
-                return (
-                  <TableCell key={engravingIndex} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
-                    <span style={{ visibility: columnTotal ? 'visible' : 'hidden' }}>{columnTotal}</span>
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
-    );
-  };  
-
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
   };
@@ -690,9 +562,13 @@ const EngravingCalculator: React.FC = () => {
         </div>
       )}
       {currentTab === 1 && (
-        <div className="mt-4">
-          {renderEngravingTable()}
-        </div>
+        <EngravingGrid
+          selectedEngravings={selectedEngravings}
+          accessoryEngravings={accessoryEngravings}
+          accessoryLevels={accessoryLevels}
+          engravingItems={engravingItems}
+          negativeEngravings={negativeEngravings}
+        />
       )}
       <Dialog
         open={confirmClearDialogOpen}
