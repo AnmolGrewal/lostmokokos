@@ -616,7 +616,7 @@ const EngravingCalculator: React.FC = () => {
                   key={key}
                   label={option}
                   {...tagProps}
-                  className="bg-chip-background-color text-chip-text-color text-lg mr-2 mt-2"
+                  className="!bg-chip-background-color !text-chip-text-color !text-lg !mr-2 !mt-2"
                   deleteIcon={<DeleteIcon style={{ color: 'var(--primary-text-label-color)' }} />}
                 />
               );
