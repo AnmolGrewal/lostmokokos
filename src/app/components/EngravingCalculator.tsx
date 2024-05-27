@@ -471,7 +471,7 @@ const EngravingCalculator: React.FC = () => {
                   }}
                 />
                 <div className="text-center text-primary-text-label-color mt-1">
-                  {optimizerValues[engraving] || 0}
+                  Level: {optimizerValues[engraving] || 0}
                 </div>
               </div>
             ))}
