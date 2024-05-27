@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Autocomplete, Chip, Slider, TextField, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { engravings, engravingItems, negativeEngravings } from '../../data/engravings';
@@ -10,63 +10,97 @@ interface Engravings {
   totalEngravings: { [key: string]: number };
 }
 
+interface Preset {
+  name: string;
+  engravings: Engravings;
+}
+
 const EngravingCalculator: React.FC = () => {
+  const [presets, setPresets] = useState<Preset[]>([]);
+  const [selectedPreset, setSelectedPreset] = useState<string>('');
   const [selectedEngravings, setSelectedEngravings] = useState<string[]>([]);
   const [accessoryEngravings, setAccessoryEngravings] = useState<string[][]>([]);
   const [accessoryLevels, setAccessoryLevels] = useState<number[][]>([]);
   const [totalEngravings, setTotalEngravings] = useState<{ [key: string]: number }>({});
   const [confirmClearDialogOpen, setConfirmClearDialogOpen] = useState<boolean>(false);
 
+  const addNewPreset = useCallback(() => {
+    const newPresetName = presets.length > 0 ? `Preset ${presets.length + 1}` : 'Preset 1';
+    const newPreset: Preset = {
+      name: newPresetName,
+      engravings: {
+        selectedEngravings: [],
+        accessoryEngravings: [],
+        accessoryLevels: [],
+        totalEngravings: {},
+      },
+    };
+    setPresets([...presets, newPreset]);
+    setSelectedPreset(newPresetName);
+    loadEngravings(newPreset.engravings);
+  }, [presets]);
+
+  const handlePresetChange = useCallback((event: React.ChangeEvent<{}>, value: string | null) => {
+    if (value) {
+      setSelectedPreset(value);
+      const preset = presets.find((preset) => preset.name === value);
+      if (preset) {
+        loadEngravings(preset.engravings);
+      } else if (value === 'Add New Preset') {
+        addNewPreset();
+      }
+    }
+  }, [presets, addNewPreset]);
+
   useEffect(() => {
-    const loadEngravings = () => {
-      const savedData = localStorage.getItem('engravings');
-      if (savedData) {
-        const parsedData: Engravings = JSON.parse(savedData);
-        setSelectedEngravings(parsedData.selectedEngravings);
-        setAccessoryEngravings(parsedData.accessoryEngravings);
-        setAccessoryLevels(parsedData.accessoryLevels);
-        setTotalEngravings(parsedData.totalEngravings);
+    const loadPresets = () => {
+      const savedPresets = localStorage.getItem('presets');
+      if (savedPresets) {
+        const parsedPresets: Preset[] = JSON.parse(savedPresets);
+        setPresets(parsedPresets);
+        if (parsedPresets.length > 0) {
+          setSelectedPreset(parsedPresets[0].name);
+          loadEngravings(parsedPresets[0].engravings);
+        }
+      } else {
+        const defaultPreset: Preset = {
+          name: 'Default',
+          engravings: {
+            selectedEngravings: [],
+            accessoryEngravings: [],
+            accessoryLevels: [],
+            totalEngravings: {},
+          },
+        };
+        setPresets([defaultPreset]);
+        setSelectedPreset(defaultPreset.name);
+        loadEngravings(defaultPreset.engravings);
       }
     };
 
-    loadEngravings();
+    loadPresets();
   }, []);
 
   useEffect(() => {
-    const saveEngravings = () => {
-      const data: Engravings = {
-        selectedEngravings,
-        accessoryEngravings,
-        accessoryLevels,
-        totalEngravings,
-      };
-      localStorage.setItem('engravings', JSON.stringify(data));
+    const savePresets = () => {
+      localStorage.setItem('presets', JSON.stringify(presets));
     };
 
-    saveEngravings();
-  }, [selectedEngravings, accessoryEngravings, accessoryLevels, totalEngravings]);
+    savePresets();
+  }, [presets]);
 
-  useEffect(() => {
-    const calculateTotalEngravings = () => {
-      const totals: { [key: string]: number } = {};
-      accessoryEngravings.forEach((engravingList, accessoryIndex) => {
-        engravingList.forEach((engraving, engravingIndex) => {
-          if (engraving) {
-            totals[engraving] = (totals[engraving] || 0) + accessoryLevels[accessoryIndex][engravingIndex];
-          }
-        });
-      });
-      setTotalEngravings(totals);
-    };
-
-    calculateTotalEngravings();
-  }, [accessoryEngravings, accessoryLevels]);
+  const loadEngravings = (engravings: Engravings) => {
+    setSelectedEngravings(engravings.selectedEngravings);
+    setAccessoryEngravings(engravings.accessoryEngravings);
+    setAccessoryLevels(engravings.accessoryLevels);
+    setTotalEngravings(engravings.totalEngravings);
+  };
 
   const handleEngravingChange = (event: React.ChangeEvent<{}>, value: string[]) => {
-    const deletedEngravings = selectedEngravings.filter(engraving => !value.includes(engraving));
+    const deletedEngravings = selectedEngravings.filter((engraving) => !value.includes(engraving));
 
-    const newAccessoryEngravings = accessoryEngravings.map(engravingList =>
-      engravingList.map(engraving => (deletedEngravings.includes(engraving) ? '' : engraving))
+    const newAccessoryEngravings = accessoryEngravings.map((engravingList) =>
+      engravingList.map((engraving) => (deletedEngravings.includes(engraving) ? '' : engraving))
     );
     const newAccessoryLevels = accessoryLevels.map((levelList, accessoryIndex) =>
       levelList.map((level, engravingIndex) =>
@@ -77,11 +111,18 @@ const EngravingCalculator: React.FC = () => {
     setSelectedEngravings(value);
     setAccessoryEngravings(newAccessoryEngravings);
     setAccessoryLevels(newAccessoryLevels);
+
+    updateCurrentPreset({
+      selectedEngravings: value,
+      accessoryEngravings: newAccessoryEngravings,
+      accessoryLevels: newAccessoryLevels,
+      totalEngravings,
+    });
   };
 
   const handleAccessoryEngravingChange = (accessoryIndex: number, engravingIndex: number) => (
     event: React.SyntheticEvent<Element, Event>,
-    value: string | null,
+    value: string | null
   ) => {
     const newAccessoryEngravings = [...accessoryEngravings];
     const newAccessoryLevels = [...accessoryLevels];
@@ -93,12 +134,39 @@ const EngravingCalculator: React.FC = () => {
 
     setAccessoryEngravings(newAccessoryEngravings);
     setAccessoryLevels(newAccessoryLevels);
+
+    updateCurrentPreset({
+      selectedEngravings,
+      accessoryEngravings: newAccessoryEngravings,
+      accessoryLevels: newAccessoryLevels,
+      totalEngravings,
+    });
   };
 
   const handleAccessoryLevelChange = (accessoryIndex: number, engravingIndex: number) => (event: Event, value: number | number[]) => {
     const newAccessoryLevels = [...accessoryLevels];
     newAccessoryLevels[accessoryIndex][engravingIndex] = value as number;
     setAccessoryLevels(newAccessoryLevels);
+
+    updateCurrentPreset({
+      selectedEngravings,
+      accessoryEngravings,
+      accessoryLevels: newAccessoryLevels,
+      totalEngravings,
+    });
+  };
+
+  const updateCurrentPreset = (engravings: Engravings) => {
+    const updatedPresets = presets.map((preset) => {
+      if (preset.name === selectedPreset) {
+        return {
+          ...preset,
+          engravings,
+        };
+      }
+      return preset;
+    });
+    setPresets(updatedPresets);
   };
 
   const handleToggleConfirmClearDialog = () => {
@@ -110,6 +178,12 @@ const EngravingCalculator: React.FC = () => {
     setAccessoryEngravings([]);
     setAccessoryLevels([]);
     setTotalEngravings({});
+    updateCurrentPreset({
+      selectedEngravings: [],
+      accessoryEngravings: [],
+      accessoryLevels: [],
+      totalEngravings: {},
+    });
     handleToggleConfirmClearDialog();
   };
 
@@ -144,6 +218,7 @@ const EngravingCalculator: React.FC = () => {
                     options={engravingIndex === 2 ? negativeEngravings.map((engraving) => engraving.label) : selectedEngravings}
                     value={accessoryEngravings[accessoryIndex][engravingIndex] || null}
                     onChange={handleAccessoryEngravingChange(accessoryIndex, engravingIndex)}
+                    isOptionEqualToValue={(option, value) => option === value}
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -250,11 +325,38 @@ const EngravingCalculator: React.FC = () => {
     <div className="bg-primary-background-color p-4 size-full flex flex-1 flex-shrink-0 flex-col justify-center">
       <div className="bg-secondary-background-color p-4 rounded-lg mt-4 flex flex-1 flex-shrink-0 flex-row justify-center align-middle items-center">
         <Autocomplete
+          options={[...presets.map((preset) => preset.name), 'Add New Preset']}
+          value={selectedPreset || null}
+          onChange={handlePresetChange}
+          isOptionEqualToValue={(option, value) => option === value}
+          className="w-full mr-2 min-h-[60px] flex flex-1 flex-shrink-0 flex-row justify-center align-middle items-center"
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Select Preset"
+              InputLabelProps={{
+                style: { color: 'var(--primary-text-label-color)' },
+              }}
+              InputProps={{
+                ...params.InputProps,
+                style: {
+                  color: 'var(--primary-text-color)',
+                  backgroundColor: 'var(--primary-background-color)',
+                  minHeight: '60px',
+                },
+              }}
+            />
+          )}
+        />
+      </div>
+      <div className="bg-secondary-background-color p-4 rounded-lg mt-4 flex flex-1 flex-shrink-0 flex-row justify-center align-middle items-center">
+        <Autocomplete
           multiple
           options={engravings.map((engraving) => engraving.label)}
           value={selectedEngravings}
-          className='w-full mr-2 min-h-[60px] flex flex-1 flex-shrink-0 flex-row justify-center align-middle items-center'
+          className="w-full mr-2 min-h-[60px] flex flex-1 flex-shrink-0 flex-row justify-center align-middle items-center"
           onChange={handleEngravingChange}
+          isOptionEqualToValue={(option, value) => option === value}
           renderTags={(value: string[], getTagProps) =>
             value.map((option: string, index: number) => {
               const { key, ...tagProps } = getTagProps({ index });
@@ -283,11 +385,7 @@ const EngravingCalculator: React.FC = () => {
                   backgroundColor: 'var(--primary-background-color)',
                   minHeight: '60px',
                 },
-                endAdornment: (
-                  <>
-                    {params.InputProps.endAdornment}
-                  </>
-                ),
+                endAdornment: <>{params.InputProps.endAdornment}</>,
               }}
             />
           )}
@@ -313,9 +411,7 @@ const EngravingCalculator: React.FC = () => {
           <DeleteIcon />
         </IconButton>
       </div>
-      <div className="mt-4">
-        {renderAccessoryRows()}
-      </div>
+      <div className="mt-4">{renderAccessoryRows()}</div>
 
       <Dialog
         open={confirmClearDialogOpen}
