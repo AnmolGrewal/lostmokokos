@@ -4,7 +4,7 @@ import { Autocomplete, Chip, Slider, TextField, IconButton, Dialog, DialogAction
 import DeleteIcon from '@mui/icons-material/Delete';
 import { engravings, engravingItems, negativeEngravings } from '../../data/engravings';
 import EngravingGrid from './EngravingGrid';
-
+import ClearDialog from './ClearDialog';
 
 interface Engravings {
   selectedEngravings: string[];
@@ -570,30 +570,11 @@ const EngravingCalculator: React.FC = () => {
           negativeEngravings={negativeEngravings}
         />
       )}
-      <Dialog
+      <ClearDialog
         open={confirmClearDialogOpen}
         onClose={handleToggleConfirmClearDialog}
-        sx={{
-          '& .MuiPaper-root': {
-            backgroundColor: 'var(--chip-background-color)',
-            color: 'var(--primary-text-color)',
-          },
-        }}
-      >
-        <DialogTitle sx={{ color: 'var(--primary-text-label-color)' }}>Confirm Clear All Data</DialogTitle>
-        <DialogContent>
-          <p>Are you sure you want to clear all data and reset to default?</p>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleToggleConfirmClearDialog} sx={{ color: 'inherit' }}>
-            Cancel
-          </Button>
-          <Button onClick={handleClearAllDataConfirmed} sx={{ color: 'inherit' }}>
-            Clear All Data
-          </Button>
-        </DialogActions>
-      </Dialog>
-
+        onConfirm={handleClearAllDataConfirmed}
+      />
       <Dialog
         open={confirmDeleteDialogOpen}
         onClose={() => handleToggleConfirmDeleteDialog('')}
