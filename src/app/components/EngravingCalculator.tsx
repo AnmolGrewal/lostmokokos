@@ -385,6 +385,11 @@ const EngravingCalculator: React.FC = () => {
               }}
             />
           )}
+          sx={{
+            '& .MuiAutocomplete-endAdornment .MuiSvgIcon-root': {
+              color: 'var(--primary-text-label-color)',
+            },
+          }}
         />
         {selectedPreset !== 'Default' && (
           <IconButton
