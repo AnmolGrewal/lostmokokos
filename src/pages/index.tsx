@@ -79,6 +79,8 @@ export default function Home() {
       <h2 className="text-primary-text-color text-center text-2xl">
         Fresh Update! Added Engraving Calculator! Check it out!
         <br />
+        Added a Grid to Engravings as well Since people liked seeing a Grid still
+        <br />
         Will be adding Weekly Unas as well to Character Sheet and Rest Soon!
       </h2>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
