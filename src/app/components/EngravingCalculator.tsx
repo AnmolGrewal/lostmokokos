@@ -5,6 +5,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { engravings, engravingItems, negativeEngravings } from '../../data/engravings';
 import EngravingGrid from './EngravingGrid';
 import ClearDialog from './ClearDialog';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Engravings {
   selectedEngravings: string[];
@@ -629,7 +631,24 @@ const EngravingCalculator: React.FC = () => {
     if (backtrack(0, initialRemainingValues, 0)) {
       return combinationNeeded;
     } else {
-      console.log('No combination found');
+      toast.error('Combination Not Found', {
+        position: 'bottom-right',
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+        style: {
+          backgroundColor: 'var(--primary-background-color)',
+          color: 'var(--primary-text-color)',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          borderRadius: '4px',
+          fontSize: '16px',
+          padding: '12px',
+        },
+      });
       return combinationNeeded;
     }
   };
@@ -688,6 +707,13 @@ const EngravingCalculator: React.FC = () => {
 
     return (
       <div className="mt-4">
+        <h1 className="text-primary-text-label-color text-center text-2xl">
+          Please Set Books and Ability Stone Before Using this as it does tens of thousands of combinations! 
+          <br/>
+          Pre Release Alpha Version!
+          <br/>
+          Works Better when you select atleast 5 level 3's
+        </h1>
         {rows.map((row, rowIndex) => (
           <div key={rowIndex} className="bg-secondary-background-color p-4 mt-4 rounded-lg flex flex-wrap justify-center">
             {row.map((engraving, index) => (
@@ -910,6 +936,7 @@ const EngravingCalculator: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      <ToastContainer />
     </div>
   );
 };
