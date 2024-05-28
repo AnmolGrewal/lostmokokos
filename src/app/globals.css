@@ -153,8 +153,8 @@ body {
 }
 
 .MuiAutocomplete-option, .MuiAutocomplete-noOptions {
-  background-color: var(--secondary-background-color);
-  color: var(--primary-text-label-color);
+  background-color: var(--secondary-background-color) !important;
+  color: var(--primary-text-label-color) !important;
   width: 100%;
 }
 
@@ -167,5 +167,5 @@ body {
 }
 
 .MuiAutocomplete-listbox {
-  background-color: var(--secondary-background-color);
+  background-color: var(--secondary-background-color) !important;
 }

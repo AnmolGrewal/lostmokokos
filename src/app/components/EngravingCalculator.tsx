@@ -776,7 +776,7 @@ const EngravingCalculator: React.FC = () => {
       >
         <Tab label="Accessories" />
         <Tab label="Grid" />
-        <Tab label="Optimizer" />
+        {/*<Tab label="Optimizer" />*/}
       </Tabs>
       {currentTab === 0 && (
         <div>
