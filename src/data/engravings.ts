@@ -107,6 +107,8 @@ interface EngravingItem {
   image: string;
   label: string;
   values: number[][];
+  maxValues: number[],
+  fixedValues?: number[],
 }
 
 const engravingItems: EngravingItem[] = [
@@ -118,6 +120,7 @@ const engravingItems: EngravingItem[] = [
       [1, 2, 3],
       [1, 2, 3],
     ],
+    maxValues: [6, 3],
   },
   {
     image: imagesData.necklace,
@@ -127,6 +130,7 @@ const engravingItems: EngravingItem[] = [
       [1, 2, 3],
       [1, 2, 3],
     ],
+    maxValues: [6, 3],
   },
   {
     image: imagesData.earring,
@@ -136,6 +140,7 @@ const engravingItems: EngravingItem[] = [
       [1, 2, 3],
       [1, 2, 3],
     ],
+    maxValues: [6, 3],
   },
   {
     image: imagesData.abilityStone,
@@ -145,11 +150,14 @@ const engravingItems: EngravingItem[] = [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     ],
+    maxValues: [10, 10],
   },
   {
     image: imagesData.book,
     label: 'Books',
     values: [[3, 6, 9, 12], [3, 6, 9, 12]],
+    maxValues: [12, 12],
+    fixedValues: [3, 6, 9, 12],
   },
 ];
 
