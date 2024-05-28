@@ -691,18 +691,33 @@ const EngravingCalculator: React.FC = () => {
               }}
             >
               {combinations[currentCombinationIndex].map((item, index) => (
-                <div key={index} className="flex flex-col items-center justify-center p-2 border border-primary-text-color bg-primary-background-color rounded-lg m-2">
-                  <span className="text-primary-text-color font-bold">{item.label}</span>
+                <div
+                  key={index}
+                  className={`flex flex-col items-center justify-center p-2 border ${
+                    item.isFixed ? 'border-image-calendar-color bg-image-calendar-color' : 'border-primary-text-color bg-primary-background-color'
+                  } rounded-lg m-2`}
+                >
+                  <span className={`${item.isFixed ? 'text-primary-background-color' : 'text-primary-text-color'} font-bold`}>
+                    {item.label}
+                  </span>
                   {item.firstEngraving && (
                     <div className="flex items-center">
-                      <span className="text-primary-text-color">{item.firstEngraving}:</span>
-                      <span className="text-primary-text-color ml-1">{item.firstEngravingValue}</span>
+                      <span className={item.isFixed ? 'text-primary-background-color' : 'text-primary-text-color'}>
+                        {item.firstEngraving}:
+                      </span>
+                      <span className={`${item.isFixed ? 'text-primary-background-color' : 'text-primary-text-color'} ml-1`}>
+                        {item.firstEngravingValue}
+                      </span>
                     </div>
                   )}
                   {item.secondEngraving && (
                     <div className="flex items-center">
-                      <span className="text-primary-text-color">{item.secondEngraving}:</span>
-                      <span className="text-primary-text-color ml-1">{item.secondEngravingValue}</span>
+                      <span className={item.isFixed ? 'text-primary-background-color' : 'text-primary-text-color'}>
+                        {item.secondEngraving}:
+                      </span>
+                      <span className={`${item.isFixed ? 'text-primary-background-color' : 'text-primary-text-color'} ml-1`}>
+                        {item.secondEngravingValue}
+                      </span>
                     </div>
                   )}
                 </div>
