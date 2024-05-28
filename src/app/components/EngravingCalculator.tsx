@@ -643,7 +643,11 @@ const EngravingCalculator: React.FC = () => {
           padding: '12px',
         },
       });
-      return combinationNeeded;
+      return (
+        <div className="flex flex-col items-center justify-center p-2 border border-primary-text-color bg-primary-background-color rounded-lg m-2">
+          <span className="text-primary-text-color font-bold">Combination Not Possible</span>
+        </div>
+      );
     }
   };
 
@@ -665,23 +669,27 @@ const EngravingCalculator: React.FC = () => {
         <div className="mt-4">
           <h3 className="text-primary-text-color text-xl text-center">Combination Details</h3>
           <div className="flex flex-wrap justify-center">
-            {combination.map((item, index) => (
-              <div key={index} className="flex flex-col items-center justify-center p-2 border border-primary-text-color bg-primary-background-color rounded-lg m-2">
-                <span className="text-primary-text-color font-bold">{item.label}</span>
-                {item.firstEngraving && (
-                  <div className="flex items-center">
-                    <span className="text-primary-text-color">{item.firstEngraving}:</span>
-                    <span className="text-primary-text-color ml-1">{item.firstEngravingValue}</span>
-                  </div>
-                )}
-                {item.secondEngraving && (
-                  <div className="flex items-center">
-                    <span className="text-primary-text-color">{item.secondEngraving}:</span>
-                    <span className="text-primary-text-color ml-1">{item.secondEngravingValue}</span>
-                  </div>
-                )}
-              </div>
-            ))}
+            {Array.isArray(combination) ? (
+              combination.map((item, index) => (
+                <div key={index} className="flex flex-col items-center justify-center p-2 border border-primary-text-color bg-primary-background-color rounded-lg m-2">
+                  <span className="text-primary-text-color font-bold">{item.label}</span>
+                  {item.firstEngraving && (
+                    <div className="flex items-center">
+                      <span className="text-primary-text-color">{item.firstEngraving}:</span>
+                      <span className="text-primary-text-color ml-1">{item.firstEngravingValue}</span>
+                    </div>
+                  )}
+                  {item.secondEngraving && (
+                    <div className="flex items-center">
+                      <span className="text-primary-text-color">{item.secondEngraving}:</span>
+                      <span className="text-primary-text-color ml-1">{item.secondEngravingValue}</span>
+                    </div>
+                  )}
+                </div>
+              ))
+            ) : (
+              combination
+            )}
           </div>
         </div>
       </div>
