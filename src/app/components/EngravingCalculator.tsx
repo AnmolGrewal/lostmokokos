@@ -633,7 +633,7 @@ const EngravingCalculator: React.FC = () => {
         },
       });
     }
-    
+
     return combinations;
   };
 
@@ -663,14 +663,14 @@ const EngravingCalculator: React.FC = () => {
         <div className="flex flex-wrap justify-center">
           {Object.entries(remainingValues).map(([label, remaining], index) => (
             <div key={index} className="flex flex-col items-center justify-center p-2 border border-primary-text-color bg-primary-background-color rounded-lg m-2">
-              <span className="text-primary-text-color">{label}</span>
+              <span className="text-primary-text-color font-bold">{label}</span>
               <span className="text-primary-text-color">{remaining > 0 ? remaining : 'Achieved'}</span>
             </div>
           ))}
         </div>
         <div className="mt-4 flex align-center justify-center">
           <button
-            className="bg-primary-background-color text-primary-text-color px-4 py-2 rounded items-center"
+            className="bg-primary-background-color text-primary-text-color px-4 py-2 rounded items-center font-bold"
             onClick={handleCalculateCombinations}
           >
             Calculate Combinations
@@ -738,59 +738,52 @@ const EngravingCalculator: React.FC = () => {
   };
 
   const renderOptimizer = () => {
-    const rows = [];
-    for (let i = 0; i < selectedEngravings.length; i += 3) {
-      rows.push(selectedEngravings.slice(i, i + 3));
-    }
-
     return (
       <div className="mt-4">
         <h1 className="text-primary-text-label-color text-center text-2xl">
-          Please Set Books and Ability Stone Before Using this as it does tens of thousands of combinations! 
-          <br/>
+          Please Set Books and Ability Stone Before Using this as it does tens of thousands of combinations!
+          <br />
           Pre Release Alpha Version!
-          <br/>
-          Works Better when you select atleast 5 level 3s
+          <br />
+          Works Better when you select at least 5 level 3s
         </h1>
-        {rows.map((row, rowIndex) => (
-          <div key={rowIndex} className="bg-secondary-background-color p-4 mt-4 rounded-lg flex flex-wrap justify-center">
-            {row.map((engraving, index) => (
-              <div key={index} className="flex flex-col items-center mb-4 mx-2 flex-1">
-                <span className="text-primary-text-color text-lg">{engraving}</span>
-                <Slider
-                  value={optimizerValues[engraving] || 0}
-                  onChange={(event, value) => handleOptimizerSliderChange(engraving, value)}
-                  min={0}
-                  max={3}
-                  step={1}
-                  marks={[
-                    { value: 0, label: '' },
-                    { value: 1, label: '' },
-                    { value: 2, label: '' },
-                    { value: 3, label: '' },
-                  ]}
-                  valueLabelDisplay="auto"
-                  className="w-11/12"
-                  sx={{
-                    color: 'var(--primary-text-color)',
-                    '& .MuiSlider-rail': {
-                      backgroundColor: 'var(--primary-background-color)',
-                    },
-                    '& .MuiSlider-track': {
-                      backgroundColor: 'var(--secondary-background-color)',
-                    },
-                    '& .MuiSlider-thumb': {
-                      backgroundColor: 'var(--primary-text-color)',
-                    },
-                  }}
-                />
-                <div className="text-center text-primary-text-label-color mt-1">
-                  Level: {optimizerValues[engraving] || 0}
-                </div>
+        <div className="bg-secondary-background-color p-4 mt-4 rounded-lg grid md:grid-cols-3 gap-4 grid-cols-2">
+          {selectedEngravings.map((engraving, index) => (
+            <div key={index} className="flex flex-col items-center mb-4 mx-2">
+              <span className="text-primary-text-color text-lg">{engraving}</span>
+              <Slider
+                value={optimizerValues[engraving] || 0}
+                onChange={(event, value) => handleOptimizerSliderChange(engraving, value)}
+                min={0}
+                max={3}
+                step={1}
+                marks={[
+                  { value: 0, label: '' },
+                  { value: 1, label: '' },
+                  { value: 2, label: '' },
+                  { value: 3, label: '' },
+                ]}
+                valueLabelDisplay="auto"
+                className="w-11/12"
+                sx={{
+                  color: 'var(--primary-text-color)',
+                  '& .MuiSlider-rail': {
+                    backgroundColor: 'var(--primary-background-color)',
+                  },
+                  '& .MuiSlider-track': {
+                    backgroundColor: 'var(--secondary-background-color)',
+                  },
+                  '& .MuiSlider-thumb': {
+                    backgroundColor: 'var(--primary-text-color)',
+                  },
+                }}
+              />
+              <div className="text-center text-primary-text-label-color mt-1">
+                Level: {optimizerValues[engraving] || 0}
               </div>
-            ))}
-          </div>
-        ))}
+            </div>
+          ))}
+        </div>
       </div>
     );
   };
