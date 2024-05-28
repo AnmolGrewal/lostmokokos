@@ -439,16 +439,18 @@ const EngravingCalculator: React.FC = () => {
     return remainingValues;
   };
 
-  const calculateTotalValues = () => {
-    const totalValues = new Map<string, number>();
+  const calculateRemainingValuesMap = () => {
+    const remainingValues = new Map<string, number>();
   
     selectedEngravings.forEach((engraving) => {
       const desiredValue = optimizerValues[engraving] || 0;
-      totalValues.set(engraving, desiredValue * 5);
+      const currentValue = totalEngravings[engraving] || 0;
+      const remaining = (desiredValue * 5) - currentValue;
+      remainingValues.set(engraving, remaining);
     });
   
-    return totalValues;
-  };  
+    return remainingValues;
+  }; 
 
   interface EngravingItem {
     label: string;
@@ -458,10 +460,11 @@ const EngravingCalculator: React.FC = () => {
     secondEngravingValue: number;
     firstEngravingMaxValue: number;
     secondEngravingMaxValue: number;
+    isFixed: boolean;
   }
 
   const findCombinationNeeded = () => {
-    const totalValues = calculateTotalValues();
+    const remainingValues = calculateRemainingValuesMap();
     const combinationNeeded: EngravingItem[] = new Array(7).fill(null).map(() => ({
       label: '',
       firstEngraving: '',
@@ -470,6 +473,7 @@ const EngravingCalculator: React.FC = () => {
       secondEngravingValue: 0,
       firstEngravingMaxValue: 0,
       secondEngravingMaxValue: 0,
+      isFixed: false,
     }));
   
     // Create a mapping of accessory index to accessory data
@@ -493,12 +497,25 @@ const EngravingCalculator: React.FC = () => {
       combinationNeeded[index].secondEngravingValue = engravingLevels[1];
       combinationNeeded[index].firstEngravingMaxValue = accessoryData.maxValues[0];
       combinationNeeded[index].secondEngravingMaxValue = accessoryData.maxValues[1];
+      if (combinationNeeded[index].firstEngravingValue > 0 || combinationNeeded[index].secondEngravingValue > 0) {
+        combinationNeeded[index].isFixed = true;
+      }
     });
-  
-    console.log(combinationNeeded);
-    console.log(totalValues);
+    // Find the most efficient combination for non-fixed accessories
+    const nonFixedAccessories = combinationNeeded.filter((accessory) => !accessory.isFixed);
+    
+    /*
+    FINISH CODE HERE
+    Find a combination to make remainingValues to be less than or equal to 0, the first combination that gets there
+    You need to set the firstEngravingValue and secondEngravingValue and the firstEngraving and secondEngraving for each
+    nonFixedAccessories to get to that combination of 0. Sometimes it is not reachable, sometimes it is. Find 1 such combination
+    you cannot exceed the maxValue of the respective engraving as in firstEngravingValue cannot exceed firstEngravingMaxValue same with
+    secondEngravingValue cannot exceed secondEngravingMaxValue. When you reach the combination return instantly sometimes you do not need
+    to use all nonFixedAccessories. Solve this problem
+    */
+
     return combinationNeeded;
-  };  
+  };
 
   const renderRemainingValues = () => {
     const remainingValues = calculateRemainingValues();
@@ -515,13 +532,33 @@ const EngravingCalculator: React.FC = () => {
               <span className="text-primary-text-color">{remaining > 0 ? remaining : 'Achieved'}</span>
             </div>
           ))}
-          <div>
-            Combination Needed
+        </div>
+        <div className="mt-4">
+          <h3 className="text-primary-text-color text-xl text-center">Combination Details</h3>
+          <div className="flex flex-wrap justify-center">
+            {combination.map((item, index) => (
+              <div key={index} className="flex flex-col items-center justify-center p-2 border border-primary-text-color bg-primary-background-color rounded-lg m-2">
+                <span className="text-primary-text-color font-bold">{item.label}</span>
+                {item.firstEngraving && (
+                  <div className="flex items-center">
+                    <span className="text-primary-text-color">{item.firstEngraving}:</span>
+                    <span className="text-primary-text-color ml-1">{item.firstEngravingValue}</span>
+                  </div>
+                )}
+                {item.secondEngraving && (
+                  <div className="flex items-center">
+                    <span className="text-primary-text-color">{item.secondEngraving}:</span>
+                    <span className="text-primary-text-color ml-1">{item.secondEngravingValue}</span>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </div>
     );
   };
+  
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
