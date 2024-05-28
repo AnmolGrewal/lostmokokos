@@ -513,8 +513,85 @@ const EngravingCalculator: React.FC = () => {
     secondEngravingValue cannot exceed secondEngravingMaxValue. When you reach the combination return instantly sometimes you do not need
     to use all nonFixedAccessories. Solve this problem
     */
+    const memo = new Map<string, boolean>();
 
-    return combinationNeeded;
+    const serializeState = (index: number, remainingValues: Map<string, number>): string => {
+      const remainingArray = Array.from(remainingValues.entries()).sort().map(([key, value]) => `${key}:${value}`).join(',');
+      return `${index}:${remainingArray}`;
+    };
+
+    const backtrack = (index: number, currentRemainingValues: Map<string, number>): boolean => {
+      if (Array.from(currentRemainingValues.values()).every(value => value <= 0)) {
+        return true;
+      }
+      if (index >= nonFixedAccessories.length) {
+        return false;
+      }
+
+      const stateKey = serializeState(index, currentRemainingValues);
+      if (memo.has(stateKey)) {
+        return memo.get(stateKey)!;
+      }
+
+      const accessory = nonFixedAccessories[index];
+
+      const remainingEngravings = Array.from(currentRemainingValues.keys()).filter(engraving => currentRemainingValues.get(engraving)! > 0);
+
+      for (const firstEngraving of remainingEngravings) {
+        for (const secondEngraving of remainingEngravings) {
+          if (firstEngraving === secondEngraving) continue;
+
+          accessory.firstEngraving = firstEngraving;
+          accessory.secondEngraving = secondEngraving;
+
+          if (accessory.label === 'Books') {
+            const fixedValues = accessoryMapping[0].fixedValues!;
+            for (const value of fixedValues) {
+              const newRemainingValues = new Map(currentRemainingValues);
+              const firstRemaining = (newRemainingValues.get(firstEngraving) || 0) - value;
+              const secondRemaining = (newRemainingValues.get(secondEngraving) || 0) - value;
+              newRemainingValues.set(firstEngraving, firstRemaining);
+              newRemainingValues.set(secondEngraving, secondRemaining);
+
+              if (backtrack(index + 1, newRemainingValues)) {
+                accessory.firstEngravingValue = value;
+                accessory.secondEngravingValue = value;
+                memo.set(stateKey, true);
+                return true;
+              }
+            }
+          } else {
+            for (let i = 0; i <= accessory.firstEngravingMaxValue; i++) {
+              for (let j = 0; j <= accessory.secondEngravingMaxValue; j++) {
+                const newRemainingValues = new Map(currentRemainingValues);
+                const firstRemaining = (newRemainingValues.get(firstEngraving) || 0) - i;
+                const secondRemaining = (newRemainingValues.get(secondEngraving) || 0) - j;
+                newRemainingValues.set(firstEngraving, firstRemaining);
+                newRemainingValues.set(secondEngraving, secondRemaining);
+
+                if (backtrack(index + 1, newRemainingValues)) {
+                  accessory.firstEngravingValue = i;
+                  accessory.secondEngravingValue = j;
+                  memo.set(stateKey, true);
+                  return true;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      memo.set(stateKey, false);
+      return false;
+    };
+
+    const initialRemainingValues = new Map(remainingValues);
+    if (backtrack(0, initialRemainingValues)) {
+      return combinationNeeded;
+    } else {
+      console.log('No combination found');
+      return combinationNeeded;
+    }
   };
 
   const renderRemainingValues = () => {
