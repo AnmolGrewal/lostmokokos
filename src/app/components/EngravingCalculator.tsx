@@ -528,17 +528,19 @@ const EngravingCalculator: React.FC = () => {
     const generateCombinations = (engravings: string[], minSize: number, maxSize: number): string[][] => {
       const result: string[][] = [];
 
-      const generateHelper = (start: number, combination: string[]) => {
-        if (combination.length >= minSize && combination.length <= maxSize) {
-          result.push(combination);
+      const generatePermutations = (permutation: string[]) => {
+        if (permutation.length >= minSize && permutation.length <= maxSize) {
+          result.push(permutation);
         }
 
-        for (let i = start; i < engravings.length; i++) {
-          generateHelper(i + 1, [...combination, engravings[i]]);
+        for (let i = 0; i < engravings.length; i++) {
+          if (!permutation.includes(engravings[i])) {
+            generatePermutations([...permutation, engravings[i]]);
+          }
         }
       };
 
-      generateHelper(0, []);
+      generatePermutations([]);
       return result;
     };
 
@@ -609,29 +611,6 @@ const EngravingCalculator: React.FC = () => {
                 accessory.secondEngravingValue = 0;
                 memo.set(stateKey, true);
                 return true;
-              }
-            }
-          }
-
-          // Swap the first and second engravings and try again
-          if (secondEngraving) {
-            accessory.firstEngraving = secondEngraving;
-            accessory.secondEngraving = firstEngraving;
-
-            for (let i = 3; i <= accessory.firstEngravingMaxValue; i++) {
-              for (let j = 3; j <= accessory.secondEngravingMaxValue; j++) {
-                const newRemainingValues = new Map(currentRemainingValues);
-                const firstRemaining = (newRemainingValues.get(firstEngraving) || 0) - j;
-                const secondRemaining = (newRemainingValues.get(secondEngraving) || 0) - i;
-                newRemainingValues.set(firstEngraving, firstRemaining);
-                newRemainingValues.set(secondEngraving, secondRemaining);
-
-                if (backtrack(index + 1, newRemainingValues, depth + 1)) {
-                  accessory.firstEngravingValue = j;
-                  accessory.secondEngravingValue = i;
-                  memo.set(stateKey, true);
-                  return true;
-                }
               }
             }
           }
