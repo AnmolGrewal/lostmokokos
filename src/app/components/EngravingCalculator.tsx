@@ -424,7 +424,7 @@ const EngravingCalculator: React.FC = () => {
         </div>
       </>
     );
-  };  
+  };
 
   const calculateRemainingValues = () => {
     const remainingValues: { [key: string]: number } = {};
@@ -439,140 +439,72 @@ const EngravingCalculator: React.FC = () => {
     return remainingValues;
   };
 
-  const findCombinationForAll = (remainingValues: { [key: string]: number }) => {
-    const combination: { [key: string]: { [key: string]: number } } = {};
-    const items = ['Books', 'Ability Stone', 'Necklace', 'Earring1', 'Earring2', 'Ring1', 'Ring2'];
+  const calculateTotalValues = () => {
+    const totalValues = new Map<string, number>();
   
-    // Initialize combination structure with a maximum of 2 distinct engravings per item
-    items.forEach(item => {
-      combination[item] = {};
+    selectedEngravings.forEach((engraving) => {
+      const desiredValue = optimizerValues[engraving] || 0;
+      totalValues.set(engraving, desiredValue * 5);
     });
   
-    // Helper function to allocate values
-    const allocateValues = (engraving: string, values: number[], item: string, maxEngraving1: number, maxEngraving2: number) => {
-      for (const value of values) {
-        if (remainingValues[engraving] >= value) {
-          const currentEngraving1 = Object.values(combination[item])[0] || 0;
-          const currentEngraving2 = Object.values(combination[item])[1] || 0;
-          const numEngravings = Object.keys(combination[item]).length;
-          if (
-            numEngravings < 2 &&
-            ((currentEngraving1 + value <= maxEngraving1 && currentEngraving2 === 0) ||
-              (currentEngraving2 + value <= maxEngraving2 && currentEngraving1 === 0))
-          ) {
-            combination[item][engraving] = (combination[item][engraving] || 0) + value;
-            remainingValues[engraving] -= value;
-            if (remainingValues[engraving] <= 0) break;
-          }
-        }
-      }
-    };
+    return totalValues;
+  };  
+
+  interface EngravingItem {
+    label: string;
+    firstEngraving: string;
+    secondEngraving: string;
+    firstEngravingValue: number;
+    secondEngravingValue: number;
+    firstEngravingMaxValue: number;
+    secondEngravingMaxValue: number;
+  }
+
+  const findCombinationNeeded = () => {
+    const totalValues = calculateTotalValues();
+    const combinationNeeded: EngravingItem[] = new Array(7).fill(null).map(() => ({
+      label: '',
+      firstEngraving: '',
+      secondEngraving: '',
+      firstEngravingValue: 0,
+      secondEngravingValue: 0,
+      firstEngravingMaxValue: 0,
+      secondEngravingMaxValue: 0,
+    }));
   
-    // Allocate fixed values from accessories
-    items.forEach((item, index) => {
-      const accessoryEngraving = accessoryEngravings[index];
-      const accessoryLevel = accessoryLevels[index];
-      if (accessoryEngraving && accessoryLevel) {
-        accessoryEngraving.forEach((engraving, engravingIndex) => {
-          if (engraving) {
-            combination[item][engraving] = accessoryLevel[engravingIndex];
-            remainingValues[engraving] -= accessoryLevel[engravingIndex];
-          }
-        });
-      }
+    // Create a mapping of accessory index to accessory data
+    const accessoryMapping = [
+      { label: 'Books', maxValues: [12, 12], fixedValues: [3, 6, 9, 12] },
+      { label: 'Ability Stone', maxValues: [10, 10] },
+      { label: 'Necklace', maxValues: [6, 3] },
+      { label: 'Earring 1', maxValues: [6, 3] },
+      { label: 'Earring 2', maxValues: [6, 3] },
+      { label: 'Ring 1', maxValues: [6, 3] },
+      { label: 'Ring 2', maxValues: [6, 3] },
+    ];
+  
+    accessoryLevels.forEach((engravingLevels, index) => {
+      const accessoryData = accessoryMapping[index];
+      const engravingData = accessoryEngravings[index];
+      combinationNeeded[index].label = accessoryData.label;
+      combinationNeeded[index].firstEngraving = engravingData[0];
+      combinationNeeded[index].secondEngraving = engravingData[1];
+      combinationNeeded[index].firstEngravingValue = engravingLevels[0];
+      combinationNeeded[index].secondEngravingValue = engravingLevels[1];
+      combinationNeeded[index].firstEngravingMaxValue = accessoryData.maxValues[0];
+      combinationNeeded[index].secondEngravingMaxValue = accessoryData.maxValues[1];
     });
   
-    // Allocate Books
-    const bookLevels = [12, 9, 6, 3];
-    selectedEngravings.forEach(engraving => {
-      let allocatedBooks = 0;
-      if (accessoryEngravings[0].includes(engraving)) {
-        // If the engraving is already in books, use the corresponding level
-        const engravingIndex = accessoryEngravings[0].indexOf(engraving);
-        combination['Books'][engraving] = accessoryLevels[0][engravingIndex];
-        allocatedBooks = accessoryLevels[0][engravingIndex];
-      } else {
-        // Allocate books for engravings not in accessories
-        for (const level of bookLevels) {
-          if (remainingValues[engraving] >= level && allocatedBooks + level <= 12) {
-            combination['Books'][engraving] = level;
-            remainingValues[engraving] -= level;
-            allocatedBooks += level;
-          }
-          if (remainingValues[engraving] <= 0 || allocatedBooks === 12) break;
-        }
-      }
-    });
-  
-    // Ensure each item has a maximum of 2 distinct engravings
-    items.forEach(item => {
-      const engravings = Object.keys(combination[item]);
-      if (engravings.length > 2) {
-        const excessEngravings = engravings.slice(2);
-        excessEngravings.forEach(excessEngraving => {
-          remainingValues[excessEngraving] += combination[item][excessEngraving];
-          delete combination[item][excessEngraving];
-        });
-      }
-    });
-  
-    // Optimize the allocation to reach the total required for each engraving
-    const optimizeAllocation = () => {
-      const stoneLevels = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
-  
-      selectedEngravings.forEach(engraving => {
-        let remaining = remainingValues[engraving];
-        if (remaining > 0) {
-          // Try to allocate to books first
-          allocateValues(engraving, bookLevels, 'Books', 12, 12);
-  
-          // Allocate +6 to engraving 1 on all accessories first
-          items.slice(2).forEach(item => {
-            allocateValues(engraving, [6], item, 6, 3);
-          });
-  
-          // Then allocate +3 to engraving 2 on all accessories
-          items.slice(2).forEach(item => {
-            if (Object.keys(combination[item]).length < 2) {
-              allocateValues(engraving, [3], item, 6, 3);
-            }
-          });
-  
-          // Then try to allocate to ability stone
-          allocateValues(engraving, stoneLevels, 'Ability Stone', 10, 10);
-        }
-      });
-    };
-  
-    optimizeAllocation();
-  
-    return combination;
-  };                  
-  
-  const renderCombinationNeeded = () => {
-    const remainingValues = calculateRemainingValues();
-    const combination = findCombinationForAll(remainingValues);
-  
-    return (
-      <div className="bg-secondary-background-color p-4 mt-4 rounded-lg flex flex-shrink-0 flex-col">
-        <h2 className="text-primary-text-color text-2xl text-center">Combination Needed</h2>
-        <div className="flex flex-wrap justify-center">
-          {['Books', 'Ability Stone', 'Necklace', 'Earring1', 'Earring2', 'Ring1', 'Ring2'].map((item, index) => (
-            <div key={index} className="flex flex-col items-center justify-center p-2 border border-primary-text-color bg-primary-background-color rounded-lg m-2">
-              <span className="text-primary-text-color">{item}</span>
-              {Object.entries(combination[item]).map(([engraving, value], engravingIndex) => (
-                value > 0 && <span key={engravingIndex} className="text-primary-text-color">{engraving}: +{value}</span>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-    );
+    console.log(combinationNeeded);
+    console.log(totalValues);
+    return combinationNeeded;
   };  
 
   const renderRemainingValues = () => {
     const remainingValues = calculateRemainingValues();
-
+    const combination = findCombinationNeeded();
+    console.log(combination);
+  
     return (
       <div className="bg-secondary-background-color p-4 mt-4 rounded-lg flex flex-shrink-0 flex-col">
         <h2 className="text-primary-text-color text-2xl text-center">Combination Needed</h2>
@@ -583,6 +515,9 @@ const EngravingCalculator: React.FC = () => {
               <span className="text-primary-text-color">{remaining > 0 ? remaining : 'Achieved'}</span>
             </div>
           ))}
+          <div>
+            Combination Needed
+          </div>
         </div>
       </div>
     );
@@ -776,7 +711,7 @@ const EngravingCalculator: React.FC = () => {
       >
         <Tab label="Accessories" />
         <Tab label="Grid" />
-        {/*<Tab label="Optimizer" />*/}
+        <Tab label="Optimizer" />
       </Tabs>
       {currentTab === 0 && (
         <div>
@@ -794,7 +729,6 @@ const EngravingCalculator: React.FC = () => {
       )}
       {currentTab === 2 && renderOptimizer()}
       {currentTab === 2 && renderRemainingValues()}
-      {currentTab === 2 && renderCombinationNeeded()}
       <ClearDialog
         open={confirmClearDialogOpen}
         onClose={handleToggleConfirmClearDialog}
