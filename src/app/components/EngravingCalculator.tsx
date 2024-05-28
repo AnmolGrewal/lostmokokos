@@ -33,6 +33,8 @@ const EngravingCalculator: React.FC = () => {
   const [presetToDelete, setPresetToDelete] = useState<string | null>(null);
   const [currentTab, setCurrentTab] = useState(0);
   const [optimizerValues, setOptimizerValues] = useState<{ [key: string]: number }>({});
+  const [combinations, setCombinations] = useState<EngravingItem[][]>([]);
+  const [currentCombinationIndex, setCurrentCombinationIndex] = useState(0);
 
   const handleOptimizerSliderChange = (engraving: string, value: number | number[]) => {
     setOptimizerValues((prevValues) => ({
@@ -505,126 +507,113 @@ const EngravingCalculator: React.FC = () => {
         combinationNeeded[index].isFixed = true;
       }
     });
-    // Find the most efficient combination for non-fixed accessories
+  
     const nonFixedAccessories = combinationNeeded.filter((accessory) => !accessory.isFixed);
-    
-    /*
-    FINISH CODE HERE
-    Find a combination to make remainingValues to be less than or equal to 0, the first combination that gets there
-    You need to set the firstEngravingValue and secondEngravingValue and the firstEngraving and secondEngraving for each
-    nonFixedAccessories to get to that combination of 0. Sometimes it is not reachable, sometimes it is. Find 1 such combination
-    you cannot exceed the maxValue of the respective engraving as in firstEngravingValue cannot exceed firstEngravingMaxValue same with
-    secondEngravingValue cannot exceed secondEngravingMaxValue. When you reach the combination return instantly sometimes you do not need
-    to use all nonFixedAccessories. Solve this problem
-    */
+  
     const memo = new Map<string, boolean>();
     const MAX_DEPTH = 5;
-
+    const MAX_COMBINATIONS = 50;
+    const combinations: EngravingItem[][] = [];
+  
     const serializeState = (index: number, remainingValues: Map<string, number>): string => {
       const remainingArray = Array.from(remainingValues.entries()).sort().map(([key, value]) => `${key}:${value}`).join(',');
       return `${index}:${remainingArray}`;
     };
-
+  
     const generateCombinations = (engravings: string[], minSize: number, maxSize: number): string[][] => {
       const result: string[][] = [];
-
+  
       const generatePermutations = (permutation: string[]) => {
         if (permutation.length >= minSize && permutation.length <= maxSize) {
           result.push(permutation);
         }
-
+  
         for (let i = 0; i < engravings.length; i++) {
           if (!permutation.includes(engravings[i])) {
             generatePermutations([...permutation, engravings[i]]);
           }
         }
       };
-
+  
       generatePermutations([]);
       return result;
     };
-
-    const backtrack = (index: number, currentRemainingValues: Map<string, number>, depth: number): boolean => {
+  
+    const backtrack = (index: number, currentRemainingValues: Map<string, number>, depth: number): void => {
       if (Array.from(currentRemainingValues.values()).every(value => value <= 0)) {
-        return true;
+        combinations.push(combinationNeeded.map(item => ({ ...item })));
+        if (combinations.length >= MAX_COMBINATIONS) {
+          return;
+        }
       }
       if (index >= nonFixedAccessories.length || depth >= MAX_DEPTH) {
-        return false;
+        return;
       }
-
+  
       const stateKey = serializeState(index, currentRemainingValues);
       if (memo.has(stateKey)) {
-        return memo.get(stateKey)!;
+        return;
       }
-
+  
       const accessory = nonFixedAccessories[index];
-
+  
       const remainingEngravings = Array.from(currentRemainingValues.keys()).filter(engraving => currentRemainingValues.get(engraving)! > 0);
-
-      const combinations = generateCombinations(remainingEngravings, 1, 2);
-
-      for (const combination of combinations) {
+  
+      const combinationOptions = generateCombinations(remainingEngravings, 1, 2);
+  
+      for (const combination of combinationOptions) {
         const [firstEngraving, secondEngraving] = combination;
         accessory.firstEngraving = firstEngraving;
         accessory.secondEngraving = secondEngraving || '';
-
+  
         if (accessory.label === 'Books') {
           const fixedValues = accessoryMapping[0].fixedValues!;
           for (const value of fixedValues) {
             const newRemainingValues = new Map(currentRemainingValues);
             const firstRemaining = (newRemainingValues.get(firstEngraving) || 0) - value;
             newRemainingValues.set(firstEngraving, firstRemaining);
-
+            accessory.firstEngravingValue = value;
+  
             if (secondEngraving) {
               const secondRemaining = (newRemainingValues.get(secondEngraving) || 0) - value;
               newRemainingValues.set(secondEngraving, secondRemaining);
+              accessory.secondEngravingValue = value;
+            } else {
+              accessory.secondEngravingValue = 0;
             }
-
-            if (backtrack(index + 1, newRemainingValues, depth + 1)) {
-              accessory.firstEngravingValue = value;
-              accessory.secondEngravingValue = secondEngraving ? value : 0;
-              memo.set(stateKey, true);
-              return true;
-            }
+  
+            backtrack(index + 1, newRemainingValues, depth + 1);
           }
         } else {
           for (let i = 3; i <= accessory.firstEngravingMaxValue; i++) {
             const newRemainingValues = new Map(currentRemainingValues);
             const firstRemaining = (newRemainingValues.get(firstEngraving) || 0) - i;
             newRemainingValues.set(firstEngraving, firstRemaining);
-
+            accessory.firstEngravingValue = i;
+  
             if (secondEngraving) {
               for (let j = 3; j <= accessory.secondEngravingMaxValue; j++) {
                 const secondRemaining = (newRemainingValues.get(secondEngraving) || 0) - j;
                 newRemainingValues.set(secondEngraving, secondRemaining);
-
-                if (backtrack(index + 1, newRemainingValues, depth + 1)) {
-                  accessory.firstEngravingValue = i;
-                  accessory.secondEngravingValue = j;
-                  memo.set(stateKey, true);
-                  return true;
-                }
+                accessory.secondEngravingValue = j;
+  
+                backtrack(index + 1, newRemainingValues, depth + 1);
               }
             } else {
-              if (backtrack(index + 1, newRemainingValues, depth + 1)) {
-                accessory.firstEngravingValue = i;
-                accessory.secondEngravingValue = 0;
-                memo.set(stateKey, true);
-                return true;
-              }
+              accessory.secondEngravingValue = 0;
+              backtrack(index + 1, newRemainingValues, depth + 1);
             }
           }
         }
       }
-
-      memo.set(stateKey, false);
-      return false;
+  
+      memo.set(stateKey, true);
     };
-
+  
     const initialRemainingValues = new Map(remainingValues);
-    if (backtrack(0, initialRemainingValues, 0)) {
-      return combinationNeeded;
-    } else {
+    backtrack(0, initialRemainingValues, 0);
+
+    if(combinations.length == 0) {
       toast.error('Combination Not Found', {
         position: 'bottom-right',
         autoClose: 3000,
@@ -643,17 +632,30 @@ const EngravingCalculator: React.FC = () => {
           padding: '12px',
         },
       });
-      return (
-        <div className="flex flex-col items-center justify-center p-2 border border-primary-text-color bg-primary-background-color rounded-lg m-2">
-          <span className="text-primary-text-color font-bold">Combination Not Possible</span>
-        </div>
-      );
     }
+    
+    return combinations;
+  };
+
+  const handleCalculateCombinations = () => {
+    const calculatedCombinations = findCombinationNeeded();
+    setCombinations(calculatedCombinations);
+    setCurrentCombinationIndex(0);
+  };
+
+  const handlePreviousCombination = () => {
+    setCurrentCombinationIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+    console.log(currentCombinationIndex);
+  };
+
+  const handleNextCombination = () => {
+    setCurrentCombinationIndex((prevIndex) => Math.min(prevIndex + 1, combinations.length - 1));
+    console.log(currentCombinationIndex);
   };
 
   const renderRemainingValues = () => {
     const remainingValues = calculateRemainingValues();
-    const combination = findCombinationNeeded();
+    console.log(combinations)
   
     return (
       <div className="bg-secondary-background-color p-4 mt-4 rounded-lg flex flex-shrink-0 flex-col">
@@ -666,11 +668,29 @@ const EngravingCalculator: React.FC = () => {
             </div>
           ))}
         </div>
-        <div className="mt-4">
-          <h3 className="text-primary-text-color text-xl text-center">Combination Details</h3>
-          <div className="flex flex-wrap justify-center">
-            {Array.isArray(combination) ? (
-              combination.map((item, index) => (
+        <div className="mt-4 flex align-center justify-center">
+          <button
+            className="bg-primary-background-color text-primary-text-color px-4 py-2 rounded items-center"
+            onClick={handleCalculateCombinations}
+          >
+            Calculate Combinations
+          </button>
+        </div>
+        {combinations.length > 0 && (
+          <div className="mt-4">
+            <h3 className="text-primary-text-color text-xl text-center">Combination Details</h3>
+            <div
+              className="flex flex-wrap justify-center"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'ArrowLeft') {
+                  handlePreviousCombination();
+                } else if (e.key === 'ArrowRight') {
+                  handleNextCombination();
+                }
+              }}
+            >
+              {combinations[currentCombinationIndex].map((item, index) => (
                 <div key={index} className="flex flex-col items-center justify-center p-2 border border-primary-text-color bg-primary-background-color rounded-lg m-2">
                   <span className="text-primary-text-color font-bold">{item.label}</span>
                   {item.firstEngraving && (
@@ -686,16 +706,32 @@ const EngravingCalculator: React.FC = () => {
                     </div>
                   )}
                 </div>
-              ))
-            ) : (
-              combination
-            )}
+              ))}
+            </div>
+            <div className="flex justify-center mt-4">
+              <button
+                className="bg-primary-background-color text-primary-text-color px-4 py-2 rounded mr-2"
+                onClick={handlePreviousCombination}
+                disabled={currentCombinationIndex === 0}
+              >
+                Previous
+              </button>
+              <span className="text-primary-text-color mx-2 flex items-center">
+                {currentCombinationIndex + 1} / {combinations.length}
+              </span>
+              <button
+                className="bg-primary-background-color text-primary-text-color px-4 py-2 rounded"
+                onClick={handleNextCombination}
+                disabled={currentCombinationIndex === combinations.length - 1}
+              >
+                Next
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     );
-  };
-  
+  };  
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
