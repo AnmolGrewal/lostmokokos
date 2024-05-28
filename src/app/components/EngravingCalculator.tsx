@@ -727,7 +727,7 @@ const EngravingCalculator: React.FC = () => {
           <br/>
           Pre Release Alpha Version!
           <br/>
-          Works Better when you select atleast 5 level 3's
+          Works Better when you select atleast 5 level 3s
         </h1>
         {rows.map((row, rowIndex) => (
           <div key={rowIndex} className="bg-secondary-background-color p-4 mt-4 rounded-lg flex flex-wrap justify-center">
