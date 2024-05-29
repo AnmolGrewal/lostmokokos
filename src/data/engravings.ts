@@ -117,7 +117,7 @@ const engravingItems: EngravingItem[] = [
     image: imagesData.ring,
     label: 'Ring',
     values: [
-      [1, 2, 3, 4, 5, 6],
+      [3, 4, 5, 6],
       [1, 2, 3],
       [1, 2, 3],
     ],
@@ -127,7 +127,7 @@ const engravingItems: EngravingItem[] = [
     image: imagesData.necklace,
     label: 'Necklace',
     values: [
-      [1, 2, 3, 4, 5, 6],
+      [3, 4, 5, 6],
       [1, 2, 3],
       [1, 2, 3],
     ],
@@ -137,7 +137,7 @@ const engravingItems: EngravingItem[] = [
     image: imagesData.earring,
     label: 'Earring',
     values: [
-      [1, 2, 3, 4, 5, 6],
+      [3, 4, 5, 6],
       [1, 2, 3],
       [1, 2, 3],
     ],
