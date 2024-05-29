@@ -35,6 +35,7 @@ const EngravingCalculator: React.FC = () => {
   const [optimizerValues, setOptimizerValues] = useState<{ [key: string]: number }>({});
   const [combinations, setCombinations] = useState<EngravingItem[][]>([]);
   const [currentCombinationIndex, setCurrentCombinationIndex] = useState(0);
+  const accessoryOrder = ['Books', 'Ability Stone', 'Necklace', 'Earring', 'Earring', 'Ring', 'Ring'];
 
   const handleOptimizerSliderChange = (engraving: string, value: number | number[]) => {
     setOptimizerValues((prevValues) => ({
@@ -150,7 +151,14 @@ const EngravingCalculator: React.FC = () => {
     const newAccessoryLevels = [...accessoryLevels];
 
     newAccessoryEngravings[accessoryIndex][engravingIndex] = value || '';
-    if (!value) {
+
+    // Set the engraving level to the minimum level of the corresponding engravingItem
+    if (value) {
+      const engravingItem = engravingItems.find((item) => item.label === accessoryOrder[accessoryIndex]);
+      if (engravingItem) {
+        newAccessoryLevels[accessoryIndex][engravingIndex] = Math.min(...engravingItem.values[engravingIndex]);
+      }
+    } else {
       newAccessoryLevels[accessoryIndex][engravingIndex] = 0;
     }
 
@@ -262,7 +270,6 @@ const EngravingCalculator: React.FC = () => {
   };
 
   const renderAccessoryRows = () => {
-    const accessoryOrder = ['Books', 'Ability Stone', 'Necklace', 'Earring', 'Earring', 'Ring', 'Ring'];
     const accessoryRows = [];
 
     for (let i = 0; i < accessoryOrder.length; i++) {
@@ -322,34 +329,40 @@ const EngravingCalculator: React.FC = () => {
                   />
                   {accessoryEngravings[accessoryIndex][engravingIndex] && (
                     <>
-                      <div className="flex items-center justify-center mt-2">
-                        <Slider
-                          value={accessoryLevels[accessoryIndex][engravingIndex]}
-                          onChange={handleAccessoryLevelChange(accessoryIndex, engravingIndex)}
-                          min={Math.min(...values)}
-                          max={Math.max(...values)}
-                          step={null}
-                          marks={values.map((value) => ({ value, label: '' }))}
-                          valueLabelDisplay="auto"
-                          className="w-11/12"
-                          sx={{
-                            color: 'var(--primary-text-color)',
-                            '& .MuiSlider-rail': {
-                              backgroundColor: 'var(--primary-background-color)',
-                            },
-                            '& .MuiSlider-track': {
-                              backgroundColor: 'var(--secondary-background-color)',
-                            },
-                            '& .MuiSlider-thumb': {
-                              backgroundColor: 'var(--primary-text-color)',
-                            },
-                          }}
-                        />
-                      </div>
-                      <div className="text-center text-primary-text-label-color mt-1">
-                        {accessoryLevels[accessoryIndex][engravingIndex]}
-                      </div>
-                    </>
+                      {values.length > 1 ? (
+                        <div className="flex items-center justify-center mt-2 flex-col">
+                          <Slider
+                            value={accessoryLevels[accessoryIndex][engravingIndex]}
+                            onChange={handleAccessoryLevelChange(accessoryIndex, engravingIndex)}
+                            min={Math.min(...values)}
+                            max={Math.max(...values)}
+                            step={null}
+                            marks={values.map((value) => ({ value, label: '' }))}
+                            valueLabelDisplay="auto"
+                            className="w-11/12"
+                            sx={{
+                              color: 'var(--primary-text-color)',
+                              '& .MuiSlider-rail': {
+                                backgroundColor: 'var(--primary-background-color)',
+                              },
+                              '& .MuiSlider-track': {
+                                backgroundColor: 'var(--secondary-background-color)',
+                              },
+                              '& .MuiSlider-thumb': {
+                                backgroundColor: 'var(--primary-text-color)',
+                              },
+                            }}
+                          />
+                          <div className="text-center text-primary-text-label-color mt-1">
+                            {accessoryLevels[accessoryIndex][engravingIndex]}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-center text-primary-text-label-color mt-5 text-2xl">
+                          {accessoryLevels[accessoryIndex][engravingIndex]}
+                        </div>
+                      )}
+                    </>                  
                   )}
                 </div>
               ))}
