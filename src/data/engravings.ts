@@ -118,7 +118,7 @@ const engravingItems: EngravingItem[] = [
     label: 'Ring',
     values: [
       [3, 4, 5, 6],
-      [1, 2, 3],
+      [3],
       [1, 2, 3],
     ],
     maxValues: [6, 3],
@@ -128,7 +128,7 @@ const engravingItems: EngravingItem[] = [
     label: 'Necklace',
     values: [
       [3, 4, 5, 6],
-      [1, 2, 3],
+      [3],
       [1, 2, 3],
     ],
     maxValues: [6, 3],
@@ -138,7 +138,7 @@ const engravingItems: EngravingItem[] = [
     label: 'Earring',
     values: [
       [3, 4, 5, 6],
-      [1, 2, 3],
+      [3],
       [1, 2, 3],
     ],
     maxValues: [6, 3],
