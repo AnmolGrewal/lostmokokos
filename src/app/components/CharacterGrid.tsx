@@ -39,6 +39,7 @@ import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import { styled } from '@mui/material/styles';
 import {useClockBar} from './useClockBar';
 import ClearDialog from './ClearDialog';
+import HistoryIcon from '@mui/icons-material/History';
 
 const StyledRating = styled(Rating)(({ theme }) => ({
   '& .MuiRating-iconFilled': {
@@ -86,6 +87,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const [additionalGold, setAdditionalGold] = useState<number[]>(new Array(characterCount).fill(0));
 
   const [additionalGoldDialogOpen, setAdditionalGoldDialogOpen] = useState<boolean>(false);
+  const [confirmSweepDialogOpen, setConfirmSweepDialogOpen] = useState<boolean>(false);
   const [currentEditingIndex, setCurrentEditingIndex] = useState<number>(-1);
   const [tempAdditionalGold, setTempAdditionalGold] = useState<number>(0);
 
@@ -432,6 +434,23 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
     localStorage.removeItem('weeklyResetTime');
   };
 
+  const handleToggleConfirmSweepDialog = () => {
+    setConfirmSweepDialogOpen(!confirmSweepDialogOpen);
+  };
+
+  const handleSweepCheckedStates = () => {
+    setCheckedStates((prevStates) =>
+      prevStates.map((characterState) => {
+        let newState: CharacterState = {};
+        Object.keys(characterState).forEach((raidPath) => {
+          newState[raidPath] = new Array(characterState[raidPath].length).fill(false);
+        });
+        return newState;
+      })
+    );
+    handleToggleConfirmSweepDialog();
+  };
+
   return (
     <div>
       <h2 className="text-primary-text-color text-2xl mt-2 text-center">
@@ -501,10 +520,24 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
             bgcolor: 'var(--image-background-color)',
             borderRadius: '50%',
             p: '5px',
+            mr: '5px',
             '&:hover': { bgcolor: 'var(--primary-background-hover-color)' },
           }}
         >
           <DeleteIcon />
+        </IconButton>
+        <IconButton
+          onClick={handleToggleConfirmSweepDialog}
+          size="small"
+          sx={{
+            color: 'var(--primary-text-color)',
+            bgcolor: 'var(--image-background-color)',
+            borderRadius: '50%',
+            p: '5px',
+            '&:hover': { bgcolor: 'var(--primary-background-hover-color)' },
+          }}
+        >
+          <HistoryIcon />
         </IconButton>
       </h2>
       <ClearDialog
@@ -550,6 +583,10 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
               <li className="mt-4 flex">
                 <DeleteIcon sx={{ mr: 1 }} />
                 <span className="mt-0.5">Click to clear all data and reset to default</span>
+              </li>
+              <li className="mt-4 flex">
+                <HistoryIcon sx={{ mr: 1 }} />
+                <span className="mt-0.5">Click to reset raid data for every character</span>
               </li>
             </ul>
           </div>
@@ -732,6 +769,30 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
           </Button>
           <Button onClick={handleSaveAdditionalGold} sx={{ color: 'inherit' }}>
             Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={confirmSweepDialogOpen}
+        onClose={handleToggleConfirmSweepDialog}
+        sx={{
+          '& .MuiPaper-root': {
+            backgroundColor: 'var(--chip-background-color)',
+            color: 'var(--primary-text-color)',
+          },
+        }}
+      >
+        <DialogTitle sx={{ color: 'var(--primary-text-label-color)' }}>Reset Raid Data For All Characters</DialogTitle>
+        <DialogContent>
+          <p>Reset raid data for all characters?</p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleToggleConfirmSweepDialog} sx={{ color: 'inherit' }}>
+            No
+          </Button>
+          <Button onClick={handleSweepCheckedStates} sx={{ color: 'inherit' }}>
+            Yes
           </Button>
         </DialogActions>
       </Dialog>
