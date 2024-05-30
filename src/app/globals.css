@@ -26,7 +26,7 @@
 }
 
 /* Hiding Text on Nav Bar */
-@media (max-width: 767px) {
+@media (max-width: 825px) {
   .hide-on-small {
     display: none;
   }
