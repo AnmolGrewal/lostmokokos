@@ -76,6 +76,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
 
   const [open, setOpen] = useState<{ [key: string]: boolean }>({});
   const [checkedStates, setCheckedStates] = useState<CharacterState[]>([initializeNewCharacterState()]);
+  const [boxCheckedStates, setBoxCheckedStates] = useState<CharacterState[]>([initializeNewCharacterState()]);
   const [characterCount, setCharacterCount] = useState<number>(1);
   const [characterNames, setCharacterNames] = useState<string[]>(['Character 1']);
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
@@ -231,6 +232,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
         .fill('Character')
         .map((name, index) => `${name} ${index + 1}`);
       const savedCheckedStates = JSON.parse(localStorage.getItem('checkedStates1') || '[]');
+      const savedBoxCheckedStates = JSON.parse(localStorage.getItem('boxCheckedStates1') || '[]');
       const savedAdditionalGold = JSON.parse(localStorage.getItem('additionalGold1') || '[]');
       const defaultAdditionalGold = new Array(savedCharacterCount).fill(0);
       const savedChaosGateRatings = JSON.parse(localStorage.getItem('chaosGateRatings') || '[]');
@@ -249,7 +251,9 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
       setCheckedStates(
         savedCheckedStates.length ? savedCheckedStates : Array.from({ length: savedCharacterCount }, initializeNewCharacterState)
       );
-
+      setBoxCheckedStates(
+        savedBoxCheckedStates.length ? savedBoxCheckedStates : Array.from({ length: savedCharacterCount }, initializeNewCharacterState)
+      );
       if (savedAdditionalGold.length === savedCharacterCount) {
         setAdditionalGold(savedAdditionalGold);
       } else {
@@ -265,12 +269,13 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
     localStorage.setItem('characterCount1', characterCount.toString());
     localStorage.setItem('characterNames1', JSON.stringify(characterNames));
     localStorage.setItem('checkedStates1', JSON.stringify(checkedStates));
+    localStorage.setItem('boxCheckedStates1', JSON.stringify(boxCheckedStates));
     localStorage.setItem('additionalGold1', JSON.stringify(additionalGold));
     localStorage.setItem('chaosGateRatings', JSON.stringify(chaosGateRatings));
     localStorage.setItem('unaTaskRatings', JSON.stringify(unaTaskRatings));
     localStorage.setItem('guardianRaidRatings', JSON.stringify(guardianRaidRatings));
     localStorage.setItem('guildWeekliesRatings', JSON.stringify(guildWeekliesRatings));
-  }, [characterCount, characterNames, checkedStates, additionalGold, chaosGateRatings, guardianRaidRatings, guildWeekliesRatings, unaTaskRatings]);  
+  }, [characterCount, characterNames, checkedStates, additionalGold, chaosGateRatings, guardianRaidRatings, guildWeekliesRatings, unaTaskRatings, boxCheckedStates]);  
 
   const handleAddCharacter = () => {
     const newCharacterName = `Character ${characterCount + 1}`;
@@ -369,7 +374,9 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
     raids.forEach((raid) => {
       total += raid.gateData.gold.reduce((sum, gold, index) => {
         if (checkedStates[characterIndex]?.[raid.path]?.[index]) {
-          return sum + gold;
+          const boxCost = raid.gateData.boxCost[index] || 0;
+          const isBoxChecked = boxCheckedStates[characterIndex]?.[raid.path]?.[index] || false;
+          return sum + gold - (isBoxChecked ? boxCost : 0);
         }
         return sum;
       }, 0);
@@ -450,6 +457,24 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
     );
     handleToggleConfirmSweepDialog();
   };
+
+  const handleBoxCheckboxChange = (raidPath: string, columnIndex: number, index: number) => {
+    setBoxCheckedStates((prevStates) => {
+      const newState = [...prevStates];
+      const raid = raids.find((r) => r.path === raidPath);
+      if (raid) {
+        if (!newState[columnIndex]) {
+          newState[columnIndex] = {};
+        }
+        if (!newState[columnIndex][raidPath]) {
+          newState[columnIndex][raidPath] = Array(raid.gateData.gold.length).fill(false);
+        }
+        newState[columnIndex][raidPath] = newState[columnIndex][raidPath].map((value, i) => (i === index ? !value : value));
+      }
+      return newState;
+    });
+  };
+  
 
   return (
     <div>
@@ -911,11 +936,18 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
                                       className="flex justify-center items-center"
                                       key={`${raid.path}-gate-${gateIndex}`}
                                       control={
-                                        <Checkbox
-                                          checked={checkedStates[characterIndex]?.[raid.path]?.[gateIndex] || false}
-                                          onChange={() => handleGateCheckboxChange(raid.path, characterIndex, gateIndex)}
-                                          className="flex justify-center items-center"
-                                        />
+                                        <>
+                                          <Checkbox
+                                            checked={checkedStates[characterIndex]?.[raid.path]?.[gateIndex] || false}
+                                            onChange={() => handleGateCheckboxChange(raid.path, characterIndex, gateIndex)}
+                                            className="flex justify-center items-center"
+                                          />
+                                          <Checkbox
+                                            checked={boxCheckedStates[characterIndex]?.[raid.path]?.[gateIndex] || false}
+                                            onChange={() => handleBoxCheckboxChange(raid.path, characterIndex, gateIndex)}
+                                            className="flex justify-center items-center size-2"
+                                          />
+                                        </>
                                       }
                                       label={`Gate ${gateIndex + 1}`}
                                       style={{ display: 'flex' }}
