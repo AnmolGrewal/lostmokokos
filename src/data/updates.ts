@@ -1,3 +1,5 @@
+import { title } from "process";
+
 interface Update {
   date: string;
   title?: string;
@@ -118,6 +120,11 @@ const updates: Update[] = [
     date: 'May 29, 2024',
     context: ['Added someones request to add a clear all raid data for every character (reverse clock icon). ' + 
     'Made Engravings have a minimum of 3 for each and no slider for 2nd engraving'],
+  },
+  {
+    date: 'May 29, 2024',
+    title: 'No More Class Engravings on Ability Stones',
+    context: ['Class Engravings are now labeled. They cannot be self added on the ability stone anymore going forward by Users (Optimizer can pick class engravings)'],
   },
 ].reverse();
 
