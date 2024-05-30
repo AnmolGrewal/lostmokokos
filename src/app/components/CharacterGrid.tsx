@@ -961,10 +961,9 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
                               <Collapse in={open[raid.path]} timeout="auto" unmountOnExit>
                                 <div style={{ marginLeft: '40px' }}>
                                   {raid.gateData.gold.map((_, gateIndex: number) => (
-                                    <>
+                                    <div key={`${raid.path}-gold-${gateIndex}`}>
                                       <FormControlLabel
                                         className="flex justify-center items-center"
-                                        key={`${raid.path}-gate-${gateIndex}`}
                                         control={
                                           <Checkbox
                                             checked={checkedStates[characterIndex]?.[raid.path]?.[gateIndex] || false}
@@ -975,7 +974,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
                                         label={`Gate ${gateIndex + 1}`}
                                         style={{ display: 'flex' }}
                                       />
-                                      <Tooltip title="Chest" placement="top">
+                                      <Tooltip title="Chest" placement="top" key={`${raid.path}-gate-${gateIndex}-boxCostTooltip`}>
                                         <FormControlLabel
                                           control={
                                             <Checkbox
@@ -988,7 +987,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
                                           label={<FontAwesomeIcon icon={faBriefcase} size="xs" className="text-image-sun-color" />}
                                         />
                                       </Tooltip>
-                                    </>
+                                    </div>
                                   ))}
                                 </div>
                               </Collapse>
