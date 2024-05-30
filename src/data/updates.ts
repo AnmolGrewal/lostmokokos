@@ -118,7 +118,7 @@ const updates: Update[] = [
     date: 'May 29, 2024',
     title: 'No More Class Engravings on Ability Stones, Discord Server Added!',
     context: ['Added someones request to add a clear all raid data for every character (reverse clock icon). ' + 
-    'Made Engravings have a minimum of 3 for each and no slider for 2nd engraving' +
+    'Made Engravings have a minimum of 3 for each and no slider for 2nd engraving. ' +
     'Class Engravings are now labeled. They cannot be self added on the ability stone anymore going forward by Users (Optimizer can pick class engravings). ' +
     'Added discord server as well.'],
   },
