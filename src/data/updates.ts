@@ -1,5 +1,3 @@
-import { title } from "process";
-
 interface Update {
   date: string;
   title?: string;
