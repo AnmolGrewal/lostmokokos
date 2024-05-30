@@ -19,7 +19,8 @@ import {
   Collapse,
   FormControlLabel,
   FormGroup,
-  Rating
+  Rating,
+  Tooltip
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddIcon from '@mui/icons-material/Add';
@@ -40,6 +41,8 @@ import { styled } from '@mui/material/styles';
 import {useClockBar} from './useClockBar';
 import ClearDialog from './ClearDialog';
 import HistoryIcon from '@mui/icons-material/History';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBriefcase } from '@fortawesome/free-solid-svg-icons';
 
 const StyledRating = styled(Rating)(({ theme }) => ({
   '& .MuiRating-iconFilled': {
@@ -932,26 +935,34 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
                               <Collapse in={open[raid.path]} timeout="auto" unmountOnExit>
                                 <div style={{ marginLeft: '40px' }}>
                                   {raid.gateData.gold.map((_, gateIndex: number) => (
-                                    <FormControlLabel
-                                      className="flex justify-center items-center"
-                                      key={`${raid.path}-gate-${gateIndex}`}
-                                      control={
-                                        <>
+                                    <>
+                                      <FormControlLabel
+                                        className="flex justify-center items-center"
+                                        key={`${raid.path}-gate-${gateIndex}`}
+                                        control={
                                           <Checkbox
                                             checked={checkedStates[characterIndex]?.[raid.path]?.[gateIndex] || false}
                                             onChange={() => handleGateCheckboxChange(raid.path, characterIndex, gateIndex)}
                                             className="flex justify-center items-center"
                                           />
-                                          <Checkbox
-                                            checked={boxCheckedStates[characterIndex]?.[raid.path]?.[gateIndex] || false}
-                                            onChange={() => handleBoxCheckboxChange(raid.path, characterIndex, gateIndex)}
-                                            className="flex justify-center items-center size-2"
-                                          />
-                                        </>
-                                      }
-                                      label={`Gate ${gateIndex + 1}`}
-                                      style={{ display: 'flex' }}
-                                    />
+                                        }
+                                        label={`Gate ${gateIndex + 1}`}
+                                        style={{ display: 'flex' }}
+                                      />
+                                      <Tooltip title="Chest" placement="top">
+                                        <FormControlLabel
+                                          control={
+                                            <Checkbox
+                                              checked={boxCheckedStates[characterIndex]?.[raid.path]?.[gateIndex] || false}
+                                              onChange={() => handleBoxCheckboxChange(raid.path, characterIndex, gateIndex)}
+                                              className="flex justify-center items-center"
+                                            />
+                                          }
+                                          className="flex justify-center items-center"
+                                          label={<FontAwesomeIcon icon={faBriefcase} size="xs" className="text-image-sun-color" />}
+                                        />
+                                      </Tooltip>
+                                    </>
                                   ))}
                                 </div>
                               </Collapse>
