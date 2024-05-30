@@ -149,9 +149,9 @@ const EngravingCalculator: React.FC = () => {
   ) => {
     const newAccessoryEngravings = [...accessoryEngravings];
     const newAccessoryLevels = [...accessoryLevels];
-
+  
     newAccessoryEngravings[accessoryIndex][engravingIndex] = value || '';
-
+  
     // Set the engraving level to the minimum level of the corresponding engravingItem
     if (value) {
       const engravingItem = engravingItems.find((item) => item.label === accessoryOrder[accessoryIndex]);
@@ -161,20 +161,20 @@ const EngravingCalculator: React.FC = () => {
     } else {
       newAccessoryLevels[accessoryIndex][engravingIndex] = 0;
     }
-
+  
     setAccessoryEngravings(newAccessoryEngravings);
     setAccessoryLevels(newAccessoryLevels);
-
+  
     const newTotalEngravings = calculateTotalEngravings(newAccessoryEngravings, newAccessoryLevels);
     setTotalEngravings(newTotalEngravings);
-
+  
     updateCurrentPreset({
       selectedEngravings,
       accessoryEngravings: newAccessoryEngravings,
       accessoryLevels: newAccessoryLevels,
       totalEngravings: newTotalEngravings,
     });
-  };
+  };  
 
   const handleAccessoryLevelChange = (accessoryIndex: number, engravingIndex: number) => (event: Event, value: number | number[]) => {
     const newAccessoryLevels = [...accessoryLevels];
@@ -296,7 +296,13 @@ const EngravingCalculator: React.FC = () => {
               {accessoryData.values.map((values, engravingIndex) => (
                 <div key={engravingIndex} className="flex flex-col mt-4 flex-1">
                   <Autocomplete
-                    options={engravingIndex === 2 ? negativeEngravings.map((engraving) => engraving.label) : selectedEngravings}
+                    options={
+                      accessoryData.label === 'Ability Stone'
+                        ? selectedEngravings.filter((engraving) => !engravings.find((e) => e.label === engraving)?.isClassEngraving)
+                        : engravingIndex === 2
+                          ? negativeEngravings.map((engraving) => engraving.label)
+                          : selectedEngravings
+                    }
                     value={accessoryEngravings[accessoryIndex][engravingIndex] || null}
                     onChange={handleAccessoryEngravingChange(accessoryIndex, engravingIndex)}
                     isOptionEqualToValue={(option, value) => option === value}
