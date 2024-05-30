@@ -46,7 +46,7 @@ export default function Home() {
       </Helmet>
       <h1 className="text-4xl text-center mt-4 mb-4 text-[48px]">Lost Mokokos</h1>
       <h2 className="text-primary-text-color text-center text-2xl">
-        Added Discord Server for Comments Suggestions
+        Added Discord Server for Comments Suggestions (Fixed Invite Link)
         <br />
         Added Working Engraving Optimizer after many hours
       </h2>
