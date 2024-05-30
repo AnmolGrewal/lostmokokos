@@ -419,6 +419,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
     setCharacterCount(newCharacterCount);
     setCharacterNames(['Character 1']);
     setCheckedStates([initializeNewCharacterState()]);
+    setBoxCheckedStates([initializeNewCharacterState()]);
     setAdditionalGold(new Array(newCharacterCount).fill(0));
     setChaosGateRatings(new Array(newCharacterCount).fill(0));
     setUnaTaskRatings(new Array(newCharacterCount).fill(0));
@@ -430,6 +431,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
     localStorage.removeItem('characterCount1');
     localStorage.removeItem('characterNames1');
     localStorage.removeItem('checkedStates1');
+    localStorage.removeItem('boxCheckedStates1');
     localStorage.removeItem('additionalGold1');
     // localStorage.removeItem('raidVisibility1');
   
@@ -458,8 +460,17 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
         return newState;
       })
     );
+    setBoxCheckedStates((prevStates) => // Clear box checked states
+      prevStates.map((characterState) => {
+        let newState: CharacterState = {};
+        Object.keys(characterState).forEach((raidPath) => {
+          newState[raidPath] = new Array(characterState[raidPath].length).fill(false);
+        });
+        return newState;
+      })
+    );
     handleToggleConfirmSweepDialog();
-  };
+  };  
 
   const handleBoxCheckboxChange = (raidPath: string, columnIndex: number, index: number) => {
     setBoxCheckedStates((prevStates) => {
@@ -472,12 +483,27 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
         if (!newState[columnIndex][raidPath]) {
           newState[columnIndex][raidPath] = Array(raid.gateData.gold.length).fill(false);
         }
+        const isChecked = !newState[columnIndex][raidPath][index];
         newState[columnIndex][raidPath] = newState[columnIndex][raidPath].map((value, i) => (i === index ? !value : value));
+  
+        // Update the corresponding gate checkbox state only if the chest checkbox is checked
+        if (isChecked) {
+          setCheckedStates((prevCheckedStates) => {
+            const updatedCheckedStates = [...prevCheckedStates];
+            if (!updatedCheckedStates[columnIndex]) {
+              updatedCheckedStates[columnIndex] = {};
+            }
+            if (!updatedCheckedStates[columnIndex][raidPath]) {
+              updatedCheckedStates[columnIndex][raidPath] = Array(raid.gateData.gold.length).fill(false);
+            }
+            updatedCheckedStates[columnIndex][raidPath][index] = true;
+            return updatedCheckedStates;
+          });
+        }
       }
       return newState;
     });
-  };
-  
+  };  
 
   return (
     <div>

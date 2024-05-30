@@ -46,9 +46,11 @@ export default function Home() {
       </Helmet>
       <h1 className="text-4xl text-center mt-4 mb-4 text-[48px]">Lost Mokokos</h1>
       <h2 className="text-primary-text-color text-center text-2xl">
-        Added Discord Server for Comments Suggestions (Fixed Invite Link)
+        Added The Ability to buy boxs for every raid on Character Sheet!
         <br />
-        Added Working Engraving Optimizer after many hours
+        Added Discord Server for Comments Suggestions
+        <br />
+        Added Working Engraving Optimizer
       </h2>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
         <h2 className="text-lg text-primary-text-color">Todo List</h2>
