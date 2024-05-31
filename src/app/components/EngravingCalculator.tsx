@@ -6,6 +6,7 @@ import { engravings, engravingItems, negativeEngravings } from '../../data/engra
 import EngravingGrid from './EngravingGrid';
 import ClearDialog from './ClearDialog';
 import { ToastContainer, toast } from 'react-toastify';
+import imagesData from '../../data/imageLinks';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface Engravings {
@@ -288,24 +289,31 @@ const EngravingCalculator: React.FC = () => {
         const updatedGoldCost = Array.isArray(preset.engravings.goldCost)
           ? [...preset.engravings.goldCost]
           : Array(7).fill(0);
-        updatedGoldCost[accessoryIndex] = value;
+        
+        // Ensure that the value is a valid number
+        const parsedValue = isNaN(value) ? 0 : value;
+        updatedGoldCost[accessoryIndex] = parsedValue;
   
         // Calculate the total gold cost by summing up all the gold costs
-        const totalGoldCost = updatedGoldCost.reduce((sum, cost) => sum + cost, 0);
-        console.log('Unknown preset name:', totalGoldCost);
+        const totalGoldCost = updatedGoldCost.reduce((sum, cost) => {
+          // Ensure that each cost is a valid number
+          const parsedCost = isNaN(cost) ? 0 : cost;
+          return sum + parsedCost;
+        }, 0);
+        console.log('totalGoldCost', totalGoldCost);
         return {
           ...preset,
           engravings: {
             ...preset.engravings,
             goldCost: updatedGoldCost,
           },
-          totalGoldCost, // Update the totalGoldCost property
+          totalGoldCost,
         };
       }
       return preset;
     });
     setPresets(updatedPresets);
-  };
+  };  
 
   const renderAccessoryRows = () => {
     const accessoryRows = [];
@@ -334,14 +342,16 @@ const EngravingCalculator: React.FC = () => {
                 <img src={accessoryData.image} alt={accessoryData.label} className="w-10 h-10 flex-shrink-0" />
                 <span className="text-lg text-primary-text-color min-w-fit flex-shrink-0 accessory-label">{accessoryData.label}</span>
               </div>
-              <input
-                type="number"
-                min="0"
-                value={currentPreset.engravings.goldCost[accessoryIndex] || ''}
-                onChange={(e) => handleGoldCostChange(accessoryIndex, parseInt(e.target.value) || 0)}
-                className="bg-primary-background-color text-primary-text-color px-2 py-1 rounded w-24 text-right"
-              />
-
+              <div className="flex items-center">
+                <img src={imagesData.goldCoins} alt="Gold Coins" style={{ width: '20px', marginRight: '5px' }} />
+                <input
+                  type="number"
+                  min="0"
+                  value={currentPreset.engravings.goldCost[accessoryIndex] || ''}
+                  onChange={(e) => handleGoldCostChange(accessoryIndex, parseInt(e.target.value) || 0)}
+                  className="bg-primary-background-color text-primary-text-color px-2 py-1 rounded w-24 text-right"
+                />
+              </div>
             </div>
             <div className="accessory-row">
               {accessoryData.values.map((values, engravingIndex) => (
