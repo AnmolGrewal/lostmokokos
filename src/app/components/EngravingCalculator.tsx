@@ -13,12 +13,14 @@ interface Engravings {
   accessoryEngravings: string[][];
   accessoryLevels: number[][];
   totalEngravings: { [key: string]: number };
+  goldCost: number[];
 }
 
 interface Preset {
   name: string;
   index: number;
   engravings: Engravings;
+  totalGoldCost?: number;
 }
 
 const EngravingCalculator: React.FC = () => {
@@ -28,6 +30,7 @@ const EngravingCalculator: React.FC = () => {
   const [accessoryEngravings, setAccessoryEngravings] = useState<string[][]>([]);
   const [accessoryLevels, setAccessoryLevels] = useState<number[][]>([]);
   const [totalEngravings, setTotalEngravings] = useState<{ [key: string]: number }>({});
+  const [goldCost, setGoldCost] = useState<number[]>([]);
   const [confirmClearDialogOpen, setConfirmClearDialogOpen] = useState<boolean>(false);
   const [confirmDeleteDialogOpen, setConfirmDeleteDialogOpen] = useState<boolean>(false);
   const [presetToDelete, setPresetToDelete] = useState<string | null>(null);
@@ -55,6 +58,7 @@ const EngravingCalculator: React.FC = () => {
         accessoryEngravings: [],
         accessoryLevels: [],
         totalEngravings: {},
+        goldCost: [],
       },
     };
     setPresets([...presets, newPreset]);
@@ -93,6 +97,7 @@ const EngravingCalculator: React.FC = () => {
             accessoryEngravings: [],
             accessoryLevels: [],
             totalEngravings: {},
+            goldCost: [],
           },
         };
         setPresets([defaultPreset]);
@@ -113,11 +118,13 @@ const EngravingCalculator: React.FC = () => {
   }, [presets]);
 
   const loadEngravings = (engravings: Engravings) => {
-    setSelectedEngravings(engravings.selectedEngravings);
-    setAccessoryEngravings(engravings.accessoryEngravings);
-    setAccessoryLevels(engravings.accessoryLevels);
-    setTotalEngravings(engravings.totalEngravings);
+    setSelectedEngravings(engravings.selectedEngravings || []);
+    setAccessoryEngravings(engravings.accessoryEngravings || Array(7).fill(Array(3).fill('')));
+    setAccessoryLevels(engravings.accessoryLevels || Array(7).fill(Array(3).fill(0)));
+    setTotalEngravings(engravings.totalEngravings || {});
+    setGoldCost(engravings.goldCost || Array(7).fill(0));
   };
+  
 
   const handleEngravingChange = (event: React.ChangeEvent<{}>, value: string[]) => {
     const deletedEngravings = selectedEngravings.filter((engraving) => !value.includes(engraving));
@@ -140,6 +147,7 @@ const EngravingCalculator: React.FC = () => {
       accessoryEngravings: newAccessoryEngravings,
       accessoryLevels: newAccessoryLevels,
       totalEngravings,
+      goldCost: {...goldCost},
     });
   };
 
@@ -149,6 +157,7 @@ const EngravingCalculator: React.FC = () => {
   ) => {
     const newAccessoryEngravings = [...accessoryEngravings];
     const newAccessoryLevels = [...accessoryLevels];
+    const newGoldCost = {...goldCost};
   
     newAccessoryEngravings[accessoryIndex][engravingIndex] = value || '';
   
@@ -173,6 +182,7 @@ const EngravingCalculator: React.FC = () => {
       accessoryEngravings: newAccessoryEngravings,
       accessoryLevels: newAccessoryLevels,
       totalEngravings: newTotalEngravings,
+      goldCost: newGoldCost,
     });
   };  
 
@@ -189,6 +199,7 @@ const EngravingCalculator: React.FC = () => {
       accessoryEngravings,
       accessoryLevels: newAccessoryLevels,
       totalEngravings: newTotalEngravings,
+      goldCost: {...goldCost},
     });
   };
 
@@ -218,7 +229,7 @@ const EngravingCalculator: React.FC = () => {
       return preset;
     });
     setPresets(updatedPresets);
-  };
+  };  
 
   const handleToggleConfirmClearDialog = () => {
     setConfirmClearDialogOpen(!confirmClearDialogOpen);
@@ -234,6 +245,7 @@ const EngravingCalculator: React.FC = () => {
       accessoryEngravings: [],
       accessoryLevels: [],
       totalEngravings: {},
+      goldCost: [],
     });
     handleToggleConfirmClearDialog();
   };
@@ -259,6 +271,7 @@ const EngravingCalculator: React.FC = () => {
             accessoryEngravings: [],
             accessoryLevels: [],
             totalEngravings: {},
+            goldCost: [],
           },
         };
         setPresets([defaultPreset]);
@@ -268,6 +281,27 @@ const EngravingCalculator: React.FC = () => {
       handleToggleConfirmDeleteDialog('');
     }
   };
+
+  const handleGoldCostChange = (accessoryIndex: number, value: number) => {
+    const updatedPresets = presets.map((preset) => {
+      if (preset.name === selectedPreset) {
+        const updatedGoldCost = Array.isArray(preset.engravings.goldCost)
+          ? [...preset.engravings.goldCost]
+          : Array(7).fill(0);
+        updatedGoldCost[accessoryIndex] = value;
+        return {
+          ...preset,
+          engravings: {
+            ...preset.engravings,
+            goldCost: updatedGoldCost,
+          },
+        };
+      }
+      return preset;
+    });
+    setPresets(updatedPresets);
+  };
+      
 
   const renderAccessoryRows = () => {
     const accessoryRows = [];
@@ -286,11 +320,24 @@ const EngravingCalculator: React.FC = () => {
           accessoryLevels[accessoryIndex] = Array(accessoryData.values.length).fill(0);
         }
 
+        const currentPreset = presets.find((preset) => preset.name === selectedPreset);
+        if (!currentPreset) return null;
+
         return (
           <div key={accessoryIndex} className="bg-secondary-background-color p-4 mt-4 rounded-lg flex flex-shrink-0 flex-col">
-            <div className="flex items-center space-x-4 justify-center">
-              <img src={accessoryData.image} alt={accessoryData.label} className="w-10 h-10 flex-shrink-0" />
-              <span className="text-lg text-primary-text-color min-w-fit flex-shrink-0 accessory-label">{accessoryData.label}</span>
+            <div className="flex items-center space-x-4 justify-between">
+              <div className="flex items-center space-x-4">
+                <img src={accessoryData.image} alt={accessoryData.label} className="w-10 h-10 flex-shrink-0" />
+                <span className="text-lg text-primary-text-color min-w-fit flex-shrink-0 accessory-label">{accessoryData.label}</span>
+              </div>
+              <input
+                type="number"
+                min="0"
+                value={currentPreset.engravings.goldCost[accessoryIndex] || ''}
+                onChange={(e) => handleGoldCostChange(accessoryIndex, parseInt(e.target.value) || 0)}
+                className="bg-primary-background-color text-primary-text-color px-2 py-1 rounded w-24 text-right"
+              />
+
             </div>
             <div className="accessory-row">
               {accessoryData.values.map((values, engravingIndex) => (
