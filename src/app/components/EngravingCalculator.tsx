@@ -157,7 +157,7 @@ const EngravingCalculator: React.FC = () => {
   ) => {
     const newAccessoryEngravings = [...accessoryEngravings];
     const newAccessoryLevels = [...accessoryLevels];
-    const newGoldCost = {...goldCost};
+    const newGoldCost = [...goldCost];
   
     newAccessoryEngravings[accessoryIndex][engravingIndex] = value || '';
   
@@ -199,7 +199,7 @@ const EngravingCalculator: React.FC = () => {
       accessoryEngravings,
       accessoryLevels: newAccessoryLevels,
       totalEngravings: newTotalEngravings,
-      goldCost: {...goldCost},
+      goldCost: [...goldCost],
     });
   };
 
@@ -289,19 +289,23 @@ const EngravingCalculator: React.FC = () => {
           ? [...preset.engravings.goldCost]
           : Array(7).fill(0);
         updatedGoldCost[accessoryIndex] = value;
+  
+        // Calculate the total gold cost by summing up all the gold costs
+        const totalGoldCost = updatedGoldCost.reduce((sum, cost) => sum + cost, 0);
+        console.log('Unknown preset name:', totalGoldCost);
         return {
           ...preset,
           engravings: {
             ...preset.engravings,
             goldCost: updatedGoldCost,
           },
+          totalGoldCost, // Update the totalGoldCost property
         };
       }
       return preset;
     });
     setPresets(updatedPresets);
   };
-      
 
   const renderAccessoryRows = () => {
     const accessoryRows = [];
