@@ -46,6 +46,8 @@ export default function Home() {
       </Helmet>
       <h1 className="text-4xl text-center mt-4 mb-4 text-[48px]">Lost Mokokos</h1>
       <h2 className="text-primary-text-color text-center text-2xl">
+        Adding Gold Costs for Accessories!
+        <br />
         Added The Ability to buy boxs for every raid on Character Sheet!
         <br />
         Added Discord Server for Comments Suggestions
