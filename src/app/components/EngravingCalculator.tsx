@@ -84,7 +84,7 @@ const EngravingCalculator: React.FC = () => {
 
   useEffect(() => {
     const loadPresets = () => {
-      const savedPresets = localStorage.getItem('presets');
+      const savedPresets = localStorage.getItem('presets1');
       if (savedPresets) {
         const parsedPresets: Preset[] = JSON.parse(savedPresets);
         setPresets(parsedPresets);
@@ -115,7 +115,7 @@ const EngravingCalculator: React.FC = () => {
 
   useEffect(() => {
     const savePresets = () => {
-      localStorage.setItem('presets', JSON.stringify(presets));
+      localStorage.setItem('presets1', JSON.stringify(presets));
     };
 
     savePresets();
