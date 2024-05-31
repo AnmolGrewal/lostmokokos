@@ -7,6 +7,7 @@ export interface ImageData {
   book: string;
   earring: string;
   abilityStone: string;
+  goldCoins: string;
 }
 
 const imagesData: ImageData = {
@@ -18,6 +19,7 @@ const imagesData: ImageData = {
   book: 'https://i.imgur.com/F6bpKTy.png',
   earring: 'https://i.imgur.com/bMkc20t.png',
   abilityStone: 'https://i.imgur.com/HitFWk5.png',
+  goldCoins: 'https://i.imgur.com/DI98qp1.png',
 };
 
 export default imagesData;
