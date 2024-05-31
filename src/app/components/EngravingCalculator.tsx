@@ -41,6 +41,9 @@ const EngravingCalculator: React.FC = () => {
   const [currentCombinationIndex, setCurrentCombinationIndex] = useState(0);
   const accessoryOrder = ['Books', 'Ability Stone', 'Necklace', 'Earring', 'Earring', 'Ring', 'Ring'];
 
+  const currentPreset = presets.find((preset) => preset.name === selectedPreset);
+  const totalGoldCost = currentPreset ? currentPreset.totalGoldCost : 0;
+
   const handleOptimizerSliderChange = (engraving: string, value: number | number[]) => {
     setOptimizerValues((prevValues) => ({
       ...prevValues,
@@ -129,7 +132,7 @@ const EngravingCalculator: React.FC = () => {
 
   const handleEngravingChange = (event: React.ChangeEvent<{}>, value: string[]) => {
     const deletedEngravings = selectedEngravings.filter((engraving) => !value.includes(engraving));
-
+  
     const newAccessoryEngravings = accessoryEngravings.map((engravingList) =>
       engravingList.map((engraving) => (deletedEngravings.includes(engraving) ? '' : engraving))
     );
@@ -138,17 +141,17 @@ const EngravingCalculator: React.FC = () => {
         deletedEngravings.includes(accessoryEngravings[accessoryIndex][engravingIndex]) ? 0 : level
       )
     );
-
+  
     setSelectedEngravings(value);
     setAccessoryEngravings(newAccessoryEngravings);
     setAccessoryLevels(newAccessoryLevels);
-
+  
     updateCurrentPreset({
       selectedEngravings: value,
       accessoryEngravings: newAccessoryEngravings,
       accessoryLevels: newAccessoryLevels,
       totalEngravings,
-      goldCost: {...goldCost},
+      goldCost,
     });
   };
 
@@ -158,7 +161,6 @@ const EngravingCalculator: React.FC = () => {
   ) => {
     const newAccessoryEngravings = [...accessoryEngravings];
     const newAccessoryLevels = [...accessoryLevels];
-    const newGoldCost = [...goldCost];
   
     newAccessoryEngravings[accessoryIndex][engravingIndex] = value || '';
   
@@ -183,7 +185,7 @@ const EngravingCalculator: React.FC = () => {
       accessoryEngravings: newAccessoryEngravings,
       accessoryLevels: newAccessoryLevels,
       totalEngravings: newTotalEngravings,
-      goldCost: newGoldCost,
+      goldCost: [...goldCost], // Use the existing goldCost array
     });
   };  
 
@@ -488,9 +490,9 @@ const EngravingCalculator: React.FC = () => {
   const renderTotalEngravings = () => {
     const currentPreset = presets.find((preset) => preset.name === selectedPreset);
     if (!currentPreset) return null;
-
+  
     const totalEngravingSummary = calculateTotalEngravingSummary(currentPreset.engravings.totalEngravings);
-
+  
     return (
       <>
         <div className="flex flex-col">
@@ -884,7 +886,7 @@ const EngravingCalculator: React.FC = () => {
   };
 
   return (
-    <div className="bg-primary-background-color p-4 size-full flex flex-1 flex-shrink-0 flex-col justify-center">
+    <div className="bg-primary-background-color p-4 size-full flex flex-1 flex-shrink-0 flex-col justify-center mb-20">
       <div className="bg-secondary-background-color p-4 rounded-lg mt-4 flex flex-1 flex-shrink-0 flex-row justify-center align-middle items-center">
         <Autocomplete
           options={[...presets.map((preset) => preset.name), 'Add New Preset']}
@@ -1063,6 +1065,10 @@ const EngravingCalculator: React.FC = () => {
         </DialogActions>
       </Dialog>
       <ToastContainer />
+      <footer className="fixed bottom-2 left-1/2 transform -translate-x-1/2 bg-primary-background-color text-primary-text-color text-center p-2 rounded-full border border-primary-border-color shadow-md inline-flex items-center justify-center gap-2 sm:p-4 sm:text-2xl">
+        Total Gold Cost: {totalGoldCost?.toLocaleString()}
+        <img src={imagesData.goldCoins} alt="Gold Coins" className="w-5 sm:w-10" />
+      </footer>
     </div>
   );
 };
