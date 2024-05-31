@@ -57,7 +57,7 @@ const RaidPage: React.FC = () => {
   const hasHardVersion = raidsInfo.some((r: Raid) => r.path === `/raids/${raidString}-hard`) || raidString.endsWith('-hard');
 
   return (
-    <div className="bg-primary-background-color">
+    <div className="bg-primary-background-color max-w-[1000px] mx-auto">
       <Head>
         <title>{raidLabel} - Raid Details</title>
         <meta name="description" content={`Learn more about the ${raidLabel} raid`} />

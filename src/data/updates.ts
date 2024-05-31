@@ -123,6 +123,11 @@ const updates: Update[] = [
     'Added discord server as well. ' +
     'Added Box Purchase Option on Character Sheet!'],
   },
+  {
+    date: 'May 30, 2024',
+    title: 'Fixed Width Issues with Engraving and Raids Page',
+    context: ['Width sizing has been changed to not feel so wide anymore for engravings and raids page and it still fits all data for all screens properly'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };
