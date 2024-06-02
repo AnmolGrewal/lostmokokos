@@ -309,7 +309,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
             {raid.gateRewardImgSrc && (
               <TableRow className="even-row">
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
-                  Rewards
+                  Rewards Clear/Box
                 </TableCell>
                 {raid.gateData.gateRewards &&
                   raid.gateData.gateRewards.map((rewards, index) => (

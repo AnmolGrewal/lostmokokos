@@ -130,6 +130,11 @@ const updates: Update[] = [
       'Added in gold costs for accessories as well!'
     ],
   },
+  {
+    date: 'June 2, 2024',
+    title: 'Updated Box And Raid Clear Text',
+    context: ['Box and raid rewards are the same so I made the text more clear'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };
