@@ -39,7 +39,6 @@ const EngravingCalculator: React.FC = () => {
   const [optimizerValues, setOptimizerValues] = useState<{ [key: string]: number }>({});
   const [combinations, setCombinations] = useState<EngravingItem[][]>([]);
   const [currentCombinationIndex, setCurrentCombinationIndex] = useState(0);
-  const [inputCombinationIndex, setInputCombinationIndex] = useState('');
   const accessoryOrder = ['Books', 'Ability Stone', 'Necklace', 'Earring', 'Earring', 'Ring', 'Ring'];
 
   const currentPreset = presets.find((preset) => preset.name === selectedPreset);
@@ -741,19 +740,21 @@ const EngravingCalculator: React.FC = () => {
 
   const handleInputCombinationIndexChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setInputCombinationIndex(value);
-
     const parsedValue = parseInt(value, 10);
-    if (!isNaN(parsedValue) && parsedValue >= 1 && parsedValue <= combinations.length) {
+
+    if (value === '') {
+      setCurrentCombinationIndex(0);
+    } else if (!isNaN(parsedValue) && parsedValue >= 1 && parsedValue <= combinations.length) {
       setCurrentCombinationIndex(parsedValue - 1);
     }
   };
 
   const renderRemainingValues = () => {
     const remainingValues = calculateRemainingValues();
-  
+
     return (
       <div className="bg-secondary-background-color p-4 mt-4 rounded-lg flex flex-shrink-0 flex-col">
+
         <h2 className="text-primary-text-color text-2xl text-center">Combination Needed</h2>
         <div className="flex flex-wrap justify-center">
           {Object.entries(remainingValues).map(([label, remaining], index) => (
@@ -818,7 +819,7 @@ const EngravingCalculator: React.FC = () => {
                 </div>
               ))}
             </div>
-            <div className="flex justify-center mt-4">
+            <div className="flex justify-center mt-4 items-center">
               <button
                 className="bg-primary-background-color text-primary-text-color px-4 py-2 rounded mr-2"
                 onClick={handlePreviousCombination}
@@ -826,11 +827,17 @@ const EngravingCalculator: React.FC = () => {
               >
                 Previous
               </button>
-              <span className="text-primary-text-color mx-2 flex items-center">
-                {currentCombinationIndex + 1} / {combinations.length}
+              <input
+                type="text"
+                value={currentCombinationIndex + 1}
+                onChange={handleInputCombinationIndexChange}
+                className="bg-primary-background-color text-primary-text-color px-2 py-1 rounded text-center w-20 mx-2"
+              />
+              <span className="text-primary-text-color mx-2">
+                / {combinations.length}
               </span>
               <button
-                className="bg-primary-background-color text-primary-text-color px-4 py-2 rounded"
+                className="bg-primary-background-color text-primary-text-color px-4 py-2 rounded ml-2"
                 onClick={handleNextCombination}
                 disabled={currentCombinationIndex === combinations.length - 1}
               >
@@ -841,7 +848,7 @@ const EngravingCalculator: React.FC = () => {
         )}
       </div>
     );
-  };  
+  };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
