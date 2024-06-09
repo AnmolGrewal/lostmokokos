@@ -39,6 +39,7 @@ const EngravingCalculator: React.FC = () => {
   const [optimizerValues, setOptimizerValues] = useState<{ [key: string]: number }>({});
   const [combinations, setCombinations] = useState<EngravingItem[][]>([]);
   const [currentCombinationIndex, setCurrentCombinationIndex] = useState(0);
+  const [inputCombinationIndex, setInputCombinationIndex] = useState('');
   const accessoryOrder = ['Books', 'Ability Stone', 'Necklace', 'Earring', 'Earring', 'Ring', 'Ring'];
 
   const currentPreset = presets.find((preset) => preset.name === selectedPreset);
@@ -302,7 +303,7 @@ const EngravingCalculator: React.FC = () => {
           const parsedCost = isNaN(cost) ? 0 : cost;
           return sum + parsedCost;
         }, 0);
-        console.log('totalGoldCost', totalGoldCost);
+
         return {
           ...preset,
           engravings: {
@@ -732,17 +733,24 @@ const EngravingCalculator: React.FC = () => {
 
   const handlePreviousCombination = () => {
     setCurrentCombinationIndex((prevIndex) => Math.max(prevIndex - 1, 0));
-    console.log(currentCombinationIndex);
   };
 
   const handleNextCombination = () => {
     setCurrentCombinationIndex((prevIndex) => Math.min(prevIndex + 1, combinations.length - 1));
-    console.log(currentCombinationIndex);
+  };
+
+  const handleInputCombinationIndexChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setInputCombinationIndex(value);
+
+    const parsedValue = parseInt(value, 10);
+    if (!isNaN(parsedValue) && parsedValue >= 1 && parsedValue <= combinations.length) {
+      setCurrentCombinationIndex(parsedValue - 1);
+    }
   };
 
   const renderRemainingValues = () => {
     const remainingValues = calculateRemainingValues();
-    console.log(combinations)
   
     return (
       <div className="bg-secondary-background-color p-4 mt-4 rounded-lg flex flex-shrink-0 flex-col">
