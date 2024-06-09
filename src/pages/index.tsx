@@ -46,13 +46,7 @@ export default function Home() {
       </Helmet>
       <h1 className="text-4xl text-center mt-4 mb-4 text-[48px]">Lost Mokokos</h1>
       <h2 className="text-primary-text-color text-center text-2xl">
-        Adding Gold Costs for Accessories!
-        <br />
-        Added The Ability to buy boxs for every raid on Character Sheet!
-        <br />
-        Added Discord Server for Comments Suggestions
-        <br />
-        Added Working Engraving Optimizer
+        Added Class Engravings Support for Ability Stone
       </h2>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
         <h2 className="text-lg text-primary-text-color">Todo List</h2>
@@ -85,9 +79,6 @@ export default function Home() {
             </li>
           ))}
         </ul>
-      </div>
-      <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
-        <h2 className="text-lg text-primary-text-color mb-4">Contact Me</h2>
       </div>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
         <ChangeLog />

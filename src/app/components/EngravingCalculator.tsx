@@ -319,24 +319,24 @@ const EngravingCalculator: React.FC = () => {
 
   const renderAccessoryRows = () => {
     const accessoryRows = [];
-
+  
     for (let i = 0; i < accessoryOrder.length; i++) {
       const accessory = accessoryOrder[i];
       const accessoryData = engravingItems.find((item) => item.label === accessory);
-
+  
       const renderAccessory = (accessoryData: typeof engravingItems[0] | undefined, accessoryIndex: number) => {
         if (!accessoryData) return null;
-
+  
         if (!accessoryEngravings[accessoryIndex]) {
           accessoryEngravings[accessoryIndex] = Array(accessoryData.values.length).fill('');
         }
         if (!accessoryLevels[accessoryIndex]) {
           accessoryLevels[accessoryIndex] = Array(accessoryData.values.length).fill(0);
         }
-
+  
         const currentPreset = presets.find((preset) => preset.name === selectedPreset);
         if (!currentPreset) return null;
-
+  
         return (
           <div key={accessoryIndex} className="bg-secondary-background-color p-4 mt-4 rounded-lg flex flex-shrink-0 flex-col">
             <div className="flex items-center space-x-4 justify-between">
@@ -361,10 +361,10 @@ const EngravingCalculator: React.FC = () => {
                   <Autocomplete
                     options={
                       accessoryData.label === 'Ability Stone'
-                        ? selectedEngravings.filter((engraving) => !engravings.find((e) => e.label === engraving)?.isClassEngraving)
-                        : engravingIndex === 2
+                        ? engravingIndex === 2
                           ? negativeEngravings.map((engraving) => engraving.label)
-                          : selectedEngravings
+                          : selectedEngravings.filter((engraving) => !engravings.find((e) => e.label === engraving)?.isClassEngraving)
+                        : selectedEngravings
                     }
                     value={accessoryEngravings[accessoryIndex][engravingIndex] || null}
                     onChange={handleAccessoryEngravingChange(accessoryIndex, engravingIndex)}
@@ -431,7 +431,7 @@ const EngravingCalculator: React.FC = () => {
                           {accessoryLevels[accessoryIndex][engravingIndex]}
                         </div>
                       )}
-                    </>                  
+                    </>
                   )}
                 </div>
               ))}

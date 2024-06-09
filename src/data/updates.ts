@@ -135,6 +135,11 @@ const updates: Update[] = [
     title: 'Updated Box And Raid Clear Text',
     context: ['Box and raid rewards are the same so I made the text more clear'],
   },
+  {
+    date: 'June 9, 2024',
+    title: 'Engraving Optimizer for Ability Stone now only uses class engravings',
+    context: ['Only class engravings are set for the optimizer for ability stones going forward! Negative Engravings added for ability Stone'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };
