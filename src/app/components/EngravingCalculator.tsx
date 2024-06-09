@@ -538,7 +538,20 @@ const EngravingCalculator: React.FC = () => {
     });
   
     return remainingValues;
-  }; 
+  };  
+
+  const calculateTotalValuesMap = (): Map<string, number> => {
+    const totalValues = new Map<string, number>();
+  
+    selectedEngravings.forEach((engraving) => {
+      const desiredValue = optimizerValues[engraving] || 0;
+      const totalValue = desiredValue * 5;
+      totalValues.set(engraving, totalValue);
+    });
+  
+    return totalValues;
+  };
+  
 
   interface EngravingItem {
     label: string;
@@ -699,8 +712,12 @@ const EngravingCalculator: React.FC = () => {
   
     const initialRemainingValues = new Map(remainingValues);
     backtrack(0, initialRemainingValues, 0);
-  
-    if (combinations.length === 0) {
+
+    const totalValues = calculateTotalValuesMap();
+    const filteredCombinations = filterCombinations(combinations, totalValues);
+
+
+    if (filteredCombinations.length === 0) {
       toast.error('Combination Not Found', {
         position: 'bottom-right',
         autoClose: 3000,
@@ -720,8 +737,77 @@ const EngravingCalculator: React.FC = () => {
         },
       });
     }
+
+    return filteredCombinations;
+  };
+
+  const filterCombinations = (combinations: EngravingItem[][], totalValues: Map<string, number>): EngravingItem[][] => {
+    const minEngravingValues: { [key: string]: { firstEngravingValue: number; secondEngravingValue: number } } = {};
   
-    return combinations;
+    combinations.forEach((combination) => {
+      combination.forEach((accessory) => {
+        const { label, firstEngraving, secondEngraving, firstEngravingValue, secondEngravingValue } = accessory;
+        const key = `${label}-${firstEngraving}-${secondEngraving}`;
+  
+        if (!minEngravingValues[key]) {
+          minEngravingValues[key] = { firstEngravingValue, secondEngravingValue };
+        } else {
+          minEngravingValues[key].firstEngravingValue = Math.min(
+            minEngravingValues[key].firstEngravingValue,
+            firstEngravingValue
+          );
+          minEngravingValues[key].secondEngravingValue = Math.min(
+            minEngravingValues[key].secondEngravingValue,
+            secondEngravingValue
+          );
+        }
+      });
+    });
+  
+    const updatedCombinations = combinations.map((combination) => {
+      return combination.map((accessory) => {
+        const { label, firstEngraving, secondEngraving } = accessory;
+        const key = `${label}-${firstEngraving}-${secondEngraving}`;
+        const { firstEngravingValue, secondEngravingValue } = minEngravingValues[key];
+  
+        return {
+          ...accessory,
+          firstEngravingValue,
+          secondEngravingValue,
+        };
+      });
+    });
+  
+    const uniqueCombinations = Array.from(
+      new Set(updatedCombinations.map((combination) => JSON.stringify(combination)))
+    ).map((combinationString) => JSON.parse(combinationString));
+  
+    const validCombinations = uniqueCombinations.filter((combination) => {
+      const combinationTotalValues = new Map<string, number>();
+  
+      combination.forEach((accessory: EngravingItem) => {
+        const { firstEngraving, secondEngraving, firstEngravingValue, secondEngravingValue } = accessory;
+  
+        if (firstEngraving) {
+          const currentValue = combinationTotalValues.get(firstEngraving) || 0;
+          combinationTotalValues.set(firstEngraving, currentValue + firstEngravingValue);
+        }
+        if (secondEngraving) {
+          const currentValue = combinationTotalValues.get(secondEngraving) || 0;
+          combinationTotalValues.set(secondEngraving, currentValue + secondEngravingValue);
+        }
+      });
+  
+      // Check if all engravings in the combination meet or exceed the required values
+      const isValid = Array.from(totalValues.entries()).every(([engraving, value]) => {
+        const combinationValue = combinationTotalValues.get(engraving) || 0;
+        return combinationValue >= value;
+      });
+  
+      return isValid;
+    });
+  
+    return validCombinations;
   };
 
   const handleCalculateCombinations = () => {
