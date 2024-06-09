@@ -639,7 +639,12 @@ const EngravingCalculator: React.FC = () => {
   
       const accessory = nonFixedAccessories[index];
   
-      const remainingEngravings = Array.from(currentRemainingValues.keys()).filter(engraving => currentRemainingValues.get(engraving)! > 0);
+      let remainingEngravings = Array.from(currentRemainingValues.keys()).filter(engraving => currentRemainingValues.get(engraving)! > 0);
+  
+      // Exclude class engravings for Ability Stone
+      if (accessory.label === 'Ability Stone') {
+        remainingEngravings = remainingEngravings.filter(engraving => !engravings.find(e => e.label === engraving)?.isClassEngraving);
+      }
   
       const combinationOptions = generateCombinations(remainingEngravings, 1, 2);
   
@@ -694,8 +699,8 @@ const EngravingCalculator: React.FC = () => {
   
     const initialRemainingValues = new Map(remainingValues);
     backtrack(0, initialRemainingValues, 0);
-
-    if(combinations.length == 0) {
+  
+    if (combinations.length === 0) {
       toast.error('Combination Not Found', {
         position: 'bottom-right',
         autoClose: 3000,
@@ -715,7 +720,7 @@ const EngravingCalculator: React.FC = () => {
         },
       });
     }
-
+  
     return combinations;
   };
 
@@ -838,11 +843,7 @@ const EngravingCalculator: React.FC = () => {
     return (
       <div className="mt-4">
         <h1 className="text-primary-text-label-color text-center text-2xl">
-          Please Set Books and Ability Stone Before Using this as it does tens of thousands of combinations!
-          <br />
-          Pre Release Alpha Version!
-          <br />
-          Works Better when you select at least 5 level 3s
+          Please Set 2 Engraving Items before using Calculate Combinations (i.e Ring 1, Necklace)
         </h1>
         <div className="bg-secondary-background-color p-4 mt-4 rounded-lg grid md:grid-cols-3 gap-4 grid-cols-2">
           {selectedEngravings.map((engraving, index) => (
