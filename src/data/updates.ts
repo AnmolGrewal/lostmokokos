@@ -140,6 +140,11 @@ const updates: Update[] = [
     title: 'Engraving Optimizer for Ability Stone now only uses class engravings',
     context: ['Only class engravings are set for the optimizer for ability stones going forward! Negative Engravings added for ability Stone'],
   },
+  {
+    date: 'June 13, 2024',
+    title: 'Fixed Negative Engravings',
+    context: ['You can now select negative engravings for all accessories from the range of 1 to 3 that have a third engraving slot, basically everything besides books'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };

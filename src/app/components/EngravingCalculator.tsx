@@ -155,10 +155,7 @@ const EngravingCalculator: React.FC = () => {
     });
   };
 
-  const handleAccessoryEngravingChange = (accessoryIndex: number, engravingIndex: number) => (
-    event: React.SyntheticEvent<Element, Event>,
-    value: string | null
-  ) => {
+  const handleAccessoryEngravingChange = (accessoryIndex: number, engravingIndex: number, value: string | null) => {
     const newAccessoryEngravings = [...accessoryEngravings];
     const newAccessoryLevels = [...accessoryLevels];
   
@@ -185,9 +182,9 @@ const EngravingCalculator: React.FC = () => {
       accessoryEngravings: newAccessoryEngravings,
       accessoryLevels: newAccessoryLevels,
       totalEngravings: newTotalEngravings,
-      goldCost: [...goldCost], // Use the existing goldCost array
+      goldCost: [...goldCost],
     });
-  };  
+  };
 
   const handleAccessoryLevelChange = (accessoryIndex: number, engravingIndex: number) => (event: Event, value: number | number[]) => {
     const newAccessoryLevels = [...accessoryLevels];
@@ -359,16 +356,9 @@ const EngravingCalculator: React.FC = () => {
               {accessoryData.values.map((values, engravingIndex) => (
                 <div key={engravingIndex} className="flex flex-col mt-4 flex-1">
                   <Autocomplete
-                    options={
-                      accessoryData.label === 'Ability Stone'
-                        ? engravingIndex === 2
-                          ? negativeEngravings.map((engraving) => engraving.label)
-                          : selectedEngravings.filter((engraving) => !engravings.find((e) => e.label === engraving)?.isClassEngraving)
-                        : selectedEngravings
-                    }
+                    options={engravingIndex === 2 ? negativeEngravings.map((engraving) => engraving.label) : engravings.map((engraving) => engraving.label)}
                     value={accessoryEngravings[accessoryIndex][engravingIndex] || null}
-                    onChange={handleAccessoryEngravingChange(accessoryIndex, engravingIndex)}
-                    isOptionEqualToValue={(option, value) => option === value}
+                    onChange={(event, value) => handleAccessoryEngravingChange(accessoryIndex, engravingIndex, value)}
                     renderInput={(params) => (
                       <TextField
                         {...params}
