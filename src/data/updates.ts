@@ -145,6 +145,10 @@ const updates: Update[] = [
     title: 'Fixed Negative Engravings',
     context: ['You can now select negative engravings for all accessories from the range of 1 to 3 that have a third engraving slot, basically everything besides books'],
   },
+  {
+    date: 'June 21, 2024',
+    context: ['Updated Top Bar to be countdown for Tier 4!'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };

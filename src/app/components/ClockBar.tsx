@@ -10,7 +10,7 @@ const ClockBar = () => {
   const calculateCountdowns = () => {
     const now = moment().tz('America/Los_Angeles');
 
-    const nextUpdateDate = moment.tz('2024-06-13 03:00', 'America/Los_Angeles');
+    const nextUpdateDate = moment.tz('2024-07-23 03:00', 'America/Los_Angeles');
     const daysUntilUpdate = nextUpdateDate.diff(now, 'days');
     const hoursUntilUpdate = nextUpdateDate.subtract(daysUntilUpdate, 'days').diff(now, 'hours');
     const nextUpdate = `${daysUntilUpdate > 0 ? daysUntilUpdate + 'd ' : ''}${hoursUntilUpdate > 0 ? hoursUntilUpdate + 'h' : ''}`;
@@ -31,10 +31,10 @@ const ClockBar = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-3 h-7 items-center justify-center transition bg-primary-background-color">
-      {/* Echidna Release Date */}
+      {/* Tier 4 Release Date */}
       <div className="text-center text-sm md:text-base hidden md:block">
         <span className="text-primary-text-label-color">
-          Echidna Release Date: <span className="font-semibold text-primary-text-label-color">{nextUpdate}</span>
+          Tier 4 Release Date: <span className="font-semibold text-primary-text-label-color">{nextUpdate}</span>
         </span>
       </div>
 
