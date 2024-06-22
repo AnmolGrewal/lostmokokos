@@ -149,6 +149,10 @@ const updates: Update[] = [
     date: 'June 21, 2024',
     context: ['Updated Top Bar to be countdown for Tier 4!'],
   },
+  {
+    date: 'June 22, 2024',
+    context: ['Added Echnida Drop Data!'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };
