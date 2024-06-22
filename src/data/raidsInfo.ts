@@ -362,6 +362,11 @@ const raidsInfo: Raid[] = [
       boxCost: [2200, 3400],
       itemLevels: [1620],
       gateRewards: [[3], [6]],
+      honorShards: [3600, 4200],
+      boxHonorShards: [6500, 9500],
+      chaosStones: [0, 4],
+      destructionStones: [160, 220],
+      boxDestructionStones: [450, 800],
     },
   },
   {
@@ -375,6 +380,11 @@ const raidsInfo: Raid[] = [
       boxCost: [2800, 4100],
       itemLevels: [1630],
       gateRewards: [[3], [6]],
+      honorShards: [4000, 7800],
+      boxHonorShards: [7500, 11000],
+      chaosStones: [0, 7],
+      destructionStones: [220, 280],
+      boxDestructionStones: [650, 960],
     },
   },
 ];
