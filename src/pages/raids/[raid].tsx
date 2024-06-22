@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import RaidGrid from '../../app/components/RaidGrid';
@@ -8,8 +8,6 @@ import utilities from '@/utils/utilities';
 const RaidPage: React.FC = () => {
   const router = useRouter();
   const { raid } = router.query;
-
-  const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
     const defaultRaid = '/raids/thaemine';
@@ -22,18 +20,6 @@ const RaidPage: React.FC = () => {
       router.push(currentRaid);
     }
   }, [raid, router]);
-
-  useEffect(() => {
-    const handleRouteChangeStart = () => {
-      setScrollPosition(window.pageYOffset);
-    };
-
-    router.events.on('routeChangeStart', handleRouteChangeStart);
-
-    return () => {
-      router.events.off('routeChangeStart', handleRouteChangeStart);
-    };
-  }, [router]);
 
   useEffect(() => {
     const handleRouteChangeComplete = () => {
@@ -50,12 +36,6 @@ const RaidPage: React.FC = () => {
       router.events.off('routeChangeComplete', handleRouteChangeComplete);
     };
   }, [router]);
-
-  useEffect(() => {
-    if (router.isReady && raid) {
-      window.scrollTo(0, scrollPosition);
-    }
-  }, [router.isReady, raid, scrollPosition]);
 
   if (!router.isReady || !raid) {
     return <div>Loading...</div>;
