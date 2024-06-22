@@ -9,7 +9,14 @@ const RaidsIndexPage: React.FC = () => {
     const defaultRaid = '/raids/thaemine'; // Default to the Thaemine raid
     const savedRaid = localStorage.getItem('currentRaidPath');
     const raidPath = savedRaid || defaultRaid;
-    router.push(raidPath); // Navigate to the current raid URL
+    const savedScrollPosition = localStorage.getItem('scrollPosition');
+  
+    router.push(raidPath).then(() => {
+      if (savedScrollPosition) {
+        window.scrollTo(0, parseInt(savedScrollPosition, 10));
+        localStorage.removeItem('scrollPosition');
+      }
+    });
   }, [router]);
 
   return (

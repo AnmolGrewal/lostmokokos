@@ -36,6 +36,22 @@ const RaidPage: React.FC = () => {
   }, [router]);
 
   useEffect(() => {
+    const handleRouteChangeComplete = () => {
+      const savedScrollPosition = localStorage.getItem('scrollPosition');
+      if (savedScrollPosition) {
+        window.scrollTo(0, parseInt(savedScrollPosition, 10));
+        localStorage.removeItem('scrollPosition');
+      }
+    };
+  
+    router.events.on('routeChangeComplete', handleRouteChangeComplete);
+  
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChangeComplete);
+    };
+  }, [router]);
+
+  useEffect(() => {
     if (router.isReady && raid) {
       window.scrollTo(0, scrollPosition);
     }

@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { Raid } from '../../data/raidsInfo';
 import { faSkull } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import Link from 'next/link';
 import raidsInfo from '../../data/raidsInfo';
@@ -18,6 +19,14 @@ interface RaidGridProps {
 const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
   const [dimmed, setDimmed] = useState<boolean[][] | null>(null);
   const [showDifferences, setShowDifferences] = useState<boolean>(false);
+
+  const router = useRouter();
+
+  const handleSkullClick = (newPath: string) => {
+    const scrollPosition = window.pageYOffset;
+    localStorage.setItem('scrollPosition', scrollPosition.toString());
+    router.push(newPath);
+  };
 
   useEffect(() => {
     if (raid.gateData && raid.gateData.gold && raid.gateData.boxCost) {
@@ -127,6 +136,10 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                 <FontAwesomeIcon
                   icon={faSkull}
                   className={clsx('text-red-500', 'ml-2', { 'opacity-25': !raid.path.endsWith('-hard') }, 'skull-icon')}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleSkullClick(raid.path.endsWith('-hard') ? raid.path.replace('-hard', '') : `${raid.path}-hard`);
+                  }}
                 />
               </Link>
               {!raid.path.endsWith('-hard') && (
