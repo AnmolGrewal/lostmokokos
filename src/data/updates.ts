@@ -151,7 +151,8 @@ const updates: Update[] = [
   },
   {
     date: 'June 22, 2024',
-    context: ['Added Echnida Drop Data!'],
+    title: 'Updated Echnida Data! Saving Height between Hard and Normal Raids for same Raid',
+    context: ['Added Echnida Drop Data! Your page height is saved when swapping between normal vs hard mode of the same raid so you do not have to keep scrolling'],
   },
 ].reverse();
 
