@@ -1,7 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import React from 'react';
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 import { EngravingItem, NegativeEngraving, engravingItems, negativeEngravings } from '../../data/engravings'; // Adjust the import path as needed
 
 interface EngravingGridProps {
@@ -17,7 +16,7 @@ const EngravingGrid: React.FC<EngravingGridProps> = ({
   accessoryEngravings,
   accessoryLevels,
   engravingItems,
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   negativeEngravings,
 }) => {
   const renderEngravingTable = () => {

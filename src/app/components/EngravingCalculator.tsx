@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect, useCallback } from 'react';
 import { Autocomplete, Chip, Slider, TextField, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, Button, Tab, Tabs } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -70,6 +69,7 @@ const EngravingCalculator: React.FC = () => {
     loadEngravings(newPreset.engravings);
   }, [presets]);
 
+  // eslint-disable-next-line @typescript-eslint/ban-types
   const handlePresetChange = useCallback((event: React.ChangeEvent<{}>, value: string | null) => {
     if (value) {
       setSelectedPreset(value);
@@ -130,6 +130,7 @@ const EngravingCalculator: React.FC = () => {
   };
   
 
+  // eslint-disable-next-line @typescript-eslint/ban-types
   const handleEngravingChange = (event: React.ChangeEvent<{}>, value: string[]) => {
     const deletedEngravings = selectedEngravings.filter((engraving) => !value.includes(engraving));
   
@@ -461,7 +462,7 @@ const EngravingCalculator: React.FC = () => {
   const calculateTotalEngravingSummary = (totalEngravings: { [key: string]: number }) => {
     const engravingCounts: { [key: string]: number } = {};
 
-    // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     Object.entries(totalEngravings).forEach(([label, total]) => {
       const count = Math.floor(total / 5);
       if (count > 0) {
