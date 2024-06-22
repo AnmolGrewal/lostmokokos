@@ -70,7 +70,7 @@ interface CharacterState {
 
 const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const initializeNewCharacterState = useCallback((): CharacterState => {
-    let newState: CharacterState = {};
+    const newState: CharacterState = {};
     raids.forEach((raid) => {
       newState[raid.path] = new Array(raid.gateData.gold.length).fill(false);
     });
@@ -214,7 +214,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
 
       setCheckedStates((prevStates) =>
         prevStates.map((characterState) => {
-          let newState = { ...characterState };
+          const newState = { ...characterState };
           raidsInGroup.forEach((raid) => {
             if (newState[raid.path]) {
               newState[raid.path] = newState[raid.path].map(() => false);
@@ -335,7 +335,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
     setCheckedStates((prevStates) =>
       prevStates.map((state, index) => {
         if (index === columnIndex) {
-          let updatedState = { ...state };
+          const updatedState = { ...state };
           updatedState[raidPath] = updatedState[raidPath].map(() => !allChecked);
           return updatedState;
         }
@@ -453,7 +453,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const handleSweepCheckedStates = () => {
     setCheckedStates((prevStates) =>
       prevStates.map((characterState) => {
-        let newState: CharacterState = {};
+        const newState: CharacterState = {};
         Object.keys(characterState).forEach((raidPath) => {
           newState[raidPath] = new Array(characterState[raidPath].length).fill(false);
         });
@@ -462,7 +462,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
     );
     setBoxCheckedStates((prevStates) => // Clear box checked states
       prevStates.map((characterState) => {
-        let newState: CharacterState = {};
+        const newState: CharacterState = {};
         Object.keys(characterState).forEach((raidPath) => {
           newState[raidPath] = new Array(characterState[raidPath].length).fill(false);
         });
