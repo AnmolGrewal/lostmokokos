@@ -154,6 +154,11 @@ const updates: Update[] = [
     title: 'Updated Echnida Data! Saving Height between Hard and Normal Raids for same Raid',
     context: ['Added Echnida Drop Data! Your page height is saved when swapping between normal vs hard mode of the same raid so you do not have to keep scrolling'],
   },
+  {
+    date: 'July 17, 2024',
+    title: 'Updated New Gold Data for All Raids!',
+    context: ['Ivory Tower changed to 3 gates and updated raid data for all raids based on cool retreat patch notes. Updated Character Sheet and Gold Raid Data.'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };
