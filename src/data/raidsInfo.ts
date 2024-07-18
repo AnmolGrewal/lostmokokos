@@ -1,6 +1,7 @@
 export interface GateData {
   gold: number[];
   boxCost: number[];
+  goldSolo?: number[]; // New field for solo gold values
   itemLevels: number[];
   gateRewards?: number[][];
   honorShards?: number[];
@@ -71,6 +72,7 @@ const raidsInfo: Raid[] = [
     gateData: {
       gold: [300, 450],
       boxCost: [180, 255],
+      goldSolo: [120, 230],
       itemLevels: [1415],
       gateRewards: [
         [1, 3],
@@ -110,6 +112,7 @@ const raidsInfo: Raid[] = [
     gateData: {
       gold: [350, 650],
       boxCost: [175, 290],
+      goldSolo: [170, 330],
       itemLevels: [1430],
       gateRewards: [
         [2, 1],
@@ -149,6 +152,7 @@ const raidsInfo: Raid[] = [
     gateData: {
       gold: [400, 600, 1000],
       boxCost: [200, 335, 470],
+      goldSolo: [200, 250, 450],
       itemLevels: [1475],
       gateRewards: [[1], [2], [2]],
       honorShards: [800, 800, 800],
@@ -167,6 +171,7 @@ const raidsInfo: Raid[] = [
     gateData: {
       gold: [1000, 1000, 1000, 1600],
       boxCost: [250, 300, 400, 600],
+      goldSolo: [400, 500, 800, 900],
       itemLevels: [1490, 1490, 1500, 1520],
       gateRewards: [[4], [4], [5], [7]],
       honorShards: [1000, 1200, 1500, 3000],
@@ -203,6 +208,7 @@ const raidsInfo: Raid[] = [
     gateData: {
       gold: [800, 1200, 1600],
       boxCost: [300, 400, 500],
+      goldSolo: [400, 500, 800],
       itemLevels: [1540],
       gateRewards: [[11], [12, 1], [17, 2]],
       honorShards: [2000, 2500, 4000],
@@ -243,6 +249,7 @@ const raidsInfo: Raid[] = [
     gateData: {
       gold: [1750, 2250, 4500],
       boxCost: [450, 550, 750],
+      goldSolo: [800, 900, 1600],
       itemLevels: [1580],
       gateRewards: [[3], [3], [5]],
       honorShards: [1600, 1600, 2400],
@@ -279,6 +286,7 @@ const raidsInfo: Raid[] = [
     gateData: {
       gold: [2000, 3000, 4000],
       boxCost: [500, 550, 900],
+      goldSolo: [1000, 1200, 1700],
       itemLevels: [1600],
       gateRewards: [[2], [2], [1, 1]],
       honorShards: [1500, 1500, 2000],
