@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // eslint-disable-next-line no-unused-vars
-import { faHome, faDungeon, faPersonShelter, faHammer } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faDungeon, faPersonShelter, faHammer, faPercent } from '@fortawesome/free-solid-svg-icons';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { faDiscord } from '@fortawesome/free-brands-svg-icons';
@@ -16,6 +16,7 @@ const NavigationBar = ({ currentPath }: NavigationBarProps) => {
     { path: '/raids', label: 'Raids', icon: faDungeon },
     { path: '/characters', label: 'Character Sheet', icon: faPersonShelter },
     { path: '/engravings', label: 'Engravings', icon: faHammer },
+    { path: '/compare', label: 'Gold', icon: faPercent },
     { path: 'https://discord.gg/eMdbdF9xSM', label: 'Discord', icon: faDiscord },
   ];
 
