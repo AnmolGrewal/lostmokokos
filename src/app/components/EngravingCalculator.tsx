@@ -357,7 +357,7 @@ const EngravingCalculator: React.FC = () => {
               {accessoryData.values.map((values, engravingIndex) => (
                 <div key={engravingIndex} className="flex flex-col mt-4 flex-1">
                   <Autocomplete
-                    options={engravingIndex === 2 ? negativeEngravings.map((engraving) => engraving.label) : engravings.map((engraving) => engraving.label)}
+                    options={engravingIndex === 2 ? negativeEngravings.map((engraving) => engraving.label) : selectedEngravings}
                     value={accessoryEngravings[accessoryIndex][engravingIndex] || null}
                     onChange={(event, value) => handleAccessoryEngravingChange(accessoryIndex, engravingIndex, value)}
                     renderInput={(params) => (
