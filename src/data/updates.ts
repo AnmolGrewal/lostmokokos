@@ -175,6 +175,11 @@ const updates: Update[] = [
     context: ['You can now click the Ninja Icon to see Solo Raid Data on Raids Page if the Raid has it.'],
     images: ['https://i.imgur.com/e8jrGRW.png'],
   },
+  {
+    date: 'August 10, 2024',
+    title: 'Fixed Bug where selected engravings were not working as intended',
+    context: ['Now when you select Engravings you only see those engravings in your boxes for Engraving 1 and Engraving 2'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };
