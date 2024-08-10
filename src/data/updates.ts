@@ -169,6 +169,12 @@ const updates: Update[] = [
     title: 'Immediate Bug Fixes',
     context: ['Bug fixed incorrect Normal Raid Data Gold on Compare Page'],
   },
+  {
+    date: 'August 10, 2024',
+    title: 'Added Solo Raids Support to Raids Page',
+    context: ['You can now click the Ninja Icon to see Solo Raid Data on Raids Page if the Raid has it.'],
+    images: ['https://i.imgur.com/e8jrGRW.png'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };

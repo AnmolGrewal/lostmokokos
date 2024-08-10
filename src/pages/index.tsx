@@ -47,6 +47,8 @@ export default function Home() {
       <h1 className="text-4xl text-center mt-4 mb-4 text-[48px]">Lost Mokokos</h1>
       <h2 className="text-primary-text-color text-center text-2xl">
         Updated Character Sheet for Solo Raids Gold And Box Costs!
+        <br />
+        Added Solo Raids to Raids Page
       </h2>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
         <h2 className="text-lg text-primary-text-color">Todo List</h2>
