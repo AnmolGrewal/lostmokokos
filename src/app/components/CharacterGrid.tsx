@@ -271,8 +271,8 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
     // Save all character related data to localStorage
     localStorage.setItem('characterCount1', characterCount.toString());
     localStorage.setItem('characterNames1', JSON.stringify(characterNames));
-    localStorage.setItem('checkedStates1', JSON.stringify(checkedStates));
-    localStorage.setItem('boxCheckedStates1', JSON.stringify(boxCheckedStates));
+    localStorage.setItem('checkedStates2', JSON.stringify(checkedStates));
+    localStorage.setItem('boxCheckedStates2', JSON.stringify(boxCheckedStates));
     localStorage.setItem('additionalGold1', JSON.stringify(additionalGold));
     localStorage.setItem('chaosGateRatings', JSON.stringify(chaosGateRatings));
     localStorage.setItem('unaTaskRatings', JSON.stringify(unaTaskRatings));

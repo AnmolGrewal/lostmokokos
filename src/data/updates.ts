@@ -180,6 +180,11 @@ const updates: Update[] = [
     title: 'Fixed Bug where selected engravings were not working as intended',
     context: ['Now when you select Engravings you only see those engravings in your boxes for Engraving 1 and Engraving 2'],
   },
+  {
+    date: 'August 10, 2024',
+    title: 'Fixed Critical Bug with Character Sheet Not Saving Raids',
+    context: ['Now when you set your raids and refresh the page or come back they are saved'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };
