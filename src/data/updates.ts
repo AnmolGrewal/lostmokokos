@@ -159,6 +159,11 @@ const updates: Update[] = [
     title: 'Updated New Gold Data for All Raids!',
     context: ['Ivory Tower changed to 3 gates and updated raid data for all raids based on cool retreat patch notes. Updated Character Sheet and Gold Raid Data.'],
   },
+  {
+    date: 'August 9, 2024',
+    title: 'Updated Data Support for Solo Raid Gold & Data on Website',
+    context: ['Updated Hacky soloGoldData on normal Raids to actual be standalone instead. Added Solo Checkbox along with Gate Gold Costs in Character Sheet.'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };
