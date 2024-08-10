@@ -11,6 +11,7 @@ import raidsInfo from '../../data/raidsInfo';
 import IconButton from '@mui/material/IconButton';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import imagesData from '@/data/imageLinks';
+import FirstTimeModal from './FirstTimeModal';
 
 interface RaidGridProps {
   raid: Raid;
@@ -19,6 +20,20 @@ interface RaidGridProps {
 }
 
 const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersion }) => {
+  const [showFirstTimeModal, setShowFirstTimeModal] = useState(false);
+
+  useEffect(() => {
+    const hasSeenModal = localStorage.getItem('hasSeenRaidModal');
+    if (!hasSeenModal) {
+      setShowFirstTimeModal(true);
+    }
+  }, []);
+
+  const handleCloseFirstTimeModal = () => {
+    setShowFirstTimeModal(false);
+    localStorage.setItem('hasSeenRaidModal', 'true');
+  };
+
   const [dimmed, setDimmed] = useState<boolean[][] | null>(null);
   const [showDifferences, setShowDifferences] = useState<boolean>(false);
 
@@ -547,6 +562,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
           </TableBody>
         </Table>
       </TableContainer>
+      <FirstTimeModal open={showFirstTimeModal} onClose={handleCloseFirstTimeModal} />
     </div>
   );
 };
