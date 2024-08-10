@@ -164,6 +164,11 @@ const updates: Update[] = [
     title: 'Updated Data Support for Solo Raid Gold & Data on Website',
     context: ['Updated Hacky soloGoldData on normal Raids to actual be standalone instead. Added Solo Checkbox along with Gate Gold Costs in Character Sheet.'],
   },
+  {
+    date: 'August 9, 2024',
+    title: 'Immediate Bug Fixes',
+    context: ['Bug fixed incorrect Normal Raid Data Gold on Compare Page'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };

@@ -24,7 +24,7 @@ const RaidGoldPage: React.FC = () => {
   };
 
   const getRaidData = (raidLabel: string, mode: 'solo' | 'normal' | 'hard') => {
-    const normalRaid = raidsInfo.find(raid => raid.label === raidLabel && !raid.path.includes('-hard'));
+    const normalRaid = raidsInfo.find(raid => raid.label === raidLabel && !raid.path.includes('-hard') && !raid.path.includes('-solo'));
     const soloRaid = raidsInfo.find(raid => raid.label === raidLabel && raid.path.includes('-solo'));
     const hardRaid = raidsInfo.find(raid => raid.label === raidLabel && raid.path.includes('-hard'));
 
