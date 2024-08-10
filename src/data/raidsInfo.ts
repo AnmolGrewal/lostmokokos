@@ -1,7 +1,6 @@
 export interface GateData {
   gold: number[];
   boxCost: number[];
-  goldSolo?: number[]; // New field for solo gold values
   itemLevels: number[];
   gateRewards?: number[][];
   honorShards?: number[];
@@ -64,6 +63,27 @@ const raidsInfo: Raid[] = [
     },
   },
   {
+    path: '/raids/valtan-solo',
+    label: 'Valtan',
+    imgSrc: 'https://i.imgur.com/ApCDeQb.png',
+    gateRewardImgSrc: [['https://i.imgur.com/VCqULik.png', 'https://i.imgur.com/CloDByc.png']],
+    gateRewardImgToolTip: [['Demon Beast Bone', 'Demon Beast Tendon']],
+    gateData: {
+      gold: [120, 230],
+      boxCost: [45, 60],
+      itemLevels: [1415],
+      gateRewards: [
+        [1, 3],
+        [2, 3],
+      ],
+      honorShards: [400, 600],
+      boxHonorShards: [400, 700],
+      chaosStones: [0, 1],
+      destructionStones: [150, 200],
+      boxDestructionStones: [240, 300],
+    },
+  },
+  {
     path: '/raids/valtan',
     label: 'Valtan',
     imgSrc: 'https://i.imgur.com/ApCDeQb.png',
@@ -72,7 +92,6 @@ const raidsInfo: Raid[] = [
     gateData: {
       gold: [300, 450],
       boxCost: [180, 255],
-      goldSolo: [120, 230],
       itemLevels: [1415],
       gateRewards: [
         [1, 3],
@@ -104,6 +123,27 @@ const raidsInfo: Raid[] = [
     },
   },
   {
+    path: '/raids/vykas-solo',
+    label: 'Vykas',
+    imgSrc: 'https://i.imgur.com/5VoXEOB.png',
+    gateRewardImgSrc: [['https://i.imgur.com/uzmLA6L.png', 'https://i.imgur.com/YhGuP3L.png']],
+    gateRewardImgToolTip: [['Covetous Fang', 'Covetous Wing']],
+    gateData: {
+      gold: [170, 330],
+      boxCost: [60, 100],
+      itemLevels: [1430],
+      gateRewards: [
+        [2, 1],
+        [4, 2],
+      ],
+      honorShards: [500, 700],
+      boxHonorShards: [700, 1000],
+      chaosStones: [0, 1],
+      destructionStones: [150, 200],
+      boxDestructionStones: [300, 360],
+    },
+  },
+  {
     path: '/raids/vykas',
     label: 'Vykas',
     imgSrc: 'https://i.imgur.com/5VoXEOB.png',
@@ -112,7 +152,6 @@ const raidsInfo: Raid[] = [
     gateData: {
       gold: [350, 650],
       boxCost: [175, 290],
-      goldSolo: [170, 330],
       itemLevels: [1430],
       gateRewards: [
         [2, 1],
@@ -144,6 +183,24 @@ const raidsInfo: Raid[] = [
     },
   },
   {
+    path: '/raids/clown-solo',
+    label: 'Clown',
+    imgSrc: 'https://i.imgur.com/hOOSdDm.png',
+    gateRewardImgSrc: [['https://i.imgur.com/XoYiAKo.png']],
+    gateRewardImgToolTip: [['Mayhem Horn']],
+    gateData: {
+      gold: [200, 250, 450],
+      boxCost: [70, 95, 130],
+      itemLevels: [1475],
+      gateRewards: [[1], [2], [2]],
+      honorShards: [800, 800, 800],
+      boxHonorShards: [1300, 1300, 1600],
+      chaosStones: [0, 0, 1],
+      destructionStones: [200, 200, 280],
+      boxDestructionStones: [300, 420, 540],
+    },
+  },
+  {
     path: '/raids/clown',
     label: 'Clown',
     imgSrc: 'https://i.imgur.com/hOOSdDm.png',
@@ -152,7 +209,6 @@ const raidsInfo: Raid[] = [
     gateData: {
       gold: [400, 600, 1000],
       boxCost: [200, 335, 470],
-      goldSolo: [200, 250, 450],
       itemLevels: [1475],
       gateRewards: [[1], [2], [2]],
       honorShards: [800, 800, 800],
@@ -160,6 +216,24 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 0, 1],
       destructionStones: [200, 200, 280],
       boxDestructionStones: [300, 420, 540],
+    },
+  },
+  {
+    path: '/raids/brelshaza-solo',
+    label: 'Brelshaza',
+    imgSrc: 'https://i.imgur.com/bL9k49k.png',
+    gateRewardImgSrc: [['https://i.imgur.com/3poB3IP.png']],
+    gateRewardImgToolTip: [['Phantom Intention']],
+    gateData: {
+      gold: [400, 500, 800, 900],
+      boxCost: [100, 150, 200, 375],
+      itemLevels: [1490, 1490, 1500, 1520],
+      gateRewards: [[4], [4], [5], [7]],
+      honorShards: [1000, 1200, 1500, 3000],
+      boxHonorShards: [2100, 2700, 3400, 7000],
+      chaosStones: [0, 0, 1, 3],
+      destructionStones: [100, 100, 120, 400],
+      boxDestructionStones: [120, 180, 300, 600],
     },
   },
   {
@@ -171,7 +245,6 @@ const raidsInfo: Raid[] = [
     gateData: {
       gold: [1000, 1000, 1000, 1600],
       boxCost: [250, 300, 400, 600],
-      goldSolo: [400, 500, 800, 900],
       itemLevels: [1490, 1490, 1500, 1520],
       gateRewards: [[4], [4], [5], [7]],
       honorShards: [1000, 1200, 1500, 3000],
@@ -200,6 +273,24 @@ const raidsInfo: Raid[] = [
     },
   },
   {
+    path: '/raids/kayangel-solo',
+    label: 'Kayangel',
+    imgSrc: 'https://i.imgur.com/2P9urFh.png',
+    gateRewardImgSrc: [['https://i.imgur.com/RTrjfkO.png', 'https://i.imgur.com/Cx0nbdR.png']],
+    gateRewardImgToolTip: [["Light's Trial", 'Empyrean of Contemplation']],
+    gateData: {
+      gold: [400, 500, 800],
+      boxCost: [200, 225, 300],
+      itemLevels: [1540],
+      gateRewards: [[11], [12, 1], [17, 2]],
+      honorShards: [2000, 2500, 4000],
+      boxHonorShards: [1000, 1500, 2000],
+      chaosStones: [0, 0, 4],
+      destructionStones: [240, 280, 360],
+      boxDestructionStones: [180, 220, 300],
+    },
+  },
+  {
     path: '/raids/kayangel',
     label: 'Kayangel',
     imgSrc: 'https://i.imgur.com/2P9urFh.png',
@@ -208,7 +299,6 @@ const raidsInfo: Raid[] = [
     gateData: {
       gold: [800, 1200, 1600],
       boxCost: [300, 400, 500],
-      goldSolo: [400, 500, 800],
       itemLevels: [1540],
       gateRewards: [[11], [12, 1], [17, 2]],
       honorShards: [2000, 2500, 4000],
@@ -241,6 +331,24 @@ const raidsInfo: Raid[] = [
     },
   },
   {
+    path: '/raids/akkan-solo',
+    label: 'Akkan',
+    imgSrc: 'https://i.imgur.com/W4ekupW.png',
+    gateRewardImgSrc: [['https://i.imgur.com/UnGFUC6.png']],
+    gateRewardImgToolTip: [['Eye of Decay']],
+    gateData: {
+      gold: [800, 900, 1600],
+      boxCost: [225, 275, 375],
+      itemLevels: [1580],
+      gateRewards: [[3], [3], [5]],
+      honorShards: [1600, 1600, 2400],
+      boxHonorShards: [3000, 3000, 4200],
+      chaosStones: [0, 0, 3],
+      destructionStones: [120, 160, 240],
+      boxDestructionStones: [120, 160, 240],
+    },
+  },
+  {
     path: '/raids/akkan',
     label: 'Akkan',
     imgSrc: 'https://i.imgur.com/W4ekupW.png',
@@ -249,7 +357,6 @@ const raidsInfo: Raid[] = [
     gateData: {
       gold: [1750, 2250, 4500],
       boxCost: [450, 550, 750],
-      goldSolo: [800, 900, 1600],
       itemLevels: [1580],
       gateRewards: [[3], [3], [5]],
       honorShards: [1600, 1600, 2400],
@@ -278,6 +385,24 @@ const raidsInfo: Raid[] = [
     },
   },
   {
+    path: '/raids/voldis-solo',
+    label: 'Voldis',
+    imgSrc: 'https://i.imgur.com/sSdCEIA.png',
+    gateRewardImgSrc: [['https://i.imgur.com/LAzTJgP.png', 'https://i.imgur.com/d5VKKW1.png']],
+    gateRewardImgToolTip: [['Clear Energy of Wisdom', ' Clear Elixir of Wisdom']],
+    gateData: {
+      gold: [1000, 1200, 1700],
+      boxCost: [210, 300, 500],
+      itemLevels: [1600],
+      gateRewards: [[2], [2], [1, 1]],
+      honorShards: [1500, 1500, 2000],
+      boxHonorShards: [3000, 3000, 4500],
+      chaosStones: [0, 1, 2],
+      destructionStones: [80, 80, 100],
+      boxDestructionStones: [100, 100, 200],
+    },
+  },
+  {
     path: '/raids/voldis',
     label: 'Voldis',
     imgSrc: 'https://i.imgur.com/sSdCEIA.png',
@@ -286,7 +411,6 @@ const raidsInfo: Raid[] = [
     gateData: {
       gold: [2000, 3000, 4000],
       boxCost: [500, 550, 900],
-      goldSolo: [1000, 1200, 1700],
       itemLevels: [1600],
       gateRewards: [[2], [2], [1, 1]],
       honorShards: [1500, 1500, 2000],
