@@ -11,7 +11,7 @@ const ContentSelector = ({ currentPath }: { currentPath: string }) => {
   const [isAtEnd, setIsAtEnd] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const contentItems: Raid[] = raidsInfo.filter((raid) => !raid.path.endsWith('-hard'));
+  const contentItems: Raid[] = raidsInfo.filter((raid) => !raid.path.endsWith('-hard') && !raid.path.endsWith('-solo'));
 
   useEffect(() => {
     const container = scrollContainerRef.current;
