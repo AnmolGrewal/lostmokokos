@@ -234,8 +234,8 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
       const defaultCharacterNames = Array(savedCharacterCount)
         .fill('Character')
         .map((name, index) => `${name} ${index + 1}`);
-      const savedCheckedStates = JSON.parse(localStorage.getItem('checkedStates1') || '[]');
-      const savedBoxCheckedStates = JSON.parse(localStorage.getItem('boxCheckedStates1') || '[]');
+      const savedCheckedStates = JSON.parse(localStorage.getItem('checkedStates2') || '[]');
+      const savedBoxCheckedStates = JSON.parse(localStorage.getItem('boxCheckedStates2') || '[]');
       const savedAdditionalGold = JSON.parse(localStorage.getItem('additionalGold1') || '[]');
       const defaultAdditionalGold = new Array(savedCharacterCount).fill(0);
       const savedChaosGateRatings = JSON.parse(localStorage.getItem('chaosGateRatings') || '[]');
@@ -955,7 +955,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
                                     onChange={() => handleMainCheckboxChange(raid.path, characterIndex)}
                                   />
                                 }
-                                label={raid.path.endsWith('-hard') ? 'Hard' : 'Normal'}
+                                label={raid.path.endsWith('-hard') ? 'Hard' : raid.path.endsWith('-solo') ? 'Solo' : 'Normal'}
                                 sx={{ textAlign: 'center' }} // Center the labels
                               />
                               <Collapse in={open[raid.path]} timeout="auto" unmountOnExit>
