@@ -29,9 +29,9 @@ const RaidPage: React.FC = () => {
         localStorage.removeItem('scrollPosition');
       }
     };
-  
+
     router.events.on('routeChangeComplete', handleRouteChangeComplete);
-  
+
     return () => {
       router.events.off('routeChangeComplete', handleRouteChangeComplete);
     };
@@ -47,8 +47,8 @@ const RaidPage: React.FC = () => {
     ? raidString.includes('-hard')
       ? `${utilities.capitalize(raidString.replace('-hard', ''))} Hard`
       : raidString.includes('-solo')
-      ? `${utilities.capitalize(raidString.replace('-solo', ''))} Solo`
-      : utilities.capitalize(raidString)
+        ? `${utilities.capitalize(raidString.replace('-solo', ''))} Solo`
+        : utilities.capitalize(raidString)
     : 'Raid';
 
   const hasHardVersion = raidsInfo.some((r: Raid) => r.path === `/raids/${raidString}-hard`) || raidString.endsWith('-hard');

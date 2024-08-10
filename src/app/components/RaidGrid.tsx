@@ -14,9 +14,9 @@ import imagesData from '@/data/imageLinks';
 import FirstTimeModal from './FirstTimeModal';
 
 interface RaidGridProps {
-  raid: Raid;
-  hasHardVersion: boolean;
-  hasSoloVersion: boolean;
+raid: Raid;
+hasHardVersion: boolean;
+hasSoloVersion: boolean;
 }
 
 const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersion }) => {
@@ -148,7 +148,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
           {raid.label} Raid
           {raid.path.endsWith('-hard') ? ' Hard' : raid.path.endsWith('-solo') ? ' Solo' : ''}{' '}
           <div className="flex flex-row h-8">
-          {hasSoloVersion && (
+            {hasSoloVersion && (
               <Link href={raid.path.endsWith('-solo') ? raid.path.replace('-solo', '') : `${raid.path}-solo`}>
                 <FontAwesomeIcon
                   icon={faUserNinja}
@@ -352,27 +352,27 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
                   Rewards Clear/Box
                 </TableCell>
                 {raid.gateData.gateRewards &&
-                  raid.gateData.gateRewards.map((rewards, index) => (
-                    <TableCell key={index}>
-                      <div className="raid-table-cell min-w-max">
-                        {rewards.map((reward, rewardIndex) => (
-                          <div
-                            key={rewardIndex}
-                            className="reward-cell flex flex-row flex-shrink-0 justify-center items-center text-2xl w-fit"
-                          >
-                            <div className="reward-count">{reward}</div>
-                            <Tooltip title={`${raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][rewardIndex]}`} placement="top">
-                              <img
-                                src={raid.gateRewardImgSrc && raid.gateRewardImgSrc[0][rewardIndex]}
-                                alt={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][rewardIndex]}
-                                className="reward-img"
-                              />
-                            </Tooltip>
-                          </div>
-                        ))}
+              raid.gateData.gateRewards.map((rewards, index) => (
+                <TableCell key={index}>
+                  <div className="raid-table-cell min-w-max">
+                    {rewards.map((reward, rewardIndex) => (
+                      <div
+                        key={rewardIndex}
+                        className="reward-cell flex flex-row flex-shrink-0 justify-center items-center text-2xl w-fit"
+                      >
+                        <div className="reward-count">{reward}</div>
+                        <Tooltip title={`${raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][rewardIndex]}`} placement="top">
+                          <img
+                            src={raid.gateRewardImgSrc && raid.gateRewardImgSrc[0][rewardIndex]}
+                            alt={raid.gateRewardImgToolTip && raid.gateRewardImgToolTip[0][rewardIndex]}
+                            className="reward-img"
+                          />
+                        </Tooltip>
                       </div>
-                    </TableCell>
-                  ))}
+                    ))}
+                  </div>
+                </TableCell>
+              ))}
                 <TableCell>
                   <div className="raid-table-cell min-w-max">
                     <div className="reward-cell flex flex-row flex-shrink-0 justify-center items-center text-2xl w-fit">
@@ -555,7 +555,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
                 <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
                   Destruction Stones Earnable:{' '}
                   {(destructionStonesTotal ?? 0) +
-                    (raid?.gateData?.boxDestructionStones?.reduce((total, stones) => total + stones, 0) ?? 0)}
+                (raid?.gateData?.boxDestructionStones?.reduce((total, stones) => total + stones, 0) ?? 0)}
                 </TableCell>
               </TableRow>
             )}
