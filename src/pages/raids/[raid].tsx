@@ -46,11 +46,13 @@ const RaidPage: React.FC = () => {
   const raidLabel = raidString
     ? raidString.includes('-hard')
       ? `${utilities.capitalize(raidString.replace('-hard', ''))} Hard`
+      : raidString.includes('-solo')
+      ? `${utilities.capitalize(raidString.replace('-solo', ''))} Solo`
       : utilities.capitalize(raidString)
     : 'Raid';
 
-  // Enhanced check for hard version
   const hasHardVersion = raidsInfo.some((r: Raid) => r.path === `/raids/${raidString}-hard`) || raidString.endsWith('-hard');
+  const hasSoloVersion = raidsInfo.some((r: Raid) => r.path === `/raids/${raidString}-solo`) || raidString.endsWith('-solo');
 
   return (
     <div className="bg-primary-background-color max-w-[1000px] mx-auto">
@@ -58,7 +60,14 @@ const RaidPage: React.FC = () => {
         <title>{raidLabel} - Raid Details</title>
         <meta name="description" content={`Learn more about the ${raidLabel} raid`} />
       </Head>
-      {currentRaidData && <RaidGrid key={currentRaidData.path} raid={currentRaidData} hasHardVersion={hasHardVersion} />}
+      {currentRaidData && (
+        <RaidGrid 
+          key={currentRaidData.path} 
+          raid={currentRaidData} 
+          hasHardVersion={hasHardVersion} 
+          hasSoloVersion={hasSoloVersion}
+        />
+      )}
     </div>
   );
 };

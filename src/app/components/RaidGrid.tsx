@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tooltip } from '@mui/material';
 import { Raid } from '../../data/raidsInfo';
-import { faSkull } from '@fortawesome/free-solid-svg-icons';
+import { faSkull, faUserNinja } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
@@ -15,9 +15,10 @@ import imagesData from '@/data/imageLinks';
 interface RaidGridProps {
   raid: Raid;
   hasHardVersion: boolean;
+  hasSoloVersion: boolean;
 }
 
-const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
+const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersion }) => {
   const [dimmed, setDimmed] = useState<boolean[][] | null>(null);
   const [showDifferences, setShowDifferences] = useState<boolean>(false);
 
@@ -130,9 +131,21 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
         <img src={raid.imgSrc} alt={`${raid.label} Raid`} className="rounded-full w-48 h-48" />
         <h2 className="text-primary-text-label-color text-2xl flex">
           {raid.label} Raid
-          {raid.path.endsWith('-hard') ? ' Hard' : ' Normal'}{' '}
-          {hasHardVersion && (
-            <div className="flex flex-row h-8">
+          {raid.path.endsWith('-hard') ? ' Hard' : raid.path.endsWith('-solo') ? ' Solo' : ''}{' '}
+          <div className="flex flex-row h-8">
+          {hasSoloVersion && (
+              <Link href={raid.path.endsWith('-solo') ? raid.path.replace('-solo', '') : `${raid.path}-solo`}>
+                <FontAwesomeIcon
+                  icon={faUserNinja}
+                  className={clsx('text-blue-500', 'ml-2', { 'opacity-25': !raid.path.endsWith('-solo') }, 'ninja-icon')}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleSkullClick(raid.path.endsWith('-solo') ? raid.path.replace('-solo', '') : `${raid.path}-solo`);
+                  }}
+                />
+              </Link>
+            )}
+            {hasHardVersion && (
               <Link href={raid.path.endsWith('-hard') ? raid.path.replace('-hard', '') : `${raid.path}-hard`}>
                 <FontAwesomeIcon
                   icon={faSkull}
@@ -143,22 +156,21 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion }) => {
                   }}
                 />
               </Link>
-              {!raid.path.endsWith('-hard') && !raid.path.endsWith('-solo') && (
-                <IconButton
-                  onClick={() => setShowDifferences(!showDifferences)}
-                  aria-label="Show differences"
-                  className="ml-2" // Tailwind class for margin left
-                >
-                  <CompareArrowsIcon
-                    className={clsx('text-red-500', {
-                      'opacity-25': !showDifferences,
-                      'opacity-100': showDifferences,
-                    })}
-                  />
-                </IconButton>
-              )}
-            </div>
-          )}
+            )}
+            {!raid.path.endsWith('-hard') && !raid.path.endsWith('-solo') && (
+              <IconButton
+                onClick={() => setShowDifferences(!showDifferences)}
+                aria-label="Show differences"
+              >
+                <CompareArrowsIcon
+                  className={clsx('text-red-500', {
+                    'opacity-25': !showDifferences,
+                    'opacity-100': showDifferences,
+                  })}
+                />
+              </IconButton>
+            )}
+          </div>
         </h2>
       </div>
       <TableContainer
