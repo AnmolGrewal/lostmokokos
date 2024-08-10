@@ -25,11 +25,12 @@ const RaidGoldPage: React.FC = () => {
 
   const getRaidData = (raidLabel: string, mode: 'solo' | 'normal' | 'hard') => {
     const normalRaid = raidsInfo.find(raid => raid.label === raidLabel && !raid.path.includes('-hard'));
+    const soloRaid = raidsInfo.find(raid => raid.label === raidLabel && raid.path.includes('-solo'));
     const hardRaid = raidsInfo.find(raid => raid.label === raidLabel && raid.path.includes('-hard'));
 
     switch (mode) {
       case 'solo':
-        return normalRaid?.gateData.goldSolo;
+        return soloRaid?.gateData.gold;
       case 'normal':
         return normalRaid?.gateData.gold;
       case 'hard':
@@ -69,7 +70,7 @@ const RaidGoldPage: React.FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {raidsInfo.filter(raid => !raid.path.includes('-hard')).map((raid, index) => (
+              {raidsInfo.filter(raid => !raid.path.includes('-hard') && !raid.path.includes('-solo')).map((raid, index) => (
                 <TableRow key={raid.label} className={index % 2 === 0 ? 'even-row' : ''}>
                   <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '20px', width: '200px' }}>
                     <div className="flex items-center">
