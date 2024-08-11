@@ -219,7 +219,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
                 </TableCell>
               </TableRow>
             ) : null}
-            <TableRow>
+            <TableRow className='even-row'>
               <TableCell sx={{ fontWeight: 'bold', fontSize: '24px', width: '10%' }}>Category</TableCell>
               {raid.gateData.gold.map((_, index) => (
                 <TableCell
@@ -285,7 +285,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
 
           <TableBody>
             {rows.map((row, rowIndex) => (
-              <TableRow key={rowIndex} className={rowIndex % 2 === 0 ? 'even-row' : ''}>
+              <TableRow key={rowIndex} className={rowIndex % 2 === 1 ? 'even-row' : ''}>
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
                   {row.category}
                 </TableCell>
@@ -341,7 +341,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
               </TableRow>
             ))}
             {/* Gold Earnable row */}
-            <TableRow className="even-row">
+            <TableRow>
               <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
                 Gold Earnable: {goldEarned}
               </TableCell>
@@ -402,7 +402,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
               </TableRow>
             )}
             {raid.gateData.clearMedal && (
-              <TableRow className="even-row">
+              <TableRow>
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
                   Clear Medals
                 </TableCell>
@@ -428,7 +428,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
             )}
             {/* Row for Honor Shards Normal Clear */}
             {raid?.gateData?.honorShards && (
-              <TableRow className="min-w-max">
+              <TableRow className="min-w-max even-row">
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
                   Shards
                 </TableCell>
@@ -455,7 +455,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
 
             {/* Row for Honor Shards Box Clear */}
             {raid?.gateData?.boxHonorShards && (
-              <TableRow className="even-row min-w-max">
+              <TableRow className="min-w-max">
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
                   Box Shards
                 </TableCell>
@@ -482,7 +482,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
 
             {/* Shards Earnable row */}
             {(raid?.gateData?.honorShards || raid?.gateData?.boxHonorShards) && (
-              <TableRow>
+              <TableRow className="even-row">
                 <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
                   Honor Shards Earnable: {(honorShardsTotal ?? 0) + (boxHonorShardsTotal ?? 0)}
                 </TableCell>
@@ -490,7 +490,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
             )}
             {/* Chaos Stones Row Total */}
             {chaosStonesTotal && chaosStonesTotal > 0 && (
-              <TableRow className="even-row min-w-max">
+              <TableRow className="min-w-max">
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
                   Chaos Stones
                 </TableCell>
@@ -518,7 +518,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
             )}
             {/* Destruction Stones Row Total */}
             {destructionStonesTotal && destructionStonesTotal > 0 && (
-              <TableRow className="min-w-max">
+              <TableRow className="min-w-max even-row">
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
                   Destruction Stones
                 </TableCell>
@@ -547,7 +547,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
 
             {/* Box Destruction Stones Row Total */}
             {raid?.gateData?.boxDestructionStones && (
-              <TableRow className="even-row min-w-max">
+              <TableRow className="min-w-max">
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
                   Box Destruction Stones
                 </TableCell>
@@ -576,7 +576,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
 
             {/* Destruction Stones Earnable row */}
             {(raid?.gateData?.destructionStones || raid?.gateData?.boxDestructionStones) && (
-              <TableRow>
+              <TableRow className="even-row">
                 <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
                   Destruction Stones Earnable:{' '}
                   {(destructionStonesTotal ?? 0) +
