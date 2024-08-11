@@ -132,7 +132,7 @@ const ComparePage: React.FC = () => {
             <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Destruction Stones</TableCell>
             <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Guardian Stones</TableCell>
             <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Leapstones</TableCell>
-            <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Gems</TableCell>
+            <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Gems Level 3</TableCell>
             <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Honor Shards</TableCell>
             <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Silver</TableCell>
           </TableRow>
