@@ -121,3 +121,5 @@ const chaosInfo: ChaosData[] = [
     silver: 97820,
   },
 ];
+
+export default chaosInfo;

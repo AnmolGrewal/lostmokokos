@@ -1,12 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from 'react';
 import raidsInfo from '../../data/raidsInfo';
+import chaosInfo from '../../data/chaosInfo';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Collapse, IconButton, Tabs, Tab } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { Helmet } from 'react-helmet';
 
-const RaidGoldPage: React.FC = () => {
+const ComparePage: React.FC = () => {
   const [expandedRaids, setExpandedRaids] = useState<{ [key: string]: { [mode: string]: boolean } }>({});
   const [currentTab, setCurrentTab] = useState(0);
 
@@ -107,10 +108,50 @@ const RaidGoldPage: React.FC = () => {
   );
 
   const renderChaosDungeonTab = () => (
-    <div className="text-primary-text-color">
-      <h2 className="text-2xl font-bold mb-4">Chaos Dungeon</h2>
-      <p>Content for Chaos Dungeon tab goes here.</p>
-    </div>
+    <TableContainer
+      component={Paper}
+      sx={{
+        width: '100%',
+        maxWidth: '1000px',
+        backgroundColor: 'var(--chip-background-color)',
+        color: 'var(--primary-text-color)',
+        '.MuiTableCell-root': {
+          color: 'var(--primary-text-color)',
+          borderBottom: '2px solid var(--primary-text-label-color)',
+          paddingLeft: 2,
+          paddingRight: 2,
+        },
+      }}
+    >
+      <Table aria-label="chaos dungeon table">
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ fontWeight: 'bold', fontSize: '20px' }}>Dungeon</TableCell>
+            <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Item Level</TableCell>
+            <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Destruction Stones</TableCell>
+            <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Guardian Stones</TableCell>
+            <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Leapstones</TableCell>
+            <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Gems</TableCell>
+            <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Honor Shards</TableCell>
+            <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Silver</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {chaosInfo.map((dungeon, index) => (
+            <TableRow key={index} className={index % 2 === 0 ? 'even-row' : ''}>
+              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '20px' }}>{dungeon.label}</TableCell>
+              <TableCell align="center" sx={{ fontSize: '20px' }}>{dungeon.itemLevel}</TableCell>
+              <TableCell align="center" sx={{ fontSize: '20px' }}>{dungeon.destructionStone}</TableCell>
+              <TableCell align="center" sx={{ fontSize: '20px' }}>{dungeon.guardiannStone}</TableCell>
+              <TableCell align="center" sx={{ fontSize: '20px' }}>{dungeon.leapstone}</TableCell>
+              <TableCell align="center" sx={{ fontSize: '20px' }}>{dungeon.gem}</TableCell>
+              <TableCell align="center" sx={{ fontSize: '20px' }}>{dungeon.honorShard}</TableCell>
+              <TableCell align="center" sx={{ fontSize: '20px' }}>{dungeon.silver}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 
   const renderGuardianRaidTab = () => (
@@ -126,25 +167,15 @@ const RaidGoldPage: React.FC = () => {
         <title>Comparison Page</title>
       </Helmet>
       <div className="flex flex-col items-center w-full sm:px-4 bg-primary-background-color">
-        <h1 className="text-3xl font-bold mb-6 text-primary-text-color">Comparison Page</h1>
+        <h1 className="text-3xl font-bold mb-6 text-primary-text-label-color">Comparison Page</h1>
         <Tabs
           value={currentTab}
           onChange={(_, newValue) => setCurrentTab(newValue)}
           centered
-          aria-label="Accessory and Grid Tabs"
-          className='mt-1 mb-6 flex justify-center items-center'
+          className="mb-6"
           sx={{
-            '& .MuiTab-root': {
-              color: 'var(--primary-text-label-color)',
-              fontSize: '24px',
-            },
-            '& .Mui-selected': {
-              color: 'var(--primary-text-label-color)',
-              fontWeight: 'bold',
-            },
-            '& .MuiTabs-indicator': {
-              backgroundColor: 'var(--primary-text-label-color)',
-            },
+            '& .MuiTab-root': { color: 'var(--primary-text-color)' },
+            '& .Mui-selected': { color: 'var(--primary-text-label-color)' },
           }}
         >
           <Tab label="Gold" />
@@ -159,4 +190,4 @@ const RaidGoldPage: React.FC = () => {
   );
 };
 
-export default RaidGoldPage;
+export default ComparePage;
