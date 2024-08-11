@@ -16,7 +16,7 @@ const NavigationBar = ({ currentPath }: NavigationBarProps) => {
     { path: '/raids', label: 'Raids', icon: faDungeon },
     { path: '/characters', label: 'Character Sheet', icon: faPersonShelter },
     { path: '/engravings', label: 'Engravings', icon: faHammer },
-    { path: '/compare', label: 'Gold', icon: faPercent },
+    { path: '/compare', label: 'Compare', icon: faPercent },
     { path: 'https://discord.gg/eMdbdF9xSM', label: 'Discord', icon: faDiscord },
   ];
 
