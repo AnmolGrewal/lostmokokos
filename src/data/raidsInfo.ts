@@ -8,6 +8,7 @@ export interface GateData {
   chaosStones?: number[];
   destructionStones?: number[];
   boxDestructionStones?: number[];
+  clearMedal?: number[];
 }
 
 export interface Raid {
@@ -81,6 +82,7 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 1],
       destructionStones: [200, 240],
       boxDestructionStones: [280, 360],
+      clearMedal: [50, 70],
     },
   },
   {
@@ -102,6 +104,7 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 1],
       destructionStones: [150, 200],
       boxDestructionStones: [240, 300],
+      clearMedal: [50, 70],
     },
   },
   {
@@ -120,6 +123,7 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 1],
       destructionStones: [200, 240],
       boxDestructionStones: [360, 480],
+      clearMedal: [50, 70],
     },
   },
   {
@@ -141,6 +145,7 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 1],
       destructionStones: [240, 280],
       boxDestructionStones: [340, 420],
+      clearMedal: [60, 100],
     },
   },
   {
@@ -162,6 +167,7 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 1],
       destructionStones: [150, 200],
       boxDestructionStones: [300, 360],
+      clearMedal: [60, 100],
     },
   },
   {
@@ -180,6 +186,7 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 1],
       destructionStones: [240, 280],
       boxDestructionStones: [450, 520],
+      clearMedal: [60, 100],
     },
   },
   {
@@ -198,6 +205,7 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 0, 1],
       destructionStones: [240, 240, 280],
       boxDestructionStones: [360, 480, 600],
+      clearMedal: [60, 90, 150],
     },
   },
   {
@@ -216,6 +224,7 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 0, 1],
       destructionStones: [200, 200, 280],
       boxDestructionStones: [300, 420, 540],
+      clearMedal: [60, 90, 150],
     },
   },
   {
@@ -234,6 +243,7 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 0, 1, 3],
       destructionStones: [120, 120, 140, 420],
       boxDestructionStones: [120, 180, 300, 600],
+      clearMedal: [150, 150, 150, 250],
     },
   },
   {
@@ -252,6 +262,7 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 0, 1, 3],
       destructionStones: [100, 100, 120, 400],
       boxDestructionStones: [120, 180, 300, 600],
+      clearMedal: [150, 150, 150, 250],
     },
   },
   {
@@ -270,6 +281,7 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 0, 2, 5],
       destructionStones: [280, 320, 400, 800],
       boxDestructionStones: [260, 420, 640, 1000],
+      clearMedal: [150, 150, 150, 250],
     },
   },
   {
@@ -288,6 +300,7 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 0, 4],
       destructionStones: [260, 300, 400],
       boxDestructionStones: [220, 280, 340],
+      clearMedal: [100, 150, 200],
     },
   },
   {
@@ -306,6 +319,7 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 0, 4],
       destructionStones: [240, 280, 360],
       boxDestructionStones: [180, 220, 300],
+      clearMedal: [100, 150, 200],
     },
   },
   {
@@ -328,6 +342,7 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 0, 3],
       destructionStones: [80, 120, 150],
       boxDestructionStones: [70, 90, 120],
+      clearMedal: [100, 150, 200],
     },
   },
   {
@@ -346,6 +361,7 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 0, 3],
       destructionStones: [140, 180, 260],
       boxDestructionStones: [160, 180, 260],
+      clearMedal: [150, 200, 400],
     },
   },
   {
@@ -364,6 +380,7 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 0, 3],
       destructionStones: [120, 160, 240],
       boxDestructionStones: [120, 160, 240],
+      clearMedal: [150, 200, 400],
     },
   },
   {
@@ -382,6 +399,7 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 0, 3],
       destructionStones: [180, 200, 320],
       boxDestructionStones: [200, 240, 360],
+      clearMedal: [150, 200, 400],
     },
   },
   {
@@ -400,6 +418,7 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 0, 3],
       destructionStones: [200, 200, 260],
       boxDestructionStones: [180, 200, 280],
+      clearMedal: [200, 250, 450],
     },
   },
   {
@@ -418,6 +437,7 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 1, 2],
       destructionStones: [80, 80, 100],
       boxDestructionStones: [100, 100, 200],
+      clearMedal: [200, 250, 450],
     },
   },
   {
@@ -436,6 +456,7 @@ const raidsInfo: Raid[] = [
       chaosStones: [0, 1, 2],
       destructionStones: [100, 100, 120],
       boxDestructionStones: [150, 150, 300],
+      clearMedal: [200, 250, 450],
     },
   },
   {
