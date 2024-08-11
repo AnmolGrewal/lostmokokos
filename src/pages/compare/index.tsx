@@ -163,7 +163,7 @@ const ComparePage: React.FC = () => {
               <TableCell align="center" sx={{ fontSize: '20px' }}>
                 <div className="flex items-center justify-center">
                   <span>{dungeon.gem}</span>
-                  <img src={imagesData.gems} alt="Gems" className="w-6 h-6 ml-2" />
+                  <img src={imagesData.gems} alt="Gems" className="w-12 h-12 -ml-2" />
                 </div>
               </TableCell>
               <TableCell align="center" sx={{ fontSize: '20px' }}>
