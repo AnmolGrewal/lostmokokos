@@ -51,6 +51,8 @@ export default function Home() {
         Added Solo Raids to Raids Page
         <br />
         Added Clear Medals for Raids
+        <br />
+        Added Guardian Raid And Chaos Dungeon Data to Compare Page
       </h2>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
         <h2 className="text-lg text-primary-text-color">Todo List</h2>
