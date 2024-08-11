@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { Helmet } from 'react-helmet';
+import imagesData from '@/data/imageLinks';
 
 const ComparePage: React.FC = () => {
   const [expandedRaids, setExpandedRaids] = useState<{ [key: string]: { [mode: string]: boolean } }>({});
@@ -141,12 +142,42 @@ const ComparePage: React.FC = () => {
             <TableRow key={index} className={index % 2 === 0 ? 'even-row' : ''}>
               <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '20px' }}>{dungeon.label}</TableCell>
               <TableCell align="center" sx={{ fontSize: '20px' }}>{dungeon.itemLevel}</TableCell>
-              <TableCell align="center" sx={{ fontSize: '20px' }}>{dungeon.destructionStone}</TableCell>
-              <TableCell align="center" sx={{ fontSize: '20px' }}>{dungeon.guardiannStone}</TableCell>
-              <TableCell align="center" sx={{ fontSize: '20px' }}>{dungeon.leapstone}</TableCell>
-              <TableCell align="center" sx={{ fontSize: '20px' }}>{dungeon.gem}</TableCell>
-              <TableCell align="center" sx={{ fontSize: '20px' }}>{dungeon.honorShard}</TableCell>
-              <TableCell align="center" sx={{ fontSize: '20px' }}>{dungeon.silver}</TableCell>
+              <TableCell align="center" sx={{ fontSize: '20px' }}>
+                <div className="flex items-center justify-center">
+                  <span>{dungeon.destructionStone}</span>
+                  <img src={imagesData.destructionStones} alt="Destruction Stones" className="w-6 h-6 ml-2" />
+                </div>
+              </TableCell>
+              <TableCell align="center" sx={{ fontSize: '20px' }}>
+                <div className="flex items-center justify-center">
+                  <span>{dungeon.guardiannStone}</span>
+                  <img src={imagesData.guardianStones} alt="Guardian Stones" className="w-6 h-6 ml-2" />
+                </div>
+              </TableCell>
+              <TableCell align="center" sx={{ fontSize: '20px' }}>
+                <div className="flex items-center justify-center">
+                  <span>{dungeon.leapstone}</span>
+                  <img src={imagesData.leapStones} alt="Leapstones" className="w-6 h-6 ml-2" />
+                </div>
+              </TableCell>
+              <TableCell align="center" sx={{ fontSize: '20px' }}>
+                <div className="flex items-center justify-center">
+                  <span>{dungeon.gem}</span>
+                  <img src={imagesData.gems} alt="Gems" className="w-6 h-6 ml-2" />
+                </div>
+              </TableCell>
+              <TableCell align="center" sx={{ fontSize: '20px' }}>
+                <div className="flex items-center justify-center">
+                  <span>{dungeon.honorShard}</span>
+                  <img src={imagesData.honorShards} alt="Honor Shards" className="w-6 h-6 ml-2" />
+                </div>
+              </TableCell>
+              <TableCell align="center" sx={{ fontSize: '20px' }}>
+                <div className="flex items-center justify-center">
+                  <span>{dungeon.silver}</span>
+                  <img src={imagesData.silver} alt="Silver" className="w-6 h-6 ml-2" />
+                </div>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
