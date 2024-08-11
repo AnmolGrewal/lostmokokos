@@ -401,6 +401,31 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
                 </TableCell>
               </TableRow>
             )}
+            {raid.gateData.clearMedal && (
+              <TableRow className="even-row">
+                <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
+                  Clear Medals
+                </TableCell>
+                {raid.gateData.clearMedal.map((medals, index) => (
+                  <TableCell key={index} align="center" sx={{ fontSize: '24px' }}>
+                    <div className="flex flex-row raid-table-cell-row">
+                      <div className="reward-count">{medals}</div>
+                      <Tooltip title="Clear Medal" placement="top">
+                        <img src={imagesData.clearMedal} alt="Clear Medal" className="honor-shard-img" />
+                      </Tooltip>
+                    </div>
+                  </TableCell>
+                ))}
+                <TableCell align="center" sx={{ fontSize: '24px' }} className="min-w-max">
+                  <div className="flex flex-row raid-table-cell-row min-w-max">
+                    <div className="reward-count">{raid.gateData.clearMedal.reduce((a, b) => a + b, 0)}</div>
+                    <Tooltip title="Clear Medal" placement="top">
+                      <img src={imagesData.clearMedal} alt="Clear Medal" className="honor-shard-img" />
+                    </Tooltip>
+                  </div>
+                </TableCell>
+              </TableRow>
+            )}
             {/* Row for Honor Shards Normal Clear */}
             {raid?.gateData?.honorShards && (
               <TableRow className="min-w-max">
