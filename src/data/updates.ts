@@ -190,6 +190,11 @@ const updates: Update[] = [
     title: 'Fixed Dark Fire and Spring Water Incorrect Information',
     context: ['Dark Fire and Spring Water are now swapped'],
   },
+  {
+    date: 'August 10, 2024',
+    title: 'Added Clear Medals to All Raids that have them. Fixed Row Formatting Issues in Raid Data',
+    context: ['Now when you open certain raids Voldis and below you will see clear medals for normal, hard, and solo'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };

@@ -49,6 +49,8 @@ export default function Home() {
         Updated Character Sheet for Solo Raids Gold And Box Costs!
         <br />
         Added Solo Raids to Raids Page
+        <br />
+        Added Clear Medals for Raids
       </h2>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
         <h2 className="text-lg text-primary-text-color">Todo List</h2>
