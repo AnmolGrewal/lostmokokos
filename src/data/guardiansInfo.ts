@@ -57,3 +57,5 @@ const guardianInfo: GuardianData[] = [
     leapstone: 24,
   },
 ];
+
+export default guardianInfo;

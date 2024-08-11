@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import raidsInfo from '../../data/raidsInfo';
 import chaosInfo from '../../data/chaosInfo';
+import guardianInfo from '@/data/guardiansInfo';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Collapse, IconButton, Tabs, Tab } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -186,10 +187,59 @@ const ComparePage: React.FC = () => {
   );
 
   const renderGuardianRaidTab = () => (
-    <div className="text-primary-text-color">
-      <h2 className="text-2xl font-bold mb-4">Guardian Raid</h2>
-      <p>Content for Guardian Raid tab goes here.</p>
-    </div>
+    <TableContainer
+      component={Paper}
+      sx={{
+        width: '100%',
+        maxWidth: '1000px',
+        backgroundColor: 'var(--chip-background-color)',
+        color: 'var(--primary-text-color)',
+        '.MuiTableCell-root': {
+          color: 'var(--primary-text-color)',
+          borderBottom: '2px solid var(--primary-text-label-color)',
+          paddingLeft: 2,
+          paddingRight: 2,
+        },
+      }}
+    >
+      <Table aria-label="guardian raid table">
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ fontWeight: 'bold', fontSize: '20px' }}>Guardian</TableCell>
+            <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Item Level</TableCell>
+            <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Destruction Stones</TableCell>
+            <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Guardian Stones</TableCell>
+            <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Leapstones</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {guardianInfo.map((guardian, index) => (
+            <TableRow key={index} className={index % 2 === 0 ? 'even-row' : ''}>
+              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '20px' }}>{guardian.label}</TableCell>
+              <TableCell align="center" sx={{ fontSize: '20px' }}>{guardian.itemLevel}</TableCell>
+              <TableCell align="center" sx={{ fontSize: '20px' }}>
+                <div className="flex items-center justify-center">
+                  <span>{guardian.destructionStone}</span>
+                  <img src={imagesData.destructionStones} alt="Destruction Stones" className="w-6 h-6 ml-2" />
+                </div>
+              </TableCell>
+              <TableCell align="center" sx={{ fontSize: '20px' }}>
+                <div className="flex items-center justify-center">
+                  <span>{guardian.guardiannStone}</span>
+                  <img src={imagesData.guardianStones} alt="Guardian Stones" className="w-6 h-6 ml-2" />
+                </div>
+              </TableCell>
+              <TableCell align="center" sx={{ fontSize: '20px' }}>
+                <div className="flex items-center justify-center">
+                  <span>{guardian.leapstone}</span>
+                  <img src={imagesData.leapStones} alt="Leapstones" className="w-6 h-6 ml-2" />
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 
   return (
