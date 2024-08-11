@@ -442,8 +442,8 @@ const raidsInfo: Raid[] = [
     path: '/raids/thaemine',
     label: 'Thaemine',
     imgSrc: 'https://i.imgur.com/464OcZx.png',
-    gateRewardImgSrc: [['https://i.imgur.com/BSm95D5.png', 'https://i.imgur.com/sU7Fdcu.png']],
-    gateRewardImgToolTip: [['Magical Spring Water', 'Dark Fire']],
+    gateRewardImgSrc: [['https://i.imgur.com/sU7Fdcu.png', 'https://i.imgur.com/BSm95D5.png']],
+    gateRewardImgToolTip: [['Dark Fire', 'Magical Spring Water']],
     gateData: {
       gold: [3500, 4000, 5500],
       boxCost: [1500, 1800, 2500],
@@ -464,8 +464,8 @@ const raidsInfo: Raid[] = [
     path: '/raids/thaemine-hard',
     label: 'Thaemine',
     imgSrc: 'https://i.imgur.com/464OcZx.png',
-    gateRewardImgSrc: [['https://i.imgur.com/BSm95D5.png', 'https://i.imgur.com/sU7Fdcu.png']],
-    gateRewardImgToolTip: [['Magical Spring Water', 'Dark Fire']],
+    gateRewardImgSrc: [['https://i.imgur.com/sU7Fdcu.png', 'https://i.imgur.com/BSm95D5.png']],
+    gateRewardImgToolTip: [['Dark Fire', 'Magical Spring Water']],
     gateData: {
       gold: [5000, 6000, 9000, 21000],
       boxCost: [2000, 2400, 2800, 3600],

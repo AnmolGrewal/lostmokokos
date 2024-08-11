@@ -185,6 +185,11 @@ const updates: Update[] = [
     title: 'Fixed Critical Bug with Character Sheet Not Saving Raids',
     context: ['Now when you set your raids and refresh the page or come back they are saved'],
   },
+  {
+    date: 'August 10, 2024',
+    title: 'Fixed Dark Fire and Spring Water Incorrect Information',
+    context: ['Dark Fire and Spring Water are now swapped'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };
