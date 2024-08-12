@@ -200,6 +200,11 @@ const updates: Update[] = [
     title: 'Added Chaos Dungeon and Guardian Raids to Compare Page',
     context: ['Now you can Tab Between Gold, Chaos Dungeon and Guardian Raids to compare them all'],
   },
+  {
+    date: 'August 11, 2024',
+    title: 'Fixed Wrong Images with Silver and Ring Item',
+    context: ['Images for Silver and Ring Accessory are now correct'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };
