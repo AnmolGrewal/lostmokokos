@@ -205,6 +205,11 @@ const updates: Update[] = [
     title: 'Fixed Wrong Images with Silver and Ring Item',
     context: ['Images for Silver and Ring Accessory are now correct'],
   },
+  {
+    date: 'August 13, 2024',
+    title: 'Fixed Issue with Content Selector not selecting when Raid is Solo',
+    context: ['Now Solo Raids link back up to the Content Selector and it remains selected when you click solo Icon'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };
