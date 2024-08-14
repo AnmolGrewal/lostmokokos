@@ -42,6 +42,8 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
   const handleSkullClick = (newPath: string) => {
     const scrollPosition = window.pageYOffset;
     localStorage.setItem('scrollPosition', scrollPosition.toString());
+    const baseRaidPath = raid.path.split('-')[0];
+    localStorage.setItem(`raidPath_${baseRaidPath}`, newPath);
     router.push(newPath);
   };
 

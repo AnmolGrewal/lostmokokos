@@ -210,6 +210,11 @@ const updates: Update[] = [
     title: 'Fixed Issue with Content Selector not selecting when Raid is Solo. Updated Box Cost Text Color for better visibility',
     context: ['Now Solo Raids link back up to the Content Selector and it remains selected when you click solo Icon'],
   },
+  {
+    date: 'August 13, 2024',
+    title: 'Saves Hard/Solo/Normal Mode for Raids Based on the Raid',
+    context: ['When you Click Hard or Solo Icon it keeps it selected and saved when you revisit the page. Sometimes will not save if you swap too fast.'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };

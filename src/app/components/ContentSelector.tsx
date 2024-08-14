@@ -5,13 +5,28 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import raidsInfo, { Raid } from '../../data/raidsInfo';
 import clsx from 'clsx';
+import router from 'next/router';
 
 const ContentSelector = ({ currentPath }: { currentPath: string }) => {
   const [isAtStart, setIsAtStart] = useState(true);
   const [isAtEnd, setIsAtEnd] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-
   const contentItems: Raid[] = raidsInfo.filter((raid) => !raid.path.endsWith('-hard') && !raid.path.endsWith('-solo'));
+
+  const [hrefValues, setHrefValues] = useState<{ [key: string]: string }>({});
+  const contentItemsRef = useRef(contentItems);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && JSON.stringify(contentItemsRef.current) !== JSON.stringify(contentItems)) {
+      const newHrefValues: { [key: string]: string } = {};
+      contentItems.forEach(item => {
+        const storedPath = localStorage.getItem(`raidPath_${item.path}`);
+        newHrefValues[item.path] = storedPath || item.path;
+      });
+      setHrefValues(newHrefValues);
+      contentItemsRef.current = contentItems;
+    }
+  }, [contentItems]);
 
   useEffect(() => {
     const container = scrollContainerRef.current;
@@ -74,7 +89,14 @@ const ContentSelector = ({ currentPath }: { currentPath: string }) => {
         {contentItems.map((item, index) => (
           <Link
             key={index}
-            href={item.path}
+            href={hrefValues[item.path] || item.path}
+            onClick={(e) => {
+              const storedPath = localStorage.getItem(`raidPath_${item.path}`);
+              if (storedPath) {
+                e.preventDefault();
+                router.push(storedPath);
+              }
+            }}
             className={clsx(
               'block p-2 rounded-lg transition duration-300 ease-in-out transform shrink-0',
               currentPath === item.path || currentPath === `${item.path}-hard` || currentPath === `${item.path}-solo`

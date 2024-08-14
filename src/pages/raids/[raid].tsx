@@ -4,6 +4,8 @@ import Head from 'next/head';
 import RaidGrid from '../../app/components/RaidGrid';
 import raidsInfo, { Raid } from '../../data/raidsInfo';
 import utilities from '@/utils/utilities';
+import { debounce } from 'lodash';
+
 
 const RaidPage: React.FC = () => {
   const router = useRouter();
@@ -13,13 +15,27 @@ const RaidPage: React.FC = () => {
     const defaultRaid = '/raids/thaemine';
     const savedPath = typeof window !== 'undefined' ? localStorage.getItem('currentRaidPath') : null;
     const currentRaid = savedPath || defaultRaid;
-
+    const debouncedPush = debounce((path) => {
+      router.push(path, undefined, { shallow: true });
+    }, 300);
+  
     if (raid && typeof raid === 'string') {
-      localStorage.setItem('currentRaidPath', `/raids/${raid}`);
-    } else {
-      router.push(currentRaid);
+      const baseRaidPath = `/raids/${raid.split('-')[0]}`;
+      const storedPath = localStorage.getItem(`raidPath_${baseRaidPath}`);
+      if (storedPath) {
+        debouncedPush(storedPath);
+      } else {
+        localStorage.setItem('currentRaidPath', `/raids/${raid}`);
+      }
+    } else if (currentRaid) {
+      debouncedPush(currentRaid);
     }
+  
+    return () => {
+      debouncedPush.cancel();
+    };
   }, [raid, router]);
+  
 
   useEffect(() => {
     const handleRouteChangeComplete = () => {
