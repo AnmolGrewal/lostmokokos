@@ -21,20 +21,20 @@ export default function Home() {
 
   const handleAddTodo = () => {
     if (input) {
-      setTodos((todos) => [...todos, input]);
+      setTodos((prevTodos) => [...prevTodos, input]);
       setInput('');
     }
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      event.preventDefault(); // Prevent form from submitting
+      event.preventDefault();
       handleAddTodo();
     }
   };
 
   const handleRemoveTodo = (index: number) => {
-    const newTodos = todos.filter((_, i) => i !== index);
+    const newTodos = todos.filter((_: string, i: number) => i !== index);
     setTodos(newTodos);
   };
 
@@ -76,7 +76,7 @@ export default function Home() {
           </button>
         </form>
         <ul>
-          {todos.map((todo, index) => (
+          {todos.map((todo: string, index: number) => (
             <li key={index} className="flex justify-between items-center">
               {todo}
               <button className="text-red-500" onClick={() => handleRemoveTodo(index)}>
