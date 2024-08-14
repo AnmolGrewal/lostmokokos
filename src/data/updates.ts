@@ -207,7 +207,7 @@ const updates: Update[] = [
   },
   {
     date: 'August 13, 2024',
-    title: 'Fixed Issue with Content Selector not selecting when Raid is Solo',
+    title: 'Fixed Issue with Content Selector not selecting when Raid is Solo. Updated Box Cost Text Color for better visibility',
     context: ['Now Solo Raids link back up to the Content Selector and it remains selected when you click solo Icon'],
   },
 ].reverse();
