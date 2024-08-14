@@ -215,6 +215,11 @@ const updates: Update[] = [
     title: 'Saves Hard/Solo/Normal Mode for Raids Based on the Raid',
     context: ['When you Click Hard or Solo Icon it keeps it selected and saved when you revisit the page. Sometimes will not save if you swap too fast.'],
   },
+  {
+    date: 'August 14, 2024',
+    title: 'Updated Solo Raid Gold Data for Box and Gold Earned',
+    context: ['Solo Gold Everywhere now correctly reflects bound gold'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };

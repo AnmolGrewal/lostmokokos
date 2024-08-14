@@ -70,8 +70,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/VCqULik.png', 'https://i.imgur.com/CloDByc.png']],
     gateRewardImgToolTip: [['Demon Beast Bone', 'Demon Beast Tendon']],
     gateData: {
-      gold: [120, 230],
-      boxCost: [45, 60],
+      gold: [240, 360],
+      boxCost: [140, 200],
       itemLevels: [1415],
       gateRewards: [
         [1, 3],
@@ -133,8 +133,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/uzmLA6L.png', 'https://i.imgur.com/YhGuP3L.png']],
     gateRewardImgToolTip: [['Covetous Fang', 'Covetous Wing']],
     gateData: {
-      gold: [170, 330],
-      boxCost: [60, 100],
+      gold: [280, 520],
+      boxCost: [140, 230],
       itemLevels: [1430],
       gateRewards: [
         [2, 1],
@@ -196,8 +196,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/XoYiAKo.png']],
     gateRewardImgToolTip: [['Mayhem Horn']],
     gateData: {
-      gold: [200, 250, 450],
-      boxCost: [70, 95, 130],
+      gold: [320, 480, 800],
+      boxCost: [160, 265, 375],
       itemLevels: [1475],
       gateRewards: [[1], [2], [2]],
       honorShards: [1000, 1000, 1000],
@@ -234,8 +234,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/3poB3IP.png']],
     gateRewardImgToolTip: [['Phantom Intention']],
     gateData: {
-      gold: [400, 500, 800, 900],
-      boxCost: [100, 150, 200, 375],
+      gold: [800, 800, 800, 1280],
+      boxCost: [140, 210, 280, 530],
       itemLevels: [1490, 1490, 1500, 1520],
       gateRewards: [[4], [4], [5], [7]],
       honorShards: [1100, 1300, 1600, 3000],
@@ -291,8 +291,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/RTrjfkO.png', 'https://i.imgur.com/Cx0nbdR.png']],
     gateRewardImgToolTip: [["Light's Trial", 'Empyrean of Contemplation']],
     gateData: {
-      gold: [400, 500, 800],
-      boxCost: [200, 225, 300],
+      gold: [640, 960, 1280],
+      boxCost: [240, 320, 400],
       itemLevels: [1540],
       gateRewards: [[11], [12, 1], [17, 2]],
       honorShards: [2100, 2500, 4100],
@@ -352,8 +352,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/UnGFUC6.png']],
     gateRewardImgToolTip: [['Eye of Decay']],
     gateData: {
-      gold: [800, 900, 1600],
-      boxCost: [225, 275, 375],
+      gold: [1400, 1800, 3600],
+      boxCost: [720, 880, 1200],
       itemLevels: [1580],
       gateRewards: [[3], [3], [5]],
       honorShards: [2700, 2700, 4200],
@@ -409,8 +409,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/LAzTJgP.png', 'https://i.imgur.com/d5VKKW1.png']],
     gateRewardImgToolTip: [['Clear Energy of Wisdom', ' Clear Elixir of Wisdom']],
     gateData: {
-      gold: [1000, 1200, 1700],
-      boxCost: [210, 300, 500],
+      gold: [1600, 2400, 3200],
+      boxCost: [400, 440, 720],
       itemLevels: [1600],
       gateRewards: [[4], [4], [8, 2]],
       honorShards: [3000, 3000, 4500],

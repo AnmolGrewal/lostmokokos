@@ -53,6 +53,8 @@ export default function Home() {
         Added Clear Medals for Raids
         <br />
         Added Guardian Raid And Chaos Dungeon Data to Compare Page
+        <br />
+        Updated Solo Gold To Bound Gold and Updated Box Costs for Solo Gold
       </h2>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
         <h2 className="text-lg text-primary-text-color">Todo List</h2>
