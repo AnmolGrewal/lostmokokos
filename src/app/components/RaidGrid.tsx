@@ -174,7 +174,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
                 />
               </Link>
             )}
-            {!raid.path.endsWith('-hard') && !raid.path.endsWith('-solo') && (
+            {!raid.path.endsWith('-hard') && !raid.path.endsWith('-solo') && hasHardVersion && (
               <IconButton
                 onClick={() => setShowDifferences(!showDifferences)}
                 aria-label="Show differences"

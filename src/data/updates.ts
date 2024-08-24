@@ -225,6 +225,11 @@ const updates: Update[] = [
     title: 'Updated Tier 4 Release Date',
     context: ['Tier 4 Release Date is now October 9.'],
   },
+  {
+    date: 'August 24, 2024',
+    title: 'Added Behemoth Raid',
+    context: ['Added Behemoth Raid to Raids'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };

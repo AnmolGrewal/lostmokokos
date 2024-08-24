@@ -46,15 +46,7 @@ export default function Home() {
       </Helmet>
       <h1 className="text-4xl text-center mt-4 mb-4 text-[48px]">Lost Mokokos</h1>
       <h2 className="text-primary-text-color text-center text-2xl">
-        Updated Character Sheet for Solo Raids Gold And Box Costs!
-        <br />
-        Added Solo Raids to Raids Page
-        <br />
-        Added Clear Medals for Raids
-        <br />
-        Added Guardian Raid And Chaos Dungeon Data to Compare Page
-        <br />
-        Updated Solo Gold To Bound Gold and Updated Box Costs for Solo Gold
+        Added Behemoth Raid
       </h2>
       <div className="m-5 bg-secondary-background-color p-5 rounded-lg">
         <h2 className="text-lg text-primary-text-color">Todo List</h2>

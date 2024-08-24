@@ -540,6 +540,22 @@ const raidsInfo: Raid[] = [
       boxDestructionStones: [650, 960],
     },
   },
+  {
+    path: '/raids/behemoth',
+    label: 'Behemoth',
+    imgSrc: 'https://i.imgur.com/h8qcYOy.png',
+    gateRewardImgSrc: [['https://i.imgur.com/7e19M0E.png' , 'https://i.imgur.com/BSm95D5.png']],
+    gateRewardImgToolTip: [['Behemoth Scale' , 'Magical Spring Water']],
+    gateData: {
+      gold: [7000, 14500],
+      boxCost: [3100, 4900],
+      itemLevels: [1620],
+      gateRewards: [
+        [10, 10],
+        [20, 18],
+      ],
+    },
+  },
 ];
 
 export default raidsInfo;
