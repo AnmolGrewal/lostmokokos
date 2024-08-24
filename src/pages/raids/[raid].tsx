@@ -5,6 +5,7 @@ import RaidGrid from '../../app/components/RaidGrid';
 import raidsInfo, { Raid } from '../../data/raidsInfo';
 import utilities from '@/utils/utilities';
 import { debounce } from 'lodash';
+import constants from '../../data/constants'
 
 
 const RaidPage: React.FC = () => {
@@ -12,7 +13,7 @@ const RaidPage: React.FC = () => {
   const { raid } = router.query;
 
   useEffect(() => {
-    const defaultRaid = '/raids/thaemine';
+    const defaultRaid = constants.defaultRaid;
     const savedPath = typeof window !== 'undefined' ? localStorage.getItem('currentRaidPath') : null;
     const currentRaid = savedPath || defaultRaid;
     const debouncedPush = debounce((path) => {

@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import ContentSelector from '../../app/components/ContentSelector';
+import constants from '../../data/constants';
 
 const RaidsIndexPage: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const defaultRaid = '/raids/thaemine'; // Default to the Thaemine raid
+    const defaultRaid = constants.defaultRaid
     const savedRaid = localStorage.getItem('currentRaidPath');
     const raidPath = savedRaid || defaultRaid;
     const savedScrollPosition = localStorage.getItem('scrollPosition');
