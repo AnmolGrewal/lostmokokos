@@ -220,6 +220,11 @@ const updates: Update[] = [
     title: 'Updated Solo Raid Gold Data for Box and Gold Earned',
     context: ['Solo Gold Everywhere now correctly reflects bound gold'],
   },
+  {
+    date: 'August 24, 2024',
+    title: 'Updated Tier 4 Release Date',
+    context: ['Tier 4 Release Date is now October 9.'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };

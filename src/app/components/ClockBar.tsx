@@ -10,7 +10,7 @@ const ClockBar = () => {
   const calculateCountdowns = () => {
     const now = moment().tz('America/Los_Angeles');
 
-    const nextUpdateDate = moment.tz('2024-07-23 03:00', 'America/Los_Angeles');
+    const nextUpdateDate = moment.tz('2024-10-09 03:00', 'America/Los_Angeles');
     const daysUntilUpdate = nextUpdateDate.diff(now, 'days');
     const hoursUntilUpdate = nextUpdateDate.subtract(daysUntilUpdate, 'days').diff(now, 'hours');
     const nextUpdate = `${daysUntilUpdate > 0 ? daysUntilUpdate + 'd ' : ''}${hoursUntilUpdate > 0 ? hoursUntilUpdate + 'h' : ''}`;
