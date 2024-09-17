@@ -1,14 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import React from 'react';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { EngravingItem, NegativeEngraving, engravingItems, negativeEngravings } from '../../data/engravings'; // Adjust the import path as needed
+import { EngravingItem, NegativeEngraving } from '../../data/engravings'; // Adjust the import path as needed
 
 interface EngravingGridProps {
   selectedEngravings: string[];
   accessoryEngravings: string[][];
   accessoryLevels: number[][];
-  engravingItems: typeof engravingItems;
+  engravingItems: EngravingItem[];
   negativeEngravings: NegativeEngraving[];
 }
 
