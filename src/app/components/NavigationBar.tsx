@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faDungeon, faPersonShelter, faHammer, faPercent } from '@fortawesome/free-solid-svg-icons';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import { faDiscord } from '@fortawesome/free-brands-svg-icons';
 
 interface NavigationBarProps {
   currentPath: string;
@@ -17,7 +16,6 @@ const NavigationBar = ({ currentPath }: NavigationBarProps) => {
     { path: '/characters', label: 'Character Sheet', icon: faPersonShelter },
     { path: '/engravings', label: 'Engravings', icon: faHammer },
     { path: '/compare', label: 'Compare', icon: faPercent },
-    { path: 'https://discord.gg/eMdbdF9xSM', label: 'Discord', icon: faDiscord },
   ];
 
   const router = useRouter();
@@ -29,7 +27,7 @@ const NavigationBar = ({ currentPath }: NavigationBarProps) => {
   return (
     <div className="bg-secondary-background-color w-full h-14 flex justify-center items-center">
       <div className="flex gap-4 items-center">
-        {navItems.slice(0, -1).map((item) => (
+        {navItems.map((item) => (
           <Link
             href={item.path}
             key={item.label}
@@ -53,23 +51,6 @@ const NavigationBar = ({ currentPath }: NavigationBarProps) => {
             <span className={clsx('ml-2 text-lg text-chip-text-color font-bold', 'hide-on-small')}>{item.label}</span>
           </Link>
         ))}
-      </div>
-      <div className="flex items-center ml-4">
-        <Link
-          href={navItems[navItems.length - 1].path}
-          key={navItems[navItems.length - 1].label}
-          passHref
-          className="flex items-center px-3 py-1 rounded-full transition-all duration-300 ease-in-out bg-chip-background-color hover:bg-primary-background-hover-color hover:scale-105 cursor-pointer"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <div className="text-chip-text-color bg-image-background-color rounded-full p-2">
-            <FontAwesomeIcon icon={navItems[navItems.length - 1].icon} className="text-xl" />
-          </div>
-          <span className={clsx('ml-2 text-lg text-chip-text-color font-bold', 'hide-on-small')}>
-            {navItems[navItems.length - 1].label}
-          </span>
-        </Link>
       </div>
     </div>
   );
