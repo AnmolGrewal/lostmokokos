@@ -537,7 +537,7 @@ const raidsInfo: Raid[] = [
       boxHonorShards: [7500, 11000],
       chaosStones: [0, 7],
       destructionStones: [220, 280],
-      boxDestructionStones: [650, 960],
+      boxDestructionStones: [650, 950],
     },
   },
   {
@@ -554,6 +554,11 @@ const raidsInfo: Raid[] = [
         [10, 10],
         [20, 18],
       ],
+      honorShards: [4000, 5400],
+      boxHonorShards: [7500, 11000],
+      chaosStones: [0, 10],
+      destructionStones: [220, 280],
+      boxDestructionStones: [650, 950],
     },
   },
 ];
