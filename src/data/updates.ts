@@ -230,6 +230,11 @@ const updates: Update[] = [
     title: 'Added Behemoth Raid',
     context: ['Added Behemoth Raid to Raids'],
   },
+  {
+    date: 'Oct 7, 2024',
+    title: 'Fixed Behemoth Raid Gold Cost And Box Cost',
+    context: ['Fixed Behemoth Raid Gold Cost And Box Cost'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };

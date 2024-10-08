@@ -547,8 +547,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/7e19M0E.png' , 'https://i.imgur.com/BSm95D5.png']],
     gateRewardImgToolTip: [['Behemoth Scale' , 'Magical Spring Water']],
     gateData: {
-      gold: [7000, 14500],
-      boxCost: [3100, 4900],
+      gold: [6500, 11500],
+      boxCost: [1800, 2700],
       itemLevels: [1620],
       gateRewards: [
         [10, 10],
