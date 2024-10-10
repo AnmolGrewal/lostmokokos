@@ -44,14 +44,14 @@ const guardianInfo: GuardianData[] = [
   },
   {
     label: 'Gargadeth',
-    itemLevel: 1610,
+    itemLevel: 1600,
     destructionStone: 103,
     guardiannStone: 301,
     leapstone: 12,
   },
   {
     label: 'Vescal',
-    itemLevel: 1630,
+    itemLevel: 1610,
     destructionStone: 166,
     guardiannStone: 506,
     leapstone: 24,

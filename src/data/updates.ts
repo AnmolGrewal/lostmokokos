@@ -235,6 +235,11 @@ const updates: Update[] = [
     title: 'Fixed Behemoth Raid Gold Cost And Box Cost',
     context: ['Fixed Behemoth Raid Gold Cost And Box Cost'],
   },
+  {
+    date: 'Oct 9, 2024',
+    title: 'Fixed item level requirements for guardian raids',
+    context: ['Fixed item level requirements for guardian raids'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };
