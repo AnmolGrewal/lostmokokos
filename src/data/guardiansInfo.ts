@@ -56,6 +56,13 @@ const guardianInfo: GuardianData[] = [
     guardiannStone: 506,
     leapstone: 24,
   },
+  {
+    label: 'Argeos',
+    itemLevel: 1640,
+    destructionStone: 0,
+    guardiannStone: 0,
+    leapstone: 0,
+  },
 ];
 
 export default guardianInfo;

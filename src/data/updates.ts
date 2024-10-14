@@ -240,6 +240,11 @@ const updates: Update[] = [
     title: 'Fixed item level requirements for guardian raids',
     context: ['Fixed item level requirements for guardian raids'],
   },
+  {
+    date: 'Oct 13, 2024',
+    title: 'Updated all data for new patch',
+    context: ['Updated all gold and rewards for new balance patch'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };

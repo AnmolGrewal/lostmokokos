@@ -352,7 +352,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/UnGFUC6.png']],
     gateRewardImgToolTip: [['Eye of Decay']],
     gateData: {
-      gold: [1400, 1800, 3600],
+      gold: [800, 1440, 2080],
       boxCost: [720, 880, 1200],
       itemLevels: [1580],
       gateRewards: [[3], [3], [5]],
@@ -371,7 +371,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/UnGFUC6.png']],
     gateRewardImgToolTip: [['Eye of Decay']],
     gateData: {
-      gold: [1750, 2250, 4500],
+      gold: [1000, 1800, 2600],
       boxCost: [450, 550, 750],
       itemLevels: [1580],
       gateRewards: [[3], [3], [5]],
@@ -409,7 +409,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/LAzTJgP.png', 'https://i.imgur.com/d5VKKW1.png']],
     gateRewardImgToolTip: [['Clear Energy of Wisdom', ' Clear Elixir of Wisdom']],
     gateData: {
-      gold: [1600, 2400, 3200],
+      gold: [1200, 1600, 2400],
       boxCost: [400, 440, 720],
       itemLevels: [1600],
       gateRewards: [[4], [4], [8, 2]],
@@ -428,7 +428,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/LAzTJgP.png', 'https://i.imgur.com/d5VKKW1.png']],
     gateRewardImgToolTip: [['Clear Energy of Wisdom', ' Clear Elixir of Wisdom']],
     gateData: {
-      gold: [2000, 3000, 4000],
+      gold: [1500, 2000, 3000],
       boxCost: [500, 550, 900],
       itemLevels: [1600],
       gateRewards: [[4], [4], [8, 2]],
@@ -447,7 +447,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/XYyJ9aG.png', 'https://i.imgur.com/dS0ZviV.png']],
     gateRewardImgToolTip: [['Splendid Energy of Wisdom', 'Splendid Elixir of Wisdom']],
     gateData: {
-      gold: [3500, 4500, 6500],
+      gold: [3000, 4000, 6000],
       boxCost: [750, 900, 1350],
       itemLevels: [1620],
       gateRewards: [[4], [4], [8, 2]],
@@ -511,7 +511,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/paUGipq.png']],
     gateRewardImgToolTip: [['Scale of Agris']],
     gateData: {
-      gold: [5000, 9500],
+      gold: [6000, 10000],
       boxCost: [2200, 3400],
       itemLevels: [1620],
       gateRewards: [[3], [6]],
@@ -529,7 +529,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/9O6FFL2.png']],
     gateRewardImgToolTip: [['Alcyone Eye']],
     gateData: {
-      gold: [6000, 12500],
+      gold: [7000, 12500],
       boxCost: [2800, 4100],
       itemLevels: [1630],
       gateRewards: [[3], [6]],

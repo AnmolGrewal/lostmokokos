@@ -120,6 +120,26 @@ const chaosInfo: ChaosData[] = [
     honorShard: 14515,
     silver: 97820,
   },
+  {
+    label: 'North Kurzan',
+    itemLevel: 1640,
+    destructionStone: 0,
+    guardiannStone: 0,
+    leapstone: 0,
+    gem: 0,
+    honorShard: 0,
+    silver: 0,
+  },
+  {
+    label: 'North Kurzan',
+    itemLevel: 1660,
+    destructionStone: 0,
+    guardiannStone: 0,
+    leapstone: 0,
+    gem: 0,
+    honorShard: 0,
+    silver: 0,
+  },
 ];
 
 export default chaosInfo;
