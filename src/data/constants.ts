@@ -1,5 +1,5 @@
 const constants = {
-  defaultRaid: "/raids/behemoth",
+  defaultRaid: "/raids/aegir",
 }
 
 export default constants;
