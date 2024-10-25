@@ -41,26 +41,31 @@ const ComparePage: React.FC = () => {
         return hardRaid?.gateData.gold;
     }
   };
+  
+  const commonSXProperty = {
+    width: '100%',
+    maxWidth: '1000px',
+    backgroundColor: 'var(--chip-background-color)',
+    color: 'var(--primary-text-color)',
+    '.MuiTableCell-root': {
+      color: 'var(--primary-text-color)',
+      borderBottom: '2px solid var(--primary-text-label-color)',
+      paddingLeft: 2,
+      paddingRight: 2,
+    },
+    '& tr:nth-of-type(even)': {
+      backgroundColor: 'var(--secondary-background-color)'
+    }
+  }
 
   const renderGoldTab = () => (
     <TableContainer
       component={Paper}
-      sx={{
-        width: '100%',
-        maxWidth: '1000px',
-        backgroundColor: 'var(--chip-background-color)',
-        color: 'var(--primary-text-color)',
-        '.MuiTableCell-root': {
-          color: 'var(--primary-text-color)',
-          borderBottom: '2px solid var(--primary-text-label-color)',
-          paddingLeft: 2,
-          paddingRight: 2,
-        },
-      }}
+      sx={commonSXProperty}
     >
       <Table aria-label="raid gold table">
         <TableHead>
-          <TableRow>
+          <TableRow className='even-row'>
             <TableCell sx={{ fontWeight: 'bold', fontSize: '20px', width: '200px' }}>Raid</TableCell>
             <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Solo</TableCell>
             <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Normal</TableCell>
@@ -68,8 +73,8 @@ const ComparePage: React.FC = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {raidsInfo.filter(raid => !raid.path.includes('-hard') && !raid.path.includes('-solo')).map((raid, index) => (
-            <TableRow key={raid.label} className={index % 2 === 0 ? 'even-row' : ''}>
+          {raidsInfo.reverse().filter(raid => !raid.path.includes('-hard') && !raid.path.includes('-solo')).map((raid) => (
+            <TableRow key={raid.label}>
               <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '20px', width: '200px' }}>
                 <div className="flex items-center">
                   <img src={raid.imgSrc} alt={raid.label} className="w-10 h-10 mr-2" />
@@ -112,22 +117,11 @@ const ComparePage: React.FC = () => {
   const renderChaosDungeonTab = () => (
     <TableContainer
       component={Paper}
-      sx={{
-        width: '100%',
-        maxWidth: '1000px',
-        backgroundColor: 'var(--chip-background-color)',
-        color: 'var(--primary-text-color)',
-        '.MuiTableCell-root': {
-          color: 'var(--primary-text-color)',
-          borderBottom: '2px solid var(--primary-text-label-color)',
-          paddingLeft: 2,
-          paddingRight: 2,
-        },
-      }}
+      sx={commonSXProperty}
     >
       <Table aria-label="chaos dungeon table">
         <TableHead>
-          <TableRow>
+          <TableRow className='even-row'>
             <TableCell sx={{ fontWeight: 'bold', fontSize: '20px' }}>Dungeon</TableCell>
             <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Item Level</TableCell>
             <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Destruction Stones</TableCell>
@@ -140,7 +134,7 @@ const ComparePage: React.FC = () => {
         </TableHead>
         <TableBody>
           {chaosInfo.map((dungeon, index) => (
-            <TableRow key={index} className={index % 2 === 0 ? 'even-row' : ''}>
+            <TableRow key={index}>
               <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '20px' }}>{dungeon.label}</TableCell>
               <TableCell align="center" sx={{ fontSize: '20px' }}>{dungeon.itemLevel}</TableCell>
               <TableCell align="center" sx={{ fontSize: '20px' }}>
@@ -189,22 +183,11 @@ const ComparePage: React.FC = () => {
   const renderGuardianRaidTab = () => (
     <TableContainer
       component={Paper}
-      sx={{
-        width: '100%',
-        maxWidth: '1000px',
-        backgroundColor: 'var(--chip-background-color)',
-        color: 'var(--primary-text-color)',
-        '.MuiTableCell-root': {
-          color: 'var(--primary-text-color)',
-          borderBottom: '2px solid var(--primary-text-label-color)',
-          paddingLeft: 2,
-          paddingRight: 2,
-        },
-      }}
+      sx={commonSXProperty}
     >
       <Table aria-label="guardian raid table">
         <TableHead>
-          <TableRow>
+          <TableRow className='even-row'>
             <TableCell sx={{ fontWeight: 'bold', fontSize: '20px' }}>Guardian</TableCell>
             <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Item Level</TableCell>
             <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Destruction Stones</TableCell>
@@ -214,7 +197,7 @@ const ComparePage: React.FC = () => {
         </TableHead>
         <TableBody>
           {guardianInfo.map((guardian, index) => (
-            <TableRow key={index} className={index % 2 === 0 ? 'even-row' : ''}>
+            <TableRow key={index}>
               <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '20px' }}>{guardian.label}</TableCell>
               <TableCell align="center" sx={{ fontSize: '20px' }}>{guardian.itemLevel}</TableCell>
               <TableCell align="center" sx={{ fontSize: '20px' }}>
