@@ -151,7 +151,7 @@ const ComparePage: React.FC = () => {
               </TableCell>
               <TableCell align="center" sx={{ fontSize: '20px' }}>
                 <div className="flex items-center justify-center">
-                  <span>{dungeon.guardiannStone}</span>
+                  <span>{dungeon.guardianStone}</span>
                   <img src={imagesData.guardianStones} alt="Guardian Stones" className="w-6 h-6 ml-2" />
                 </div>
               </TableCell>
@@ -225,7 +225,7 @@ const ComparePage: React.FC = () => {
               </TableCell>
               <TableCell align="center" sx={{ fontSize: '20px' }}>
                 <div className="flex items-center justify-center">
-                  <span>{guardian.guardiannStone}</span>
+                  <span>{guardian.guardianStone}</span>
                   <img src={imagesData.guardianStones} alt="Guardian Stones" className="w-6 h-6 ml-2" />
                 </div>
               </TableCell>
