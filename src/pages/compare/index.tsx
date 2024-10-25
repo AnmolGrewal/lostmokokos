@@ -58,61 +58,67 @@ const ComparePage: React.FC = () => {
     }
   }
 
-  const renderGoldTab = () => (
-    <TableContainer
-      component={Paper}
-      sx={commonSXProperty}
-    >
-      <Table aria-label="raid gold table">
-        <TableHead>
-          <TableRow className='even-row'>
-            <TableCell sx={{ fontWeight: 'bold', fontSize: '20px', width: '200px' }}>Raid</TableCell>
-            <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Solo</TableCell>
-            <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Normal</TableCell>
-            <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Hard</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {raidsInfo.reverse().filter(raid => !raid.path.includes('-hard') && !raid.path.includes('-solo')).map((raid) => (
-            <TableRow key={raid.label}>
-              <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '20px', width: '200px' }}>
-                <div className="flex items-center">
-                  <img src={raid.imgSrc} alt={raid.label} className="w-10 h-10 mr-2" />
-                  <span>{raid.label}</span>
-                </div>
-              </TableCell>
-              {['solo', 'normal', 'hard'].map((mode) => {
-                const totalGold = calculateTotalGold(getRaidData(raid.label, mode as 'solo' | 'normal' | 'hard'));
-                return (
-                  <TableCell key={mode} align="center" sx={{ fontSize: '20px' }}>
-                    {totalGold > 0 ? (
-                      <div className="flex items-center justify-center">
-                        <span>{totalGold}</span>
-                        <IconButton
-                          onClick={() => toggleRaidExpansion(raid.label, mode)}
-                          size="small"
-                          sx={{ color: 'var(--primary-text-color)', ml: 1 }}
-                        >
-                          {expandedRaids[raid.label]?.[mode] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                        </IconButton>
-                      </div>
-                    ) : null}
-                    <Collapse in={expandedRaids[raid.label]?.[mode]} timeout="auto" unmountOnExit>
-                      <div style={{ fontSize: '20px', textAlign: 'center', marginTop: '8px' }}>
-                        {getRaidData(raid.label, mode as 'solo' | 'normal' | 'hard')?.map((gold, index) => (
-                          <div key={index}>Gate {index + 1}: {gold}</div>
-                        )) || 'N/A'}
-                      </div>
-                    </Collapse>
-                  </TableCell>
-                );
-              })}
+  const renderGoldTab = () => {
+    const sortedRaids = [...raidsInfo].reverse().filter(raid => 
+      !raid.path.includes('-hard') && !raid.path.includes('-solo')
+    );
+    
+    return (
+      <TableContainer
+        component={Paper}
+        sx={commonSXProperty}
+      >
+        <Table aria-label="raid gold table">
+          <TableHead>
+            <TableRow className='even-row'>
+              <TableCell sx={{ fontWeight: 'bold', fontSize: '20px', width: '200px' }}>Raid</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Solo</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Normal</TableCell>
+              <TableCell align="center" sx={{ fontWeight: 'bold', fontSize: '20px' }}>Hard</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+          </TableHead>
+          <TableBody>
+            {sortedRaids.map((raid) => (
+              <TableRow key={raid.label}>
+                <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '20px', width: '200px' }}>
+                  <div className="flex items-center">
+                    <img src={raid.imgSrc} alt={raid.label} className="w-10 h-10 mr-2" />
+                    <span>{raid.label}</span>
+                  </div>
+                </TableCell>
+                {['solo', 'normal', 'hard'].map((mode) => {
+                  const totalGold = calculateTotalGold(getRaidData(raid.label, mode as 'solo' | 'normal' | 'hard'));
+                  return (
+                    <TableCell key={mode} align="center" sx={{ fontSize: '20px' }}>
+                      {totalGold > 0 ? (
+                        <div className="flex items-center justify-center">
+                          <span>{totalGold}</span>
+                          <IconButton
+                            onClick={() => toggleRaidExpansion(raid.label, mode)}
+                            size="small"
+                            sx={{ color: 'var(--primary-text-color)', ml: 1 }}
+                          >
+                            {expandedRaids[raid.label]?.[mode] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                          </IconButton>
+                        </div>
+                      ) : null}
+                      <Collapse in={expandedRaids[raid.label]?.[mode]} timeout="auto" unmountOnExit>
+                        <div style={{ fontSize: '20px', textAlign: 'center', marginTop: '8px' }}>
+                          {getRaidData(raid.label, mode as 'solo' | 'normal' | 'hard')?.map((gold, index) => (
+                            <div key={index}>Gate {index + 1}: {gold}</div>
+                          )) || 'N/A'}
+                        </div>
+                      </Collapse>
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
+  };
 
   const renderChaosDungeonTab = () => (
     <TableContainer
