@@ -245,6 +245,11 @@ const updates: Update[] = [
     title: 'Updated all data for new patch',
     context: ['Updated all gold and rewards for new balance patch'],
   },
+  {
+    date: 'Oct 24, 2024',
+    title: 'Updated all data for new patch',
+    context: ['Fixed Akkan Hard Mode Gold. Added Argeos Drops Data. Added Chaos Gates T4. Added New Raid Aegir'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };

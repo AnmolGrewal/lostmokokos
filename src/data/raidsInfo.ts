@@ -561,6 +561,40 @@ const raidsInfo: Raid[] = [
       boxDestructionStones: [650, 950],
     },
   },
+  {
+    path: '/raids/aegir',
+    label: 'Aegir',
+    imgSrc: 'https://i.imgur.com/VgFaAwm.png',
+    gateRewardImgSrc: [['https://i.imgur.com/A6B4rIn.png']],
+    gateRewardImgToolTip: [['Hellfire Keystone']],
+    gateData: {
+      gold: [7500, 15500],
+      boxCost: [3200, 5300],
+      itemLevels: [1660],
+      gateRewards: [[4], [6]],
+      honorShards: [3600, 4400],
+      boxHonorShards: [6500, 9500],
+      destructionStones: [480, 580],
+      boxDestructionStones: [850, 1150],
+    },
+  },
+  {
+    path: '/raids/aegir-hard',
+    label: 'Aegir',
+    imgSrc: 'https://i.imgur.com/VgFaAwm.png',
+    gateRewardImgSrc: [['https://i.imgur.com/A6B4rIn.png']],
+    gateRewardImgToolTip: [['Hellfire Keystone']],
+    gateData: {
+      gold: [9000, 18500],
+      boxCost: [4100, 6600],
+      itemLevels: [1680],
+      gateRewards: [[8], [12]],
+      honorShards: [4200, 5400],
+      boxHonorShards: [7500, 11000],
+      destructionStones: [580, 660],
+      boxDestructionStones: [700, 1000],
+    },
+  },
 ];
 
 export default raidsInfo;
