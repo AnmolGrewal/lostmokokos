@@ -872,11 +872,14 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
           '.MuiSvgIcon-root': {
             color: 'var(--primary-text-label-color)',
           },
+          '& tr:nth-of-type(even)': {
+            backgroundColor: 'var(--secondary-background-color)'
+          }
         })}
       >
         <Table aria-label="simple table">
           <TableHead>
-            <TableRow>
+            <TableRow className='even-row'>
               <TableCell sx={{ fontWeight: 'bold', fontSize: '24px' }}></TableCell>
               {[...Array(characterCount)].map((_, index) => (
                 <TableCell
@@ -906,7 +909,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
             {Object.entries(raidGroups)
               .filter(([label]) => raidVisibility[Object.keys(raidGroups).indexOf(label)])
               .map(([label, groupedRaids], index) => (
-                <TableRow key={index} className={index % 2 === 0 ? 'even-row' : ''}>
+                <TableRow key={index}>
                   <TableCell
                     component="th"
                     scope="row"
@@ -1034,7 +1037,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
               ))}
             </TableRow>
             {chaosGateVisibility && (
-              <TableRow className="even-row">
+              <TableRow>
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
                   <div className="flex items-center">
                     <BalconyIcon sx={{ marginRight: '8px', fontSize: '40px', '& path': { fill: 'var(--primary-text-color)' } }} />
@@ -1115,7 +1118,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
               </TableRow>
             )}
             {guildWeekliesVisibility && (
-              <TableRow className="even-row">
+              <TableRow>
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
                   <div className="flex items-center">
                     <PeopleIcon sx={{ marginRight: '8px', fontSize: '40px', '& path': { fill: 'var(--primary-text-color)' } }} />
