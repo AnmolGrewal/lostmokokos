@@ -10,6 +10,8 @@ import { Helmet } from 'react-helmet';
 import imagesData from '@/data/imageLinks';
 
 const ComparePage: React.FC = () => {
+  const sortedGuardianInfo = [...guardianInfo].reverse();
+  const sortedChaosInfo = [...chaosInfo].reverse();
   const [expandedRaids, setExpandedRaids] = useState<{ [key: string]: { [mode: string]: boolean } }>({});
   const [currentTab, setCurrentTab] = useState(0);
 
@@ -139,7 +141,7 @@ const ComparePage: React.FC = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {chaosInfo.map((dungeon, index) => (
+          {sortedChaosInfo.map((dungeon, index) => (
             <TableRow key={index}>
               <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '20px' }}>{dungeon.label}</TableCell>
               <TableCell align="center" sx={{ fontSize: '20px' }}>{dungeon.itemLevel}</TableCell>
@@ -202,7 +204,7 @@ const ComparePage: React.FC = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {guardianInfo.map((guardian, index) => (
+          {sortedGuardianInfo.map((guardian, index) => (
             <TableRow key={index}>
               <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '20px' }}>{guardian.label}</TableCell>
               <TableCell align="center" sx={{ fontSize: '20px' }}>{guardian.itemLevel}</TableCell>
