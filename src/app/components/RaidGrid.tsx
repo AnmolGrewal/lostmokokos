@@ -14,9 +14,9 @@ import imagesData from '@/data/imageLinks';
 import FirstTimeModal from './FirstTimeModal';
 
 interface RaidGridProps {
-raid: Raid;
-hasHardVersion: boolean;
-hasSoloVersion: boolean;
+  raid: Raid;
+  hasHardVersion: boolean;
+  hasSoloVersion: boolean;
 }
 
 const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersion }) => {
@@ -202,6 +202,9 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
             paddingLeft: 2,
             paddingRight: 2,
           },
+          '& tr:nth-of-type(even)': {
+            backgroundColor: 'var(--secondary-background-color)'
+          }
         }}
       >
         <Table aria-label="simple table">
@@ -221,7 +224,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
                 </TableCell>
               </TableRow>
             ) : null}
-            <TableRow className='even-row'>
+            <TableRow>
               <TableCell sx={{ fontWeight: 'bold', fontSize: '24px', width: '10%' }}>Category</TableCell>
               {raid.gateData.gold.map((_, index) => (
                 <TableCell
@@ -287,7 +290,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
 
           <TableBody>
             {rows.map((row, rowIndex) => (
-              <TableRow key={rowIndex} className={rowIndex % 2 === 1 ? 'even-row' : ''}>
+              <TableRow key={rowIndex}>
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
                   {row.category}
                 </TableCell>
@@ -349,7 +352,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
               </TableCell>
             </TableRow>
             {raid.gateRewardImgSrc && (
-              <TableRow className="even-row">
+              <TableRow>
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
                   Rewards Clear/Box
                 </TableCell>
@@ -430,7 +433,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
             )}
             {/* Row for Honor Shards Normal Clear */}
             {raid?.gateData?.honorShards && (
-              <TableRow className="min-w-max even-row">
+              <TableRow className="min-w-max">
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
                   Shards
                 </TableCell>
@@ -484,7 +487,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
 
             {/* Shards Earnable row */}
             {(raid?.gateData?.honorShards || raid?.gateData?.boxHonorShards) && (
-              <TableRow className="even-row">
+              <TableRow>
                 <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
                   Honor Shards Earnable: {(honorShardsTotal ?? 0) + (boxHonorShardsTotal ?? 0)}
                 </TableCell>
@@ -520,7 +523,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
             )}
             {/* Destruction Stones Row Total */}
             {destructionStonesTotal && destructionStonesTotal > 0 && (
-              <TableRow className="min-w-max even-row">
+              <TableRow className="min-w-max">
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
                   Destruction Stones
                 </TableCell>
@@ -578,7 +581,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
 
             {/* Destruction Stones Earnable row */}
             {(raid?.gateData?.destructionStones || raid?.gateData?.boxDestructionStones) && (
-              <TableRow className="even-row">
+              <TableRow>
                 <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
                   Destruction Stones Earnable:{' '}
                   {(destructionStonesTotal ?? 0) +
