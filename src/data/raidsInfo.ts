@@ -390,7 +390,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/UnGFUC6.png']],
     gateRewardImgToolTip: [['Eye of Decay']],
     gateData: {
-      gold: [2250, 2750, 6000],
+      gold: [1500, 2500, 3500],
       boxCost: [600, 700, 950],
       itemLevels: [1600],
       gateRewards: [[7], [7], [8]],
