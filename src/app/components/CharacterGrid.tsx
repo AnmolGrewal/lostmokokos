@@ -767,7 +767,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
                 variant="outlined"
               />
               <Chip
-                label="Guild Weeklies"
+                label="Una Weeklies"
                 onClick={() => {
                   setGuildWeekliesVisibility(!guildWeekliesVisibility);
                   localStorage.setItem('guildWeekliesVisibility', JSON.stringify(!guildWeekliesVisibility));
@@ -1090,6 +1090,33 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
                 ))}
               </TableRow>
             )}
+            {guildWeekliesVisibility && (
+              <TableRow>
+                <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
+                  <div className="flex items-center">
+                    <PeopleIcon sx={{ marginRight: '8px', fontSize: '40px', '& path': { fill: 'var(--primary-text-color)' } }} />
+                    Una Weeklies
+                  </div>
+                </TableCell>
+                {[...Array(characterCount)].map((_, index) => (
+                  <TableCell key={index} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
+                    <StyledRating
+                      name={`guild-weeklies-${index}`}
+                      value={guildWeekliesRatings[index]}
+                      onChange={(event, newValue) => {
+                        const newRatings = [...guildWeekliesRatings];
+                        newRatings[index] = newValue || 0;
+                        setGuildWeekliesRatings(newRatings);
+                        localStorage.setItem('guildWeekliesRatings', JSON.stringify(newRatings));
+                      }}
+                      max={3}
+                      icon={<PeopleIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color)' } }} />}
+                      emptyIcon={<PeopleIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color-opacity)' } }} />}
+                    />
+                  </TableCell>
+                ))}
+              </TableRow>
+            )}
             {guardianRaidVisibility && (
               <TableRow>
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
@@ -1112,33 +1139,6 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
                       max={1}
                       icon={<PestControlIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color)' } }} />}
                       emptyIcon={<PestControlIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color-opacity)' } }} />}
-                    />
-                  </TableCell>
-                ))}
-              </TableRow>
-            )}
-            {guildWeekliesVisibility && (
-              <TableRow>
-                <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
-                  <div className="flex items-center">
-                    <PeopleIcon sx={{ marginRight: '8px', fontSize: '40px', '& path': { fill: 'var(--primary-text-color)' } }} />
-                    Guild Weeklies
-                  </div>
-                </TableCell>
-                {[...Array(characterCount)].map((_, index) => (
-                  <TableCell key={index} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
-                    <StyledRating
-                      name={`guild-weeklies-${index}`}
-                      value={guildWeekliesRatings[index]}
-                      onChange={(event, newValue) => {
-                        const newRatings = [...guildWeekliesRatings];
-                        newRatings[index] = newValue || 0;
-                        setGuildWeekliesRatings(newRatings);
-                        localStorage.setItem('guildWeekliesRatings', JSON.stringify(newRatings));
-                      }}
-                      max={3}
-                      icon={<PeopleIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color)' } }} />}
-                      emptyIcon={<PeopleIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color-opacity)' } }} />}
                     />
                   </TableCell>
                 ))}
