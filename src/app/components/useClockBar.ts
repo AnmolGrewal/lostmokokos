@@ -7,15 +7,15 @@ export const useClockBar = () => {
 
   useEffect(() => {
     const calculateResetTimes = () => {
-      const now = moment().tz('America/Los_Angeles');
+      const now = moment().utc();
 
-      const nextDailyReset = moment().tz('America/Los_Angeles').startOf('day').add(3, 'hours');
-      if (now.hour() >= 3) {
+      const nextDailyReset = moment().utc().startOf('day').add(10, 'hours');
+      if (now.hour() >= 10) {
         nextDailyReset.add(1, 'days');
       }
       setDailyResetTime(nextDailyReset.valueOf());
 
-      const nextWeeklyReset = moment().tz('America/Los_Angeles').startOf('week').add(3, 'days').add(3, 'hours');
+      const nextWeeklyReset = moment().utc().startOf('week').add(3, 'days').add(10, 'hours');
       if (now.isSameOrAfter(nextWeeklyReset)) {
         nextWeeklyReset.add(1, 'week');
       }

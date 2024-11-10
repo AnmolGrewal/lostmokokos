@@ -250,6 +250,11 @@ const updates: Update[] = [
     title: 'Updated all data for new patch',
     context: ['Fixed Akkan Hard Mode Gold. Added Argeos Drops Data. Added Chaos Gates T4. Added New Raid Aegir'],
   },
+  {
+    date: 'Nov 10, 2024',
+    title: 'Fixed Reset Times',
+    context: ['Fixed Daily/Weekly Reset Issue for Daylight Savings and Other Timezones'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };
