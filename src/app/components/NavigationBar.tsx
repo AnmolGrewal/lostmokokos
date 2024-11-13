@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // eslint-disable-next-line no-unused-vars
-import { faHome, faDungeon, faPersonShelter, faHammer, faPercent } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faDungeon, faPersonShelter, faHammer, faPercent, faUser } from '@fortawesome/free-solid-svg-icons';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 
@@ -13,9 +13,10 @@ const NavigationBar = ({ currentPath }: NavigationBarProps) => {
   const navItems = [
     { path: '/', label: 'Home', icon: faHome },
     { path: '/raids', label: 'Raids', icon: faDungeon },
-    { path: '/characters', label: 'Character Sheet', icon: faPersonShelter },
+    { path: '/characters', label: 'Calculator', icon: faPersonShelter },
     { path: '/engravings', label: 'Engravings', icon: faHammer },
     { path: '/compare', label: 'Compare', icon: faPercent },
+    { path: '/class', label: 'Class', icon: faUser },
   ];
 
   const router = useRouter();
