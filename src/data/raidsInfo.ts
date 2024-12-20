@@ -71,7 +71,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgToolTip: [['Demon Beast Bone', 'Demon Beast Tendon']],
     gateData: {
       gold: [240, 360],
-      boxCost: [140, 200],
+      boxCost: [75, 100],
       itemLevels: [1415],
       gateRewards: [
         [1, 3],
@@ -134,7 +134,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgToolTip: [['Covetous Fang', 'Covetous Wing']],
     gateData: {
       gold: [280, 520],
-      boxCost: [140, 230],
+      boxCost: [100, 150],
       itemLevels: [1430],
       gateRewards: [
         [2, 1],
@@ -197,7 +197,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgToolTip: [['Mayhem Horn']],
     gateData: {
       gold: [320, 480, 800],
-      boxCost: [160, 265, 375],
+      boxCost: [100, 150, 200],
       itemLevels: [1475],
       gateRewards: [[1], [2], [2]],
       honorShards: [1000, 1000, 1000],
@@ -235,7 +235,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgToolTip: [['Phantom Intention']],
     gateData: {
       gold: [800, 800, 800, 1280],
-      boxCost: [140, 210, 280, 530],
+      boxCost: [100, 150, 200, 375],
       itemLevels: [1490, 1490, 1500, 1520],
       gateRewards: [[4], [4], [5], [7]],
       honorShards: [1100, 1300, 1600, 3000],
@@ -292,7 +292,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgToolTip: [["Light's Trial", 'Empyrean of Contemplation']],
     gateData: {
       gold: [640, 960, 1280],
-      boxCost: [240, 320, 400],
+      boxCost: [200, 225, 300],
       itemLevels: [1540],
       gateRewards: [[11], [12, 1], [17, 2]],
       honorShards: [2100, 2500, 4100],
@@ -353,7 +353,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgToolTip: [['Eye of Decay']],
     gateData: {
       gold: [800, 1440, 2080],
-      boxCost: [720, 880, 1200],
+      boxCost: [225, 275, 375],
       itemLevels: [1580],
       gateRewards: [[3], [3], [5]],
       honorShards: [2700, 2700, 4200],
@@ -410,7 +410,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgToolTip: [['Clear Energy of Wisdom', ' Clear Elixir of Wisdom']],
     gateData: {
       gold: [1200, 1600, 2400],
-      boxCost: [400, 440, 720],
+      boxCost: [250, 350, 550],
       itemLevels: [1600],
       gateRewards: [[4], [4], [8, 2]],
       honorShards: [3000, 3000, 4500],

@@ -257,8 +257,8 @@ const updates: Update[] = [
   },
   {
     date: 'Dec 20, 2024',
-    title: 'Updated Chaos Gates',
-    context: ['Updated Chaos Gates to be only 1 from now on'],
+    title: 'Updated Chaos Gates, Extra Rewards Solo Box Costs',
+    context: ['Updated Chaos Gates to be only 1 from now on. Updated All Solo Raid Box Costs with new buffs. '],
   },
 ].reverse();
 
