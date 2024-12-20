@@ -255,6 +255,11 @@ const updates: Update[] = [
     title: 'Fixed Reset Times',
     context: ['Fixed Daily/Weekly Reset Issue for Daylight Savings and Other Timezones'],
   },
+  {
+    date: 'Dec 20, 2024',
+    title: 'Updated Chaos Gates',
+    context: ['Updated Chaos Gates to be only 1 from now on'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };

@@ -1055,7 +1055,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
                         setChaosGateRatings(newRatings);
                         localStorage.setItem('chaosGateRatings', JSON.stringify(newRatings));
                       }}
-                      max={2}
+                      max={1}
                       icon={<BalconyIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color)' } }} />}
                       emptyIcon={<BalconyIcon fontSize="inherit" sx={{ '& path': { fill: 'var(--primary-text-color-opacity)' } }} />}
                     />
