@@ -206,7 +206,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
     const label = Object.keys(raidGroups)[labelIndex];
     const updatedVisibility = raidVisibility.map((visible, i) => (i === labelIndex ? !visible : visible));
     setRaidVisibility(updatedVisibility);
-    localStorage.setItem('raidVisibility1', JSON.stringify(updatedVisibility));
+    localStorage.setItem('raidVisbility2', JSON.stringify(updatedVisibility));
 
     // If the raid is being hidden, set all associated check states to false
     if (!updatedVisibility[labelIndex]) {
@@ -228,15 +228,15 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
 
   useEffect(() => {
     const loadInitialData = () => {
-      const savedRaidVisibility = JSON.parse(localStorage.getItem('raidVisibility1') || '[]');
-      const savedCharacterCount = parseInt(localStorage.getItem('characterCount1') || '1', 10);
-      const savedCharacterNames = JSON.parse(localStorage.getItem('characterNames1') || '[]');
+      const savedRaidVisibility = JSON.parse(localStorage.getItem('raidVisibility2') || '[]');
+      const savedCharacterCount = parseInt(localStorage.getItem('characterCount2') || '1', 10);
+      const savedCharacterNames = JSON.parse(localStorage.getItem('characterNames2') || '[]');
       const defaultCharacterNames = Array(savedCharacterCount)
         .fill('Character')
         .map((name, index) => `${name} ${index + 1}`);
-      const savedCheckedStates = JSON.parse(localStorage.getItem('checkedStates2') || '[]');
-      const savedBoxCheckedStates = JSON.parse(localStorage.getItem('boxCheckedStates2') || '[]');
-      const savedAdditionalGold = JSON.parse(localStorage.getItem('additionalGold1') || '[]');
+      const savedCheckedStates = JSON.parse(localStorage.getItem('checkedStates3') || '[]');
+      const savedBoxCheckedStates = JSON.parse(localStorage.getItem('boxCheckedStates3') || '[]');
+      const savedAdditionalGold = JSON.parse(localStorage.getItem('additionalGold2') || '[]');
       const defaultAdditionalGold = new Array(savedCharacterCount).fill(0);
       const savedChaosGateRatings = JSON.parse(localStorage.getItem('chaosGateRatings') || '[]');
       const savedUnaTaskRatings = JSON.parse(localStorage.getItem('unaTaskRatings') || '[]');
@@ -269,11 +269,11 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
 
   useEffect(() => {
     // Save all character related data to localStorage
-    localStorage.setItem('characterCount1', characterCount.toString());
-    localStorage.setItem('characterNames1', JSON.stringify(characterNames));
-    localStorage.setItem('checkedStates2', JSON.stringify(checkedStates));
-    localStorage.setItem('boxCheckedStates2', JSON.stringify(boxCheckedStates));
-    localStorage.setItem('additionalGold1', JSON.stringify(additionalGold));
+    localStorage.setItem('characterCount2', characterCount.toString());
+    localStorage.setItem('characterNames2', JSON.stringify(characterNames));
+    localStorage.setItem('checkedStates3', JSON.stringify(checkedStates));
+    localStorage.setItem('boxCheckedStates3', JSON.stringify(boxCheckedStates));
+    localStorage.setItem('additionalGold2', JSON.stringify(additionalGold));
     localStorage.setItem('chaosGateRatings', JSON.stringify(chaosGateRatings));
     localStorage.setItem('unaTaskRatings', JSON.stringify(unaTaskRatings));
     localStorage.setItem('guardianRaidRatings', JSON.stringify(guardianRaidRatings));
@@ -428,12 +428,12 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
     handleToggleConfirmClearDialog();
   
     // Clear specific localStorage items
-    localStorage.removeItem('characterCount1');
-    localStorage.removeItem('characterNames1');
+    localStorage.removeItem('characterCount2');
+    localStorage.removeItem('characterNames2');
     localStorage.removeItem('checkedStates1');
     localStorage.removeItem('boxCheckedStates1');
-    localStorage.removeItem('additionalGold1');
-    // localStorage.removeItem('raidVisibility1');
+    localStorage.removeItem('additionalGold2');
+    // localStorage.removeItem('raidVisbility2');
   
     // Clear ratings for chaos, guardian, and weekly from localStorage
     localStorage.removeItem('chaosRating');
