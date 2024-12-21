@@ -260,6 +260,11 @@ const updates: Update[] = [
     title: 'Updated Chaos Gates, Extra Rewards Solo Box Costs',
     context: ['Updated Chaos Gates to be only 1 from now on. Updated All Solo Raid Box Costs with new buffs. '],
   },
+  {
+    date: 'Dec 21, 2024',
+    title: 'Updated Solo Raids',
+    context: ['Added Solo Mode for Echidna and Thaemine and clear medals'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };
