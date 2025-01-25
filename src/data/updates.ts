@@ -265,6 +265,11 @@ const updates: Update[] = [
     title: 'Updated Solo Raids',
     context: ['Added Solo Mode for Echidna and Thaemine and clear medals. Fixed bug and reset character sheet'],
   },
+  {
+    date: 'Jan 24, 2025',
+    title: 'Updated Raids',
+    context: ['Updated gold for new patch!'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };

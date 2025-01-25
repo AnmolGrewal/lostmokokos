@@ -447,7 +447,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/XYyJ9aG.png', 'https://i.imgur.com/dS0ZviV.png']],
     gateRewardImgToolTip: [['Splendid Energy of Wisdom', 'Splendid Elixir of Wisdom']],
     gateData: {
-      gold: [3000, 4000, 6000],
+      gold: [3000, 4000, 3500],
       boxCost: [750, 900, 1350],
       itemLevels: [1620],
       gateRewards: [[4], [4], [8, 2]],
@@ -466,8 +466,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/sU7Fdcu.png', 'https://i.imgur.com/BSm95D5.png']],
     gateRewardImgToolTip: [['Dark Fire', 'Magical Spring Water']],
     gateData: {
-      gold: [2450, 2800, 3850],
-      boxCost: [750, 840, 1200],
+      gold: [2300, 2700, 3800],
+      boxCost: [670, 800, 1140],
       itemLevels: [1610],
       gateRewards: [
         [6, 2],
@@ -489,7 +489,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/sU7Fdcu.png', 'https://i.imgur.com/BSm95D5.png']],
     gateRewardImgToolTip: [['Dark Fire', 'Magical Spring Water']],
     gateData: {
-      gold: [3500, 4000, 5500],
+      gold: [3500, 4000, 3500],
       boxCost: [1500, 1800, 2500],
       itemLevels: [1610],
       gateRewards: [
@@ -512,7 +512,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/sU7Fdcu.png', 'https://i.imgur.com/BSm95D5.png']],
     gateRewardImgToolTip: [['Dark Fire', 'Magical Spring Water']],
     gateData: {
-      gold: [5000, 6000, 9000, 21000],
+      gold: [5000, 6000, 7800, 9800],
       boxCost: [2000, 2400, 2800, 3600],
       itemLevels: [1630],
       gateRewards: [
@@ -614,7 +614,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/A6B4rIn.png']],
     gateRewardImgToolTip: [['Hellfire Keystone']],
     gateData: {
-      gold: [7500, 15500],
+      gold: [7500, 16500],
       boxCost: [3200, 5300],
       itemLevels: [1660],
       gateRewards: [[4], [6]],
@@ -631,7 +631,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/A6B4rIn.png']],
     gateRewardImgToolTip: [['Hellfire Keystone']],
     gateData: {
-      gold: [9000, 18500],
+      gold: [10000, 20000],
       boxCost: [4100, 6600],
       itemLevels: [1680],
       gateRewards: [[8], [12]],
@@ -639,6 +639,40 @@ const raidsInfo: Raid[] = [
       boxHonorShards: [7500, 11000],
       destructionStones: [580, 660],
       boxDestructionStones: [700, 1000],
+    },
+  },
+  {
+    path: '/raids/brelshaza2',
+    label: 'Brelshaza v2',
+    imgSrc: 'https://i.imgur.com/bL9k49k.png',
+    gateRewardImgSrc: [['https://i.imgur.com/3poB3IP.png']],
+    gateRewardImgToolTip: [['Karma']],
+    gateData: {
+      gold: [9000, 18500],
+      boxCost: [3800, 5600],
+      itemLevels: [1670],
+      gateRewards: [[4], [6]],
+      honorShards: [4000, 4600],
+      boxHonorShards: [7000, 10500],
+      destructionStones: [540, 640],
+      boxDestructionStones: [800, 1050],
+    },
+  },
+  {
+    path: '/raids/brelshaza2-hard',
+    label: 'Brelshaza v2',
+    imgSrc: 'https://i.imgur.com/bL9k49k.png',
+    gateRewardImgSrc: [['https://i.imgur.com/3poB3IP.png']],
+    gateRewardImgToolTip: [['Karma']],
+    gateData: {
+      gold: [11000, 23000],
+      boxCost: [4500, 7200],
+      itemLevels: [1690],
+      gateRewards: [[8], [12]],
+      honorShards: [4600, 6000],
+      boxHonorShards: [8000, 14000],
+      destructionStones: [640, 700],
+      boxDestructionStones: [950, 1400],
     },
   },
 ];
