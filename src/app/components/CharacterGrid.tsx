@@ -206,7 +206,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
     const label = Object.keys(raidGroups)[labelIndex];
     const updatedVisibility = raidVisibility.map((visible, i) => (i === labelIndex ? !visible : visible));
     setRaidVisibility(updatedVisibility);
-    localStorage.setItem('raidVisbility2', JSON.stringify(updatedVisibility));
+    localStorage.setItem('raidVisibility2', JSON.stringify(updatedVisibility));
 
     // If the raid is being hidden, set all associated check states to false
     if (!updatedVisibility[labelIndex]) {
