@@ -270,6 +270,11 @@ const updates: Update[] = [
     title: 'Updated Raids',
     context: ['Updated gold for new patch!'],
   },
+  {
+    date: 'Mar 8, 2025',
+    title: 'Added Bound Gold',
+    context: ['Added bound gold for all raids and updated gate gold and box costs!'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };

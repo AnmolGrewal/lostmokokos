@@ -351,6 +351,38 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
                 Gold Earnable: {goldEarned}
               </TableCell>
             </TableRow>
+            {/* Bound Gold */}
+            {raid.gateData.boundGold && (
+              <TableRow>
+                <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
+                  Bound Gold
+                </TableCell>
+                {raid.gateData.boundGold.map((gold, index) => (
+                  <TableCell key={index} align="center" sx={{ fontSize: '14px' }}>
+                    <div className="flex flex-row raid-table-cell-row">
+                      <div className="reward-count">{gold}</div>
+                      <Tooltip title="Bound Gold" placement="top">
+                        <img src={imagesData.goldCoins} alt="Bound Gold" className="gold-coin-img" />
+                      </Tooltip>
+                    </div>
+                  </TableCell>
+                ))}
+                <TableCell align="center" sx={{ fontSize: '14px' }} className="min-w-max">
+                  <div className="flex flex-row raid-table-cell-row min-w-max">
+                    <div className="reward-count">{raid.gateData.boundGold.reduce((a, b) => a + b, 0)}</div>
+                    <Tooltip title="Bound Gold" placement="top">
+                      <img src={imagesData.goldCoins} alt="Bound Gold" className="gold-coin-img" />
+                    </Tooltip>
+                  </div>
+                </TableCell>
+              </TableRow>
+            )}
+            {/* Gold Earnable row */}
+            {raid.gateData.boundGold && (<TableRow>
+              <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
+                Gold Tradeable: {raid.gateData.gold.reduce((a, b) => a + b, 0) - raid.gateData.boundGold.reduce((a, b) => a + b, 0)}, Bound Gold: {raid.gateData.boundGold.reduce((a, b) => a + b, 0)}
+              </TableCell>
+            </TableRow>)}
             {raid.gateRewardImgSrc && (
               <TableRow>
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>

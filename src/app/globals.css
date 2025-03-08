@@ -152,6 +152,12 @@ body {
   object-fit: contain;
 }
 
+.gold-coin-img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
 .MuiAutocomplete-option, .MuiAutocomplete-noOptions {
   background-color: var(--secondary-background-color);
   color: var(--primary-text-label-color) !important;
