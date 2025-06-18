@@ -725,8 +725,8 @@ const raidsInfo: Raid[] = [
   {
     path: '/raids/mordum',
     label: 'Mordum',
-    imgSrc: 'missingBannerImage',
-    gateRewardImgSrc: [['missingRewardNormal']],
+    imgSrc: 'https://i.imgur.com/cavTnUf.png',
+    gateRewardImgSrc: [['https://i.imgur.com/IElQu7f.png']],
     gateRewardImgToolTip: [['Thundercrack Horn']],
     gateData: {
       gold: [6000, 9500, 12500],
@@ -742,8 +742,8 @@ const raidsInfo: Raid[] = [
   {
     path: '/raids/mordum-hard',
     label: 'Mordum',
-    imgSrc: 'missingBannerImage',
-    gateRewardImgSrc: [['missingRewardHard']],
+    imgSrc: 'https://i.imgur.com/cavTnUf.png',
+    gateRewardImgSrc: [['https://i.imgur.com/Kq3fVkK.png']],
     gateRewardImgToolTip: [['Thunder Globe']],
     gateData: {
       gold: [7000, 11000, 20000],
