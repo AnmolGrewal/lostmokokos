@@ -28,7 +28,7 @@ const imagesData: ImageData = {
   book: 'https://i.imgur.com/F6bpKTy.png',
   earring: 'https://i.imgur.com/bMkc20t.png',
   abilityStone: 'https://i.imgur.com/HitFWk5.png',
-  goldCoins: 'https://i.imgur.com/DI98qp1.png',
+  goldCoins: 'https://i.imgur.com/BMQqN22.png',
   clearMedal: 'https://i.imgur.com/JuC6yqo.png',
 };
 

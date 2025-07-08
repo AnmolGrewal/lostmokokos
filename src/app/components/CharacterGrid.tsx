@@ -1020,7 +1020,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
                 }}
               >
                 <div className="flex flex-row">
-                  <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" style={{ width: '40px', verticalAlign: 'middle' }} />
+                  <img src="https://i.imgur.com/BMQqN22.png" alt="Gold Icon" style={{ width: '40px', verticalAlign: 'middle' }} />
                   Extra Gold
                 </div>
               </TableCell>
@@ -1037,7 +1037,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
                       <EditIcon />
                     </IconButton>
                     {additionalGold[index].toLocaleString()}
-                    <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" style={{ width: '20px', marginLeft: '5px' }} />
+                    <img src="https://i.imgur.com/BMQqN22.png" alt="Gold Icon" style={{ width: '20px', marginLeft: '5px' }} />
                   </span>
                 </TableCell>
               ))}
@@ -1158,7 +1158,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
                 <TableCell key={`character-total-gold-${index}`} align="center" sx={{ textAlign: 'center', fontSize: '24px' }}>
                   <span style={{ display: 'inline-flex', alignItems: 'center' }}>
                     {calculateCharacterTotalGold(index).toLocaleString()}
-                    <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" style={{ width: '20px', marginLeft: '5px' }} />
+                    <img src="https://i.imgur.com/U3gzGPU.png" alt="Gold Icon" style={{ width: '20px', marginLeft: '5px' }} />
                   </span>
                 </TableCell>
               ))}
@@ -1168,7 +1168,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
       </TableContainer>
       <footer className="fixed bottom-2 left-1/2 -translate-x-1/2 bg-primary-background-color text-primary-text-color text-center p-2 rounded-full border border-primary-border-color shadow-md inline-flex items-center justify-center gap-2 sm:p-4 sm:text-2xl">
         Total Gold: {calculateTotalGold()}
-        <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" className="w-5 sm:w-10" />
+        <img src="https://i.imgur.com/U3gzGPU.png" alt="Gold Icon" className="w-5 sm:w-10" />
       </footer>
     </div>
   );

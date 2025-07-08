@@ -314,7 +314,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
                     >
                       {showDifferences ? displayValues(rowIndex, columnIndex) : value}
                       <img
-                        src="https://i.imgur.com/DI98qp1.png"
+                        src="https://i.imgur.com/BMQqN22.png"
                         alt="Gold Icon"
                         style={{
                           width: '20px',
@@ -340,7 +340,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
                     }}
                   >
                     {showDifferences ? displayTotalValues(rowIndex) : row.total}
-                    <img src="https://i.imgur.com/DI98qp1.png" alt="Gold Icon" style={{ width: '20px', marginRight: '5px' }} />
+                    <img src="https://i.imgur.com/BMQqN22.png" alt="Gold Icon" style={{ width: '20px', marginRight: '5px' }} />
                   </div>
                 </TableCell>
               </TableRow>
