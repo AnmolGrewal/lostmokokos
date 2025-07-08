@@ -69,6 +69,7 @@ interface CharacterState {
 }
 
 const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
+  const APP_STATE_VERSION = 'v3';
   const initializeNewCharacterState = useCallback((): CharacterState => {
     const newState: CharacterState = {};
     raids.forEach((raid) => {
@@ -105,8 +106,13 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const [guildWeekliesVisibility, setGuildWeekliesVisibility] = useState<boolean>(true);
 
   const { dailyResetTime, weeklyResetTime } = useClockBar();
-  
+
   useEffect(() => {
+
+    if (localStorage.getItem('appVersion') !== APP_STATE_VERSION) {
+      localStorage.clear();
+      localStorage.setItem('appVersion', APP_STATE_VERSION);
+    }
     const storedChaosGatesVisibility = localStorage.getItem('chaosGateVisibility');
     const storedUnaTasksVisibility = localStorage.getItem('unaTaskVisibility');
     const storedGuildWeekliesVisibility = localStorage.getItem('guardianRaidVisibility');

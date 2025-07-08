@@ -275,6 +275,11 @@ const updates: Update[] = [
     title: 'Added Bound Gold',
     context: ['Added bound gold for all raids and updated gate gold and box costs!'],
   },
+  {
+    date: 'July 7, 2025',
+    title: 'Added New Raid',
+    context: ['Added latest raid Mordum Act 3'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };
