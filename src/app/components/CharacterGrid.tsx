@@ -69,7 +69,7 @@ interface CharacterState {
 }
 
 const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
-  const APP_STATE_VERSION = 'v3';
+  const APP_STATE_VERSION = 'v4';
   const initializeNewCharacterState = useCallback((): CharacterState => {
     const newState: CharacterState = {};
     raids.forEach((raid) => {

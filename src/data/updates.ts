@@ -280,6 +280,11 @@ const updates: Update[] = [
     title: 'Added New Raid',
     context: ['Added latest raid Mordum Act 3'],
   },
+  {
+    date: 'Aug 4, 2025',
+    title: 'Updated for new Patch',
+    context: ['Updated for new Patch'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };

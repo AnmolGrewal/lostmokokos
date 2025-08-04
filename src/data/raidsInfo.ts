@@ -94,8 +94,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/VCqULik.png', 'https://i.imgur.com/CloDByc.png']],
     gateRewardImgToolTip: [['Demon Beast Bone', 'Demon Beast Tendon']],
     gateData: {
-      gold: [300, 450],
-      boundGold: [240, 360],
+      gold: [290, 460],
+      boundGold: [250, 400],
       boxCost: [180, 255],
       itemLevels: [1415],
       gateRewards: [
@@ -118,7 +118,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgToolTip: [['Demon Beast Bone']],
     gateData: {
       gold: [400, 700],
-      boundGold: [320, 560],
+      boundGold: [330, 570],
       boxCost: [255, 380],
       itemLevels: [1445],
       gateRewards: [[3], [3]],
@@ -161,7 +161,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgToolTip: [['Covetous Fang', 'Covetous Wing']],
     gateData: {
       gold: [350, 650],
-      boundGold: [280, 520],
+      boundGold: [300, 550],
       boxCost: [175, 290],
       itemLevels: [1430],
       gateRewards: [
@@ -184,7 +184,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgToolTip: [['Covetous Wing']],
     gateData: {
       gold: [500, 1000],
-      boundGold: [400, 800],
+      boundGold: [420, 830],
       boxCost: [280, 435],
       itemLevels: [1460],
       gateRewards: [[3], [3]],
@@ -224,7 +224,7 @@ const raidsInfo: Raid[] = [
     gateRewardImgToolTip: [['Mayhem Horn']],
     gateData: {
       gold: [400, 600, 1000],
-      boundGold: [320, 480, 800],
+      boundGold: [330, 500, 820],
       boxCost: [200, 335, 470],
       itemLevels: [1475],
       gateRewards: [[1], [2], [2]],
@@ -263,8 +263,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/3poB3IP.png']],
     gateRewardImgToolTip: [['Phantom Intention']],
     gateData: {
-      gold: [1000, 1000, 1000, 1600],
-      boundGold: [800, 800, 800, 1280],
+      gold: [980, 1000, 1020, 1600],
+      boundGold: [810, 820, 820, 1300],
       boxCost: [250, 300, 400, 600],
       itemLevels: [1490, 1490, 1500, 1520],
       gateRewards: [[4], [4], [5], [7]],
@@ -283,8 +283,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/3poB3IP.png']],
     gateRewardImgToolTip: [['Phantom Intention']],
     gateData: {
-      gold: [1200, 1200, 1200, 2000],
-      boundGold: [960, 960, 960, 1600],
+      gold: [1180, 1200, 1220, 2000],
+      boundGold: [970, 980, 1000, 1650],
       boxCost: [400, 400, 500, 800],
       itemLevels: [1540, 1540, 1550, 1560],
       gateRewards: [[6], [6], [7], [10]],
@@ -303,8 +303,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/RTrjfkO.png', 'https://i.imgur.com/Cx0nbdR.png']],
     gateRewardImgToolTip: [["Light's Trial", 'Empyrean of Contemplation']],
     gateData: {
-      gold: [640, 960, 1280],
-      boundGold: [640, 960, 1280],
+      gold: [1000, 1100, 1200],
+      boundGold: [1000, 1100, 1200],
       boxCost: [200, 225, 300],
       itemLevels: [1540],
       gateRewards: [[11], [12, 1], [17, 2]],
@@ -323,8 +323,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/RTrjfkO.png', 'https://i.imgur.com/Cx0nbdR.png']],
     gateRewardImgToolTip: [["Light's Trial", 'Empyrean of Contemplation']],
     gateData: {
-      gold: [800, 1200, 1600],
-      boundGold: [640, 960, 1280],
+      gold: [1000, 1100, 1200],
+      boundGold: [900, 900, 900],
       boxCost: [300, 400, 500],
       itemLevels: [1540],
       gateRewards: [[11], [12, 1], [17, 2]],
@@ -343,8 +343,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/RTrjfkO.png', 'https://i.imgur.com/Cx0nbdR.png']],
     gateRewardImgToolTip: [["Light's Trial", 'Empyrean of Contemplation']],
     gateData: {
-      gold: [1000, 1600, 2200],
-      boundGold: [800, 1280, 1760],
+      gold: [1150, 1450, 1700],
+      boundGold: [1000, 1200, 1300],
       boxCost: [350, 500, 700],
       itemLevels: [1580],
       gateRewards: [
@@ -367,8 +367,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/UnGFUC6.png']],
     gateRewardImgToolTip: [['Eye of Decay']],
     gateData: {
-      gold: [800, 1440, 2080],
-      boundGold: [800, 1440, 2080],
+      gold: [1300, 1600, 1800],
+      boundGold: [1300, 1600, 1800],
       boxCost: [225, 275, 375],
       itemLevels: [1580],
       gateRewards: [[3], [3], [5]],
@@ -387,8 +387,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/UnGFUC6.png']],
     gateRewardImgToolTip: [['Eye of Decay']],
     gateData: {
-      gold: [1000, 1800, 2600],
-      boundGold: [800, 1440, 2080],
+      gold: [1270, 1600, 1830],
+      boundGold: [1000, 1300, 1500],
       boxCost: [450, 550, 750],
       itemLevels: [1580],
       gateRewards: [[3], [3], [5]],
@@ -407,8 +407,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/UnGFUC6.png']],
     gateRewardImgToolTip: [['Eye of Decay']],
     gateData: {
-      gold: [1500, 2500, 3500],
-      boundGold: [1200, 2000, 2800],
+      gold: [1500, 2050, 2450],
+      boundGold: [1300, 1600, 1800],
       boxCost: [600, 700, 950],
       itemLevels: [1600],
       gateRewards: [[7], [7], [8]],
@@ -447,8 +447,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/LAzTJgP.png', 'https://i.imgur.com/d5VKKW1.png']],
     gateRewardImgToolTip: [['Clear Energy of Wisdom', ' Clear Elixir of Wisdom']],
     gateData: {
-      gold: [1500, 2000, 3000],
-      boundGold: [1200, 1600, 2400],
+      gold: [1350, 1750, 2100],
+      boundGold: [1100, 1400, 1600],
       boxCost: [600, 650, 1000],
       itemLevels: [1600],
       gateRewards: [[4], [4], [8, 2]],
@@ -467,8 +467,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/XYyJ9aG.png', 'https://i.imgur.com/dS0ZviV.png']],
     gateRewardImgToolTip: [['Splendid Energy of Wisdom', 'Splendid Elixir of Wisdom']],
     gateData: {
-      gold: [2000, 3000, 5500],
-      boundGold: [1600, 2400, 4400],
+      gold: [2100, 2400, 2700],
+      boundGold: [1600, 1800, 2000],
       boxCost: [1200, 1450, 2000],
       itemLevels: [1620],
       gateRewards: [[4], [4], [8, 2]],
@@ -496,8 +496,8 @@ const raidsInfo: Raid[] = [
         [8, 3],
         [12, 4],
       ],
-      honorShards: [3000, 3750, 4500],
-      boxHonorShards: [3850, 4950, 6600],
+      honorShards: [2200, 2600, 3700],
+      boxHonorShards: [2200, 2600, 3700],
       chaosStones: [0, 0, 5],
       destructionStones: [150, 180, 225],
       boxDestructionStones: [420, 495, 660],
@@ -511,8 +511,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/sU7Fdcu.png', 'https://i.imgur.com/BSm95D5.png']],
     gateRewardImgToolTip: [['Dark Fire', 'Magical Spring Water']],
     gateData: {
-      gold: [2700, 3300, 5000],
-      boundGold: [1300, 1600, 2400],
+      gold: [2400, 2800, 3300],
+      boundGold: [1300, 1500, 1700],
       boxCost: [1500, 1800, 2500],
       itemLevels: [1610],
       gateRewards: [
@@ -535,8 +535,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/sU7Fdcu.png', 'https://i.imgur.com/BSm95D5.png']],
     gateRewardImgToolTip: [['Dark Fire', 'Magical Spring Water']],
     gateData: {
-      gold: [4400, 5500, 8900, 9800],
-      boundGold: [2000, 2500, 4000, 4000],
+      gold: [3800, 4100, 4600, 2750],
+      boundGold: [2000, 2100, 2400, 250],
       boxCost: [1700, 1900, 2300, 2300],
       itemLevels: [1630],
       gateRewards: [
@@ -560,8 +560,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/paUGipq.png']],
     gateRewardImgToolTip: [['Scale of Agris']],
     gateData: {
-      gold: [4800, 8000],
-      boundGold: [4800, 8000],
+      gold: [5000, 8000],
+      boundGold: [5000, 8000],
       boxCost: [1450, 2400],
       itemLevels: [1620],
       gateRewards: [[3], [6]],
@@ -580,8 +580,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/paUGipq.png']],
     gateRewardImgToolTip: [['Scale of Agris']],
     gateData: {
-      gold: [6000, 10000],
-      boundGold: [2000, 3000],
+      gold: [5000, 7000],
+      boundGold: [3000, 4000],
       boxCost: [2200, 3400],
       itemLevels: [1620],
       gateRewards: [[3], [6]],
@@ -600,8 +600,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/9O6FFL2.png']],
     gateRewardImgToolTip: [['Alcyone Eye']],
     gateData: {
-      gold: [7000, 12500],
-      boundGold: [2500, 3500],
+      gold: [7000, 9000],
+      boundGold: [4000, 5000],
       boxCost: [2800, 4100],
       itemLevels: [1630],
       gateRewards: [[3], [6]],
@@ -620,8 +620,8 @@ const raidsInfo: Raid[] = [
     gateRewardImgSrc: [['https://i.imgur.com/7e19M0E.png' , 'https://i.imgur.com/BSm95D5.png']],
     gateRewardImgToolTip: [['Behemoth Scale' , 'Magical Spring Water']],
     gateData: {
-      gold: [7000, 11000],
-      boundGold: [2500, 4000],
+      gold: [5000, 8000],
+      boundGold: [3000, 5000],
       boxCost: [1800, 2700],
       itemLevels: [1620],
       gateRewards: [
@@ -636,13 +636,32 @@ const raidsInfo: Raid[] = [
     },
   },
   {
+    path: '/raids/aegir-solo',
+    label: 'Aegir',
+    imgSrc: 'https://i.imgur.com/VgFaAwm.png',
+    gateRewardImgSrc: [['https://i.imgur.com/A6B4rIn.png']],
+    gateRewardImgToolTip: [['Hellfire Keystone']],
+    gateData: {
+      gold: [10000, 14000],
+      boundGold: [10000, 14000],
+      boxCost: [3200, 5300],
+      itemLevels: [1660],
+      gateRewards: [[4], [6]],
+      honorShards: [3600, 4400],
+      boxHonorShards: [6500, 9500],
+      destructionStones: [480, 580],
+      boxDestructionStones: [850, 1150],
+    },
+  },
+  {
     path: '/raids/aegir',
     label: 'Aegir',
     imgSrc: 'https://i.imgur.com/VgFaAwm.png',
     gateRewardImgSrc: [['https://i.imgur.com/A6B4rIn.png']],
     gateRewardImgToolTip: [['Hellfire Keystone']],
     gateData: {
-      gold: [7500, 16500],
+      gold: [9000, 15000],
+      boundGold: [3000, 4000],
       boxCost: [3200, 5300],
       itemLevels: [1660],
       gateRewards: [[4], [6]],
