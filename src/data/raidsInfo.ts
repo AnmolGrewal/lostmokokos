@@ -725,14 +725,14 @@ const raidsInfo: Raid[] = [
   {
     path: '/raids/mordum',
     label: 'Mordum',
-    imgSrc: 'https://i.imgur.com/WXlrbfr.png',
-    gateRewardImgSrc: [['https://i.imgur.com/WXlrbfr.png']],
-    gateRewardImgToolTip: [['Main Material']],
+    imgSrc: 'https://i.imgur.com/cavTnUf.png',
+    gateRewardImgSrc: [['https://i.imgur.com/IElQu7f.png']],
+    gateRewardImgToolTip: [['Thundercrack Horn']],
     gateData: {
       gold: [6000, 9500, 12500],
       boxCost: [2400, 3200, 4200],
       itemLevels: [1680],
-      gateRewards: [[3], [5], [10]],
+      gateRewards: [[3],[5],[10]],
       honorShards: [2600, 3000, 4200],
       boxHonorShards: [4800, 5600, 7400],
       destructionStones: [320, 400, 520],
@@ -742,20 +742,20 @@ const raidsInfo: Raid[] = [
   {
     path: '/raids/mordum-hard',
     label: 'Mordum',
-    imgSrc: 'https://i.imgur.com/WXlrbfr.png',
-    gateRewardImgSrc: [['https://i.imgur.com/WXlrbfr.png']],
-    gateRewardImgToolTip: [['Main Material']],
+    imgSrc: 'https://i.imgur.com/cavTnUf.png',
+    gateRewardImgSrc: [['https://i.imgur.com/Kq3fVkK.png']],
+    gateRewardImgToolTip: [['Thunder Globe']],
     gateData: {
       gold: [7000, 11000, 20000],
       boxCost: [2700, 4100, 5800],
       itemLevels: [1700],
-      gateRewards: [[3], [5], [10]],
+      gateRewards: [[3],[5],[10]],
       honorShards: [3400, 4000, 5600],
       boxHonorShards: [7000, 9900, 16800],
       destructionStones: [440, 520, 640],
       boxDestructionStones: [830, 1140, 2080],
     },
-  }
+  },
 ];
 
 export default raidsInfo;
