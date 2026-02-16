@@ -47,11 +47,19 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
     router.push(newPath);
   };
 
+  const gateCount = raid.gateData
+    ? Math.max(
+      raid.gateData.gold?.length ?? 0,
+      raid.gateData.boundGold?.length ?? 0,
+      raid.gateData.boxCost.length
+    )
+    : 0;
+
   useEffect(() => {
-    if (raid.gateData && raid.gateData.gold && raid.gateData.boxCost) {
-      setDimmed([Array(raid.gateData.gold.length).fill(false), Array(raid.gateData.boxCost.length).fill(true)]);
+    if (raid.gateData && raid.gateData.boxCost && gateCount) {
+      setDimmed([Array(gateCount).fill(false), Array(raid.gateData.boxCost.length).fill(true)]);
     }
-  }, [raid.gateData, raid.gateData.gold.length, raid.gateData.boxCost.length]);
+  }, [raid.gateData, gateCount, raid.gateData?.boxCost.length]);
 
   if (!dimmed || !raid.gateData) {
     return null;
@@ -59,10 +67,26 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
 
   const hardVersion = raidsInfo.find((r) => r.path === `${raid.path}-hard`);
 
+  // For gold row (rowIndex 0), use gold + boundGold so total is additive (missing gold = 0)
+  const getGoldRowValues = (gateData: Raid['gateData']) => {
+    const len = Math.max(
+      gateData.gold?.length ?? 0,
+      gateData.boundGold?.length ?? 0,
+      gateData.boxCost?.length ?? 0
+    );
+    return Array.from({ length: len }, (_, i) => (gateData.gold?.[i] ?? 0) + (gateData.boundGold?.[i] ?? 0));
+  };
+
   const displayValues = (rowIndex: number, columnIndex: number): string => {
     const category = rowIndex === 0 ? 'gold' : 'boxCost';
-    const currentValues = raid.gateData[category].map(Number);
-    const hardValues = hardVersion && hardVersion.gateData[category] ? hardVersion.gateData[category].map(Number) : [];
+    const currentValues =
+      rowIndex === 0 && raid.gateData
+        ? getGoldRowValues(raid.gateData).map(Number)
+        : (raid.gateData[category] ?? []).map(Number);
+    const hardValues =
+      hardVersion?.gateData && rowIndex === 0
+        ? getGoldRowValues(hardVersion.gateData).map(Number)
+        : hardVersion?.gateData?.[category]?.map(Number) ?? [];
 
     if (!showDifferences || !hardVersion || columnIndex >= currentValues.length) {
       return currentValues[columnIndex].toString();
@@ -73,8 +97,14 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
   };
 
   const displayTotalValues = (rowIndex: number): string => {
-    const values = raid.gateData?.[rowIndex === 0 ? 'gold' : 'boxCost'].map(Number) || [];
-    const hardValues = hardVersion?.gateData?.[rowIndex === 0 ? 'gold' : 'boxCost'].map(Number) || [];
+    const values =
+      rowIndex === 0 && raid.gateData
+        ? getGoldRowValues(raid.gateData).map(Number)
+        : (raid.gateData?.[rowIndex === 0 ? 'gold' : 'boxCost'] ?? []).map(Number);
+    const hardValues =
+      rowIndex === 0 && hardVersion?.gateData
+        ? getGoldRowValues(hardVersion.gateData).map(Number)
+        : (hardVersion?.gateData?.[rowIndex === 0 ? 'gold' : 'boxCost'] ?? []).map(Number);
 
     // Use the lesser of the two lengths for safe operation
     const minGateCount = Math.min(values.length, hardValues.length);
@@ -97,8 +127,15 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
     return values.reduce((acc, curr, index) => acc + (dimmed[rowIndex][index] ? 0 : curr), 0);
   };
 
-  // Update total calculation calls by passing the row index
-  const totalGold = raid.gateData ? calculateTotal(raid.gateData.gold, 0) : 0;
+  // Total gold = gold + boundGold (per gate), so total is additive (missing gold = 0)
+  const combinedGoldValues =
+    raid.gateData && gateCount
+      ? Array.from({ length: gateCount }, (_, i) => (raid.gateData.gold?.[i] ?? 0) + (raid.gateData.boundGold?.[i] ?? 0))
+      : [];
+  const totalGold =
+    raid.gateData && combinedGoldValues.length
+      ? calculateTotal(combinedGoldValues, 0)
+      : 0;
   const totalBoxCost = raid.gateData ? calculateTotal(raid.gateData.boxCost, 1) : 0;
   const goldEarned = totalGold - totalBoxCost;
   const rewardsFirstTotal = raid.gateData.gateRewards ? raid.gateData.gateRewards.reduce((acc, curr) => acc + curr[0], 0) : 0;
@@ -130,7 +167,11 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
   };
 
   const rows = [
-    { category: 'Gold', values: raid.gateData.gold, total: totalGold },
+    {
+      category: 'Gold',
+      values: combinedGoldValues.length ? combinedGoldValues : (raid.gateData.gold ?? []).map((g, i) => g + (raid.gateData.boundGold?.[i] ?? 0)),
+      total: totalGold,
+    },
     {
       category: 'Box Cost',
       values: raid.gateData.boxCost,
@@ -212,7 +253,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
             {raid.gateData.itemLevels.length === 1 ? (
               <TableRow>
                 <TableCell
-                  colSpan={raid.gateData.gold.length + 2}
+                  colSpan={gateCount + 2}
                   align="center"
                   sx={{
                     fontWeight: 'bold',
@@ -226,14 +267,14 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
             ) : null}
             <TableRow>
               <TableCell sx={{ fontWeight: 'bold', fontSize: '24px', width: '10%' }}>Category</TableCell>
-              {raid.gateData.gold.map((_, index) => (
+              {Array.from({ length: gateCount }, (_, index) => (
                 <TableCell
                   key={index}
                   align="center"
                   sx={{
                     fontWeight: 'bold',
                     fontSize: '24px',
-                    width: `${90 / raid.gateData.gold.length}%`,
+                    width: `${90 / gateCount}%`,
                     borderBottom: '2px solid var(--primary-text-label-color)',
                   }}
                 >
@@ -347,7 +388,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
             ))}
             {/* Gold Earnable row */}
             <TableRow>
-              <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
+              <TableCell colSpan={gateCount + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
                 Gold Earnable: {goldEarned}
               </TableCell>
             </TableRow>
@@ -377,12 +418,14 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
                 </TableCell>
               </TableRow>
             )}
-            {/* Gold Earnable row */}
-            {raid.gateData.boundGold && (<TableRow>
-              <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
-                Gold Tradeable: {raid.gateData.gold.reduce((a, b) => a + b, 0) - raid.gateData.boundGold.reduce((a, b) => a + b, 0)}, Bound Gold: {raid.gateData.boundGold.reduce((a, b) => a + b, 0)}
-              </TableCell>
-            </TableRow>)}
+            {/* Total Gold breakdown when bound gold exists */}
+            {raid.gateData.boundGold && (
+              <TableRow>
+                <TableCell colSpan={gateCount + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
+                  Total Gold: {(raid.gateData.gold ?? []).reduce((a, b) => a + b, 0) + raid.gateData.boundGold.reduce((a, b) => a + b, 0)} (Tradeable: {(raid.gateData.gold ?? []).reduce((a, b) => a + b, 0)}, Bound: {raid.gateData.boundGold.reduce((a, b) => a + b, 0)})
+                </TableCell>
+              </TableRow>
+            )}
             {raid.gateRewardImgSrc && (
               <TableRow>
                 <TableCell component="th" scope="row" sx={{ textAlign: 'left', fontSize: '24px' }}>
@@ -520,7 +563,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
             {/* Shards Earnable row */}
             {(raid?.gateData?.honorShards || raid?.gateData?.boxHonorShards) && (
               <TableRow>
-                <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
+                <TableCell colSpan={gateCount + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
                   Honor Shards Earnable: {(honorShardsTotal ?? 0) + (boxHonorShardsTotal ?? 0)}
                 </TableCell>
               </TableRow>
@@ -614,7 +657,7 @@ const RaidGrid: React.FC<RaidGridProps> = ({ raid, hasHardVersion, hasSoloVersio
             {/* Destruction Stones Earnable row */}
             {(raid?.gateData?.destructionStones || raid?.gateData?.boxDestructionStones) && (
               <TableRow>
-                <TableCell colSpan={raid.gateData.gold.length + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
+                <TableCell colSpan={gateCount + 2} align="center" sx={{ fontWeight: 'bold', fontSize: '24px' }}>
                   Destruction Stones Earnable:{' '}
                   {(destructionStonesTotal ?? 0) +
                 (raid?.gateData?.boxDestructionStones?.reduce((total, stones) => total + stones, 0) ?? 0)}

@@ -33,7 +33,7 @@ const ClockBar = () => {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-3 h-7 items-center justify-center transition bg-primary-background-color">
       <div className="text-center text-sm md:text-base hidden md:block">
         <span className="text-primary-text-label-color">
-          Ignited Server Ending: <span className="font-semibold text-primary-text-label-color">{nextUpdate}</span>
+          {/* Ignited Server Ending: <span className="font-semibold text-primary-text-label-color">{nextUpdate}</span> */}
         </span>
       </div>
 

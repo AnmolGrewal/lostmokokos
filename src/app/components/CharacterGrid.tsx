@@ -69,14 +69,20 @@ interface CharacterState {
 }
 
 const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
-  const APP_STATE_VERSION = 'v4';
+  const APP_STATE_VERSION = 'v5';
+  const getRaidGateCount = useCallback((raid: (typeof raids)[0]) =>
+    Math.max(
+      raid.gateData.gold?.length ?? 0,
+      raid.gateData.boundGold?.length ?? 0,
+      raid.gateData.boxCost?.length ?? 0
+    ), []);
   const initializeNewCharacterState = useCallback((): CharacterState => {
     const newState: CharacterState = {};
     raids.forEach((raid) => {
-      newState[raid.path] = new Array(raid.gateData.gold.length).fill(false);
+      newState[raid.path] = new Array(getRaidGateCount(raid)).fill(false);
     });
     return newState;
-  }, [raids]);
+  }, [raids, getRaidGateCount]);
 
   const [open, setOpen] = useState<{ [key: string]: boolean }>({});
   const [checkedStates, setCheckedStates] = useState<CharacterState[]>([initializeNewCharacterState()]);
@@ -212,7 +218,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
     const label = Object.keys(raidGroups)[labelIndex];
     const updatedVisibility = raidVisibility.map((visible, i) => (i === labelIndex ? !visible : visible));
     setRaidVisibility(updatedVisibility);
-    localStorage.setItem('raidVisbility2', JSON.stringify(updatedVisibility));
+    localStorage.setItem('raidVisibility3', JSON.stringify(updatedVisibility));
 
     // If the raid is being hidden, set all associated check states to false
     if (!updatedVisibility[labelIndex]) {
@@ -222,9 +228,10 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
         prevStates.map((characterState) => {
           const newState = { ...characterState };
           raidsInGroup.forEach((raid) => {
-            if (newState[raid.path]) {
-              newState[raid.path] = newState[raid.path].map(() => false);
-            }
+            const existing = newState[raid.path];
+            newState[raid.path] = Array.isArray(existing)
+              ? existing.map(() => false)
+              : Array(getRaidGateCount(raid)).fill(false);
           });
           return newState;
         })
@@ -234,15 +241,15 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
 
   useEffect(() => {
     const loadInitialData = () => {
-      const savedRaidVisibility = JSON.parse(localStorage.getItem('raidVisibility2') || '[]');
-      const savedCharacterCount = parseInt(localStorage.getItem('characterCount2') || '1', 10);
-      const savedCharacterNames = JSON.parse(localStorage.getItem('characterNames2') || '[]');
+      const savedRaidVisibility = JSON.parse(localStorage.getItem('raidVisibility3') || '[]');
+      const savedCharacterCount = parseInt(localStorage.getItem('characterCount3') || '1', 10);
+      const savedCharacterNames = JSON.parse(localStorage.getItem('characterNames3') || '[]');
       const defaultCharacterNames = Array(savedCharacterCount)
         .fill('Character')
         .map((name, index) => `${name} ${index + 1}`);
-      const savedCheckedStates = JSON.parse(localStorage.getItem('checkedStates3') || '[]');
-      const savedBoxCheckedStates = JSON.parse(localStorage.getItem('boxCheckedStates3') || '[]');
-      const savedAdditionalGold = JSON.parse(localStorage.getItem('additionalGold2') || '[]');
+      const savedCheckedStates = JSON.parse(localStorage.getItem('checkedStates4') || '[]');
+      const savedBoxCheckedStates = JSON.parse(localStorage.getItem('boxCheckedStates4') || '[]');
+      const savedAdditionalGold = JSON.parse(localStorage.getItem('additionalGold3') || '[]');
       const defaultAdditionalGold = new Array(savedCharacterCount).fill(0);
       const savedChaosGateRatings = JSON.parse(localStorage.getItem('chaosGateRatings') || '[]');
       const savedUnaTaskRatings = JSON.parse(localStorage.getItem('unaTaskRatings') || '[]');
@@ -257,12 +264,25 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
       setRaidVisibility(savedRaidVisibility.length ? savedRaidVisibility : raids.map(() => true));
       setCharacterCount(savedCharacterCount);
       setCharacterNames(savedCharacterNames.length ? savedCharacterNames : defaultCharacterNames);
-      setCheckedStates(
-        savedCheckedStates.length ? savedCheckedStates : Array.from({ length: savedCharacterCount }, initializeNewCharacterState)
-      );
-      setBoxCheckedStates(
-        savedBoxCheckedStates.length ? savedBoxCheckedStates : Array.from({ length: savedCharacterCount }, initializeNewCharacterState)
-      );
+
+      const sanitizeState = (states: CharacterState[]): CharacterState[] => {
+        if (!states.length || states.length !== savedCharacterCount) {
+          return Array.from({ length: savedCharacterCount }, initializeNewCharacterState);
+        }
+        return states.map((charState) => {
+          const next: CharacterState = {};
+          raids.forEach((raid) => {
+            const existing = charState[raid.path];
+            const gateCount = getRaidGateCount(raid);
+            next[raid.path] = Array.isArray(existing) && existing.length === gateCount
+              ? existing
+              : Array(gateCount).fill(false);
+          });
+          return next;
+        });
+      };
+      setCheckedStates(sanitizeState(savedCheckedStates));
+      setBoxCheckedStates(sanitizeState(savedBoxCheckedStates));
       if (savedAdditionalGold.length === savedCharacterCount) {
         setAdditionalGold(savedAdditionalGold);
       } else {
@@ -271,15 +291,15 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
     };
 
     loadInitialData();
-  }, [raids.length, initializeNewCharacterState, raids]);
+  }, [raids.length, initializeNewCharacterState, raids, getRaidGateCount]);
 
   useEffect(() => {
     // Save all character related data to localStorage
-    localStorage.setItem('characterCount2', characterCount.toString());
-    localStorage.setItem('characterNames2', JSON.stringify(characterNames));
-    localStorage.setItem('checkedStates3', JSON.stringify(checkedStates));
-    localStorage.setItem('boxCheckedStates3', JSON.stringify(boxCheckedStates));
-    localStorage.setItem('additionalGold2', JSON.stringify(additionalGold));
+    localStorage.setItem('characterCount3', characterCount.toString());
+    localStorage.setItem('characterNames3', JSON.stringify(characterNames));
+    localStorage.setItem('checkedStates4', JSON.stringify(checkedStates));
+    localStorage.setItem('boxCheckedStates4', JSON.stringify(boxCheckedStates));
+    localStorage.setItem('additionalGold3', JSON.stringify(additionalGold));
     localStorage.setItem('chaosGateRatings', JSON.stringify(chaosGateRatings));
     localStorage.setItem('unaTaskRatings', JSON.stringify(unaTaskRatings));
     localStorage.setItem('guardianRaidRatings', JSON.stringify(guardianRaidRatings));
@@ -337,12 +357,18 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
   };
 
   const handleMainCheckboxChange = (raidPath: string, columnIndex: number) => {
-    const allChecked = checkedStates[columnIndex][raidPath]?.every(Boolean);
+    const raid = raids.find((r) => r.path === raidPath);
+    const gateCount = raid ? getRaidGateCount(raid) : 0;
+    const current = checkedStates[columnIndex]?.[raidPath];
+    const allChecked = Array.isArray(current) ? current.every(Boolean) : false;
     setCheckedStates((prevStates) =>
       prevStates.map((state, index) => {
         if (index === columnIndex) {
           const updatedState = { ...state };
-          updatedState[raidPath] = updatedState[raidPath].map(() => !allChecked);
+          const existing = updatedState[raidPath];
+          updatedState[raidPath] = Array.isArray(existing)
+            ? existing.map(() => !allChecked)
+            : Array(gateCount).fill(!allChecked);
           return updatedState;
         }
         return state;
@@ -351,12 +377,15 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
   };
 
   const handleGateCheckboxChange = (raidPath: string, columnIndex: number, index: number) => {
+    const raid = raids.find((r) => r.path === raidPath);
+    const gateCount = raid ? getRaidGateCount(raid) : 0;
     setCheckedStates((prevStates) => {
       const newState = [...prevStates];
-      newState[columnIndex] = {
-        ...newState[columnIndex],
-        [raidPath]: newState[columnIndex][raidPath]?.map((value, i) => (i === index ? !value : value)) || [],
-      };
+      const existing = newState[columnIndex]?.[raidPath];
+      const arr = Array.isArray(existing) && existing.length === gateCount
+        ? existing.map((value, i) => (i === index ? !value : value))
+        : Array.from({ length: gateCount }, (_, i) => i === index);
+      newState[columnIndex] = { ...newState[columnIndex], [raidPath]: arr };
       return newState;
     });
   };
@@ -381,14 +410,16 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
   const calculateCharacterTotalGold = (characterIndex: number) => {
     let total = 0;
     raids.forEach((raid) => {
-      total += raid.gateData.gold.reduce((sum, gold, index) => {
+      const gateCount = getRaidGateCount(raid);
+      for (let index = 0; index < gateCount; index++) {
         if (checkedStates[characterIndex]?.[raid.path]?.[index]) {
+          const gold = raid.gateData.gold?.[index] ?? 0;
+          const bound = raid.gateData.boundGold?.[index] ?? 0;
           const boxCost = raid.gateData.boxCost[index] || 0;
           const isBoxChecked = boxCheckedStates[characterIndex]?.[raid.path]?.[index] || false;
-          return sum + gold - (isBoxChecked ? boxCost : 0);
+          total += gold + bound - (isBoxChecked ? boxCost : 0);
         }
-        return sum;
-      }, 0);
+      }
     });
     return total + additionalGold[characterIndex];
   };
@@ -433,13 +464,21 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
     setGuildWeekliesRatings(new Array(newCharacterCount).fill(0));
     handleToggleConfirmClearDialog();
   
-    // Clear specific localStorage items
+    // Clear specific localStorage items (old and new keys for clean reset)
     localStorage.removeItem('characterCount2');
+    localStorage.removeItem('characterCount3');
     localStorage.removeItem('characterNames2');
+    localStorage.removeItem('characterNames3');
     localStorage.removeItem('checkedStates1');
+    localStorage.removeItem('checkedStates3');
+    localStorage.removeItem('checkedStates4');
     localStorage.removeItem('boxCheckedStates1');
+    localStorage.removeItem('boxCheckedStates3');
+    localStorage.removeItem('boxCheckedStates4');
     localStorage.removeItem('additionalGold2');
-    // localStorage.removeItem('raidVisbility2');
+    localStorage.removeItem('additionalGold3');
+    localStorage.removeItem('raidVisibility2');
+    localStorage.removeItem('raidVisibility3');
   
     // Clear ratings for chaos, guardian, and weekly from localStorage
     localStorage.removeItem('chaosRating');
@@ -458,19 +497,19 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
 
   const handleSweepCheckedStates = () => {
     setCheckedStates((prevStates) =>
-      prevStates.map((characterState) => {
+      prevStates.map(() => {
         const newState: CharacterState = {};
-        Object.keys(characterState).forEach((raidPath) => {
-          newState[raidPath] = new Array(characterState[raidPath].length).fill(false);
+        raids.forEach((raid) => {
+          newState[raid.path] = Array(getRaidGateCount(raid)).fill(false);
         });
         return newState;
       })
     );
-    setBoxCheckedStates((prevStates) => // Clear box checked states
-      prevStates.map((characterState) => {
+    setBoxCheckedStates((prevStates) =>
+      prevStates.map(() => {
         const newState: CharacterState = {};
-        Object.keys(characterState).forEach((raidPath) => {
-          newState[raidPath] = new Array(characterState[raidPath].length).fill(false);
+        raids.forEach((raid) => {
+          newState[raid.path] = Array(getRaidGateCount(raid)).fill(false);
         });
         return newState;
       })
@@ -479,33 +518,35 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
   };  
 
   const handleBoxCheckboxChange = (raidPath: string, columnIndex: number, index: number) => {
+    const raid = raids.find((r) => r.path === raidPath);
+    const gateCount = raid ? getRaidGateCount(raid) : 0;
     setBoxCheckedStates((prevStates) => {
       const newState = [...prevStates];
-      const raid = raids.find((r) => r.path === raidPath);
-      if (raid) {
-        if (!newState[columnIndex]) {
-          newState[columnIndex] = {};
-        }
-        if (!newState[columnIndex][raidPath]) {
-          newState[columnIndex][raidPath] = Array(raid.gateData.gold.length).fill(false);
-        }
-        const isChecked = !newState[columnIndex][raidPath][index];
-        newState[columnIndex][raidPath] = newState[columnIndex][raidPath].map((value, i) => (i === index ? !value : value));
-  
-        // Update the corresponding gate checkbox state only if the chest checkbox is checked
-        if (isChecked) {
-          setCheckedStates((prevCheckedStates) => {
-            const updatedCheckedStates = [...prevCheckedStates];
-            if (!updatedCheckedStates[columnIndex]) {
-              updatedCheckedStates[columnIndex] = {};
-            }
-            if (!updatedCheckedStates[columnIndex][raidPath]) {
-              updatedCheckedStates[columnIndex][raidPath] = Array(raid.gateData.gold.length).fill(false);
-            }
-            updatedCheckedStates[columnIndex][raidPath][index] = true;
-            return updatedCheckedStates;
-          });
-        }
+      if (!newState[columnIndex]) {
+        newState[columnIndex] = {};
+      }
+      const existing = newState[columnIndex][raidPath];
+      const arr = Array.isArray(existing) && existing.length === gateCount
+        ? existing.map((value, i) => (i === index ? !value : value))
+        : Array.from({ length: gateCount }, (_, i) => i === index);
+      newState[columnIndex][raidPath] = arr;
+      const isChecked = arr[index];
+
+      // Update the corresponding gate checkbox state only if the chest checkbox is checked
+      if (isChecked && raid) {
+        setCheckedStates((prevCheckedStates) => {
+          const updatedCheckedStates = [...prevCheckedStates];
+          if (!updatedCheckedStates[columnIndex]) {
+            updatedCheckedStates[columnIndex] = {};
+          }
+          const existingGate = updatedCheckedStates[columnIndex][raidPath];
+          const gateArr = Array.isArray(existingGate) && existingGate.length === gateCount
+            ? [...existingGate]
+            : Array(gateCount).fill(false);
+          gateArr[index] = true;
+          updatedCheckedStates[columnIndex][raidPath] = gateArr;
+          return updatedCheckedStates;
+        });
       }
       return newState;
     });
@@ -969,7 +1010,7 @@ const CharacterGrid: React.FC<GoldGridProps> = ({ raids }) => {
                               />
                               <Collapse in={open[raid.path]} timeout="auto" unmountOnExit>
                                 <div style={{ marginLeft: '40px' }}>
-                                  {raid.gateData.gold.map((_, gateIndex: number) => (
+                                  {Array.from({ length: getRaidGateCount(raid) }, (_, gateIndex: number) => (
                                     <div key={`${raid.path}-gold-${gateIndex}`}>
                                       <FormControlLabel
                                         className="flex justify-center items-center"

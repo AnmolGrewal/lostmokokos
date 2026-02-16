@@ -285,6 +285,11 @@ const updates: Update[] = [
     title: 'Updated for new Patch',
     context: ['Updated for new Patch'],
   },
+  {
+    date: 'Feb 16, 2026',
+    title: 'Updated All Raids Gold and Box Costs',
+    context: ['Updated All Raids Gold and Box Costs'],
+  },
 ].reverse();
 
 export type { ChangeLogProps };
