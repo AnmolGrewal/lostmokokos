@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 
 /** Lost Ark (NA/EU) resets daily at 10:00 UTC; the weekly reset is Wednesday 10:00 UTC. */
 const RESET_HOUR_UTC = 10;
@@ -32,13 +32,34 @@ export function formatCountdown(ms: number): string {
   return [days ? `${days}d` : null, hours || days ? `${hours}h` : null, `${minutes}m`].filter(Boolean).join(' ');
 }
 
-/** Re-renders every 30s; returns null on the server / first render so markup stays hydration-safe. */
-export function useNow(intervalMs = 30_000): Date | null {
-  const [now, setNow] = useState<Date | null>(null);
-  useEffect(() => {
-    setNow(new Date());
-    const id = setInterval(() => setNow(new Date()), intervalMs);
-    return () => clearInterval(id);
-  }, [intervalMs]);
-  return now;
+// One shared 30s clock for every component that needs "now".
+const TICK_MS = 30_000;
+let nowMs = 0;
+let timer: ReturnType<typeof setInterval> | undefined;
+const listeners = new Set<() => void>();
+
+function subscribe(onChange: () => void) {
+  listeners.add(onChange);
+  if (!timer) {
+    nowMs = Date.now();
+    timer = setInterval(() => {
+      nowMs = Date.now();
+      listeners.forEach((l) => l());
+    }, TICK_MS);
+  }
+  return () => {
+    listeners.delete(onChange);
+    if (!listeners.size && timer) {
+      clearInterval(timer);
+      timer = undefined;
+    }
+  };
+}
+const getSnapshot = () => nowMs || (nowMs = Date.now());
+const getServerSnapshot = () => 0;
+
+/** Re-renders every 30s; returns null on the server / while hydrating so markup stays hydration-safe. */
+export function useNow(): Date | null {
+  const ms = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  return ms ? new Date(ms) : null;
 }

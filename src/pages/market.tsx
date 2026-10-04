@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import clsx from 'clsx';
 import Seo from '@/components/Seo';
 import { Gold, ItemIcon, PageHeader, Section, Stat, Tabs } from '@/components/ui';
@@ -94,19 +94,13 @@ function PriceInput({ k, sheetValue, label }: { k: string; sheetValue: number | 
 
 export default function MarketPage() {
   const router = useRouter();
-  const [tab, setTabState] = useState<Tab>('prices');
   const pricing = usePrices();
   const { prices, editedCount, reset } = pricing;
   const blueCrystal = prices.blueCrystal;
   const royalCrystal = prices.royalCrystal;
 
-  useEffect(() => {
-    if (router.isReady && (router.query.tab === 'mari' || router.query.tab === 'prices')) setTabState(router.query.tab);
-  }, [router.isReady, router.query.tab]);
-  const setTab = (t: Tab) => {
-    setTabState(t);
-    router.replace({ pathname: router.pathname, query: { tab: t } }, undefined, { shallow: true, scroll: false });
-  };
+  const tab: Tab = router.query.tab === 'mari' ? 'mari' : 'prices';
+  const setTab = (t: Tab) => router.replace({ pathname: router.pathname, query: { tab: t } }, undefined, { shallow: true, scroll: false });
 
   const deals = useMemo(
     () =>

@@ -1,13 +1,13 @@
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import clsx from 'clsx';
 import Seo from '@/components/Seo';
 import { Gold, ItemIcon, PageHeader, PctBar, Section, Stat, Tabs, TierBadge } from '@/components/ui';
 import { CHEST_REWARDS, CLEAR_REWARDS, EXTRA_LOOT, FIRST_CLEAR, type RewardMeta } from '@/data/rewards';
 import { RunPlanner } from '@/components/RunPlanner';
-import { getRaid, modeSlug, sheet, type Gate, type RaidMode } from '@/data/sheet';
+import { getRaid, modeSlug, sheet, type Gate, type Raid, type RaidMode } from '@/data/sheet';
 import { fmt } from '@/lib/format';
 import { usePrices } from '@/lib/PricesContext';
 import { difficultyLadder, uniformRun, type RunModes } from '@/lib/runs';
@@ -182,30 +182,27 @@ function ModeView({ mode, planner }: { mode: RaidMode; planner?: ReactNode }) {
   );
 }
 
+/** Run planner seeded with every gate at `start`; remount (via key) to reseed. */
+function PlannerFrom({ raid, start }: { raid: Raid; start: string }) {
+  const [plan, setPlan] = useState<RunModes>(() => uniformRun(raid, start));
+  return <RunPlanner raid={raid} modes={plan} onChange={setPlan} />;
+}
+
 export default function RaidPage({ slug }: { slug: string }) {
   const raid = getRaid(slug)!;
   const router = useRouter();
   const options = useMemo(() => raid.modes.map((m) => ({ value: modeSlug(m.difficulty), label: m.difficulty })), [raid]);
-  const [active, setActive] = useState(options[0].value);
-
-  // Pick up ?mode= (also used by redirects from the old /raids/x-hard URLs)
-  useEffect(() => {
-    if (!router.isReady) return;
-    const q = router.query.mode;
-    const wanted = typeof q === 'string' ? q.toLowerCase() : null;
-    setActive(wanted && options.some((o) => o.value === wanted) ? wanted : options[0].value);
-  }, [router.isReady, router.query.mode, options]);
+  // The open difficulty lives in the URL (?mode=), which also catches redirects from old /raids/x-hard links.
+  const q = router.query.mode;
+  const wanted = typeof q === 'string' ? q.toLowerCase() : null;
+  const active = wanted && options.some((o) => o.value === wanted) ? wanted : options[0].value;
 
   const select = (value: string) => {
-    setActive(value);
     router.replace({ pathname: router.pathname, query: { slug, mode: value } }, undefined, { shallow: true, scroll: false });
   };
 
   const mode = raid.modes.find((m) => modeSlug(m.difficulty) === active) ?? raid.modes[0];
   const canMix = difficultyLadder(raid).length > 1;
-  const [plan, setPlan] = useState<RunModes>(() => uniformRun(raid, active));
-  // Start the planner from whichever difficulty tab is open.
-  useEffect(() => setPlan(uniformRun(raid, active)), [raid, active]);
   const idx = sheet.raids.findIndex((r) => r.slug === slug);
   const prev = sheet.raids[idx - 1];
   const next = sheet.raids[idx + 1];
@@ -239,7 +236,8 @@ export default function RaidPage({ slug }: { slug: string }) {
         </span>
       </PageHeader>
 
-      <ModeView mode={mode} planner={canMix ? <RunPlanner raid={raid} modes={plan} onChange={setPlan} /> : null} />
+      {/* keyed so the planner starts over from whichever difficulty tab is open */}
+      <ModeView mode={mode} planner={canMix ? <PlannerFrom key={`${raid.slug}:${active}`} raid={raid} start={active} /> : null} />
 
       <div className="mt-10 flex justify-between gap-4 text-sm">
         {prev ? (
