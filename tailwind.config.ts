@@ -1,20 +1,44 @@
 import type { Config } from 'tailwindcss';
-import colors from './tailwind-colors';
 
 const config: Config = {
-  content: ['./src/pages/**/*.{js,ts,jsx,tsx,mdx}', './src/components/**/*.{js,ts,jsx,tsx,mdx}', './src/app/**/*.{js,ts,jsx,tsx,mdx}'],
+  content: ['./src/**/*.{ts,tsx}'],
   theme: {
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      colors: {
+        ink: {
+          950: '#0b0d12',
+          900: '#10131a',
+          850: '#151923',
+          800: '#1a1f2b',
+          700: '#252b3a',
+          600: '#343c50',
+          500: '#4b556d',
+          400: '#7c86a0',
+          300: '#a9b1c6',
+          200: '#d3d8e6',
+          100: '#eef1f8',
+        },
+        gold: {
+          300: '#f6dc9c',
+          400: '#efc56a',
+          500: '#e3a93b',
+          600: '#b9832a',
+        },
+        tier: {
+          t41: '#c084fc',
+          t4: '#60a5fa',
+          t3: '#2dd4bf',
+          t2: '#a3a3a3',
+        },
+        good: '#4ade80',
+        bad: '#f87171',
       },
-      colors,
       fontFamily: {
-        inter: ['Inter', 'sans-serif'],
+        sans: ['var(--font-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'var(--font-sans)', 'serif'],
       },
-      screens: {
-        'sm-md': { 'max': '1165px' }, // Custom screen size for 1025px or smaller
+      boxShadow: {
+        card: '0 1px 0 0 rgb(255 255 255 / 0.04) inset, 0 8px 24px -12px rgb(0 0 0 / 0.6)',
       },
     },
   },
