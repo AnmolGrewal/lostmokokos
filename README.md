@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Lost Mokokos
 
-## Getting Started
+Lost Ark raid rewards, weekly gold planning, daily content loot, market prices and F4 shop value — built from the community
+[Raids, Dungeons and Guardians Rewards](https://docs.google.com/spreadsheets/d/1YQpWt8iOK6yO5_7r3rvZZKkoRy8Z0aEAPHy11gYZZQ8) sheet (by Tylobic).
 
-First, run the development server:
+## Requirements
+
+- Node.js **24 LTS** (`nvm use` picks it up from `.nvmrc`)
+- npm
+
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npm run build      # production build
+npm run lint
+npm run typecheck
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Updating the data
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+All site data comes from seven tabs of the sheet: Raid Info, Raid extra loot, Daily Chaos, Guardian Raids, Market prices,
+Mari's Shop and F4 Shop.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+npm run sync-sheet   # downloads the tabs to data/sheet/*.csv and regenerates src/data/generated/sheet.json
+npm run data         # only regenerates the JSON from the CSVs already in data/sheet/
+```
 
-## Learn More
+Commit both the CSVs and the generated JSON — the CSV diff makes every data change easy to review.
+`scripts/build-data.mjs` checks the sheet's column headers and fails loudly if the layout changes.
 
-To learn more about Next.js, take a look at the following resources:
+## Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Path | What |
+| --- | --- |
+| `src/pages/` | Home, Raids (`/raids`, `/raids/[slug]`), Gold, Roster (`/characters`), Daily, Market, F4 Shop |
+| `src/components/` | Layout and shared UI |
+| `src/data/sheet.ts` | Typed access to the generated sheet data + helpers (best raids for an item level, …) |
+| `src/data/rewards.ts` | Labels and icons for every reward type |
+| `public/icons/` | Item icons |
+| `scripts/` | Sheet sync + CSV → JSON build |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Old URLs (`/compare`, `/gold-calculator`, `/raids/aegir-hard`, `/raids/voldis`, …) redirect to their new homes (see `next.config.mjs`).
