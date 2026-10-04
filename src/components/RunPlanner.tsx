@@ -62,7 +62,7 @@ export function RunPlanner({ raid, modes, onChange }: { raid: Raid; modes: RunMo
           {summary.mixed && <span className="chip border-amber-500/40 bg-amber-500/10 text-amber-300">Mixed difficulty</span>}
         </span>
       }
-      subtitle="Pick a difficulty per gate. After a gate you can stay or drop to a lower difficulty, never go back up."
+      subtitle="Pick a difficulty per gate. After a gate you can stay or drop to any lower one (Hard → Normal → Solo), never go back up."
     >
       <div className="overflow-x-auto">
         <table className="table-base">

@@ -269,7 +269,7 @@ export default function CharactersPage() {
       <Seo title="Roster gold tracker" description="Track weekly Lost Ark raid gold across your roster. Checkmarks reset every Wednesday." />
       <PageHeader eyebrow={sheet.lastUpdated ?? 'Weekly'} title="Roster gold tracker">
         Add your characters, pick up to {GOLD_RAIDS_PER_CHARACTER} gold raids each, and tick gates off as you clear them. Each gate can use its own difficulty
-        (e.g. Hard G1, then Normal) — you can step down after a gate but not back up. Saved in this browser; checkmarks reset
+        (e.g. Hard G1, Normal G2, Solo G3) — you can step down after any gate but not back up. Saved in this browser; checkmarks reset
         at the weekly reset{now ? ` (in ${formatCountdown(nextWeeklyReset(now).getTime() - now.getTime())})` : ''}.
       </PageHeader>
 

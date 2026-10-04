@@ -1,9 +1,9 @@
 /**
  * Raid runs with per-gate difficulty.
  *
- * After clearing a gate you can carry on at the same difficulty or drop to a lower one (e.g. Hard G1
- * → Normal G2), but never go back up. Solo / Matching are separate entry points, so a run that starts
- * in one of those stays in it.
+ * After clearing a gate you can carry on at the same difficulty or drop to any lower one
+ * (e.g. Hard G1 → Normal G2 → Solo G3), but never go back up. Solo / Matching count as the lowest
+ * difficulty, so a run can drop into them but a run that starts there stays there.
  *
  * A run is stored as one mode slug per gate (`null` = that gate isn't done). Gates are cleared in
  * order, so everything after a `null` is `null` too.
@@ -35,12 +35,16 @@ const gateIlvl = (mode: RaidMode, i: number) => mode.gates[i]?.itemLevel ?? mode
 /** Most gates any difficulty of this raid has. */
 export const gateCount = (raid: Raid) => Math.max(...raid.modes.map((m) => m.gates.length));
 
-/** Regular difficulties, hardest first (higher item level = harder). */
-export function difficultyLadder(raid: Raid): RaidMode[] {
+/**
+ * Every difficulty, hardest first: regular ones by item level (higher = harder), then Solo /
+ * Matching at the bottom. Pass `includeAlt: false` to leave Solo / Matching out.
+ */
+export function difficultyLadder(raid: Raid, opts: { includeAlt?: boolean } = {}): RaidMode[] {
+  const rank = (m: RaidMode) => (isAltEntry(m.difficulty) ? 1 : 0);
   return raid.modes
-    .filter((m) => !isAltEntry(m.difficulty))
+    .filter((m) => opts.includeAlt !== false || !isAltEntry(m.difficulty))
     .map((m, i) => ({ m, i }))
-    .sort((a, b) => (b.m.itemLevel ?? 0) - (a.m.itemLevel ?? 0) || a.i - b.i)
+    .sort((a, b) => rank(a.m) - rank(b.m) || (b.m.itemLevel ?? 0) - (a.m.itemLevel ?? 0) || a.i - b.i)
     .map(({ m }) => m);
 }
 
@@ -52,16 +56,11 @@ const findMode = (raid: Raid, slug: string | null | undefined) => (slug ? raid.m
  */
 export function gateChoices(raid: Raid, index: number, prev: string | null | undefined, itemLevel?: number): RaidMode[] {
   const ok = (m: RaidMode) => index < m.gates.length && (itemLevel === undefined || gateIlvl(m, index) <= itemLevel);
-  if (index === 0) {
-    const ladder = difficultyLadder(raid);
-    return [...ladder, ...raid.modes.filter((m) => isAltEntry(m.difficulty))].filter(ok);
-  }
+  const ladder = difficultyLadder(raid);
+  if (index === 0) return ladder.filter(ok);
   const prevMode = findMode(raid, prev);
   if (!prevMode) return []; // previous gate not done → can't continue
-  if (isAltEntry(prevMode.difficulty)) return ok(prevMode) ? [prevMode] : [];
-  const ladder = difficultyLadder(raid);
-  const from = ladder.indexOf(prevMode);
-  return ladder.slice(from).filter(ok);
+  return ladder.slice(ladder.indexOf(prevMode)).filter(ok);
 }
 
 /** Every gate at one difficulty. */
@@ -128,7 +127,7 @@ export function summarizeRun(raid: Raid, modes: RunModes): RunSummary {
   };
 }
 
-/** "Hard" or "Hard G1–2 → Normal G3–4". */
+/** "Hard" or "Hard G1–2 → Normal G3 → Solo G4". */
 function runLabel(gates: RunGate[]): string {
   if (!gates.length) return 'Not planned';
   const groups: { difficulty: string; from: number; to: number }[] = [];
@@ -150,7 +149,8 @@ function runLabel(gates: RunGate[]): string {
  * (e.g. Hard for the gates you're geared for, Normal for the rest).
  */
 export function bestRun(raid: Raid, itemLevel: number, opts: { includeAlt?: boolean } = {}): RunModes | null {
-  const ladder = difficultyLadder(raid);
+  // Solo / Matching pay the same as Normal, so they only matter when explicitly included.
+  const ladder = difficultyLadder(raid, { includeAlt: !!opts.includeAlt });
   const n = gateCount(raid);
   const memo = new Map<string, { gold: number; picks: RunModes }>();
   // best(i, r): best gold from gate i onward when gate i may use ladder[r..] (r = hardest allowed).
@@ -170,16 +170,7 @@ export function bestRun(raid: Raid, itemLevel: number, opts: { includeAlt?: bool
     memo.set(key, result);
     return result;
   };
-  let winner = best(0, 0);
-
-  if (opts.includeAlt) {
-    for (const m of raid.modes.filter((x) => isAltEntry(x.difficulty))) {
-      if (m.gates.some((_, i) => gateIlvl(m, i) > itemLevel)) continue;
-      const run = uniformRun(raid, modeSlug(m.difficulty));
-      const gold = summarizeRun(raid, run).total;
-      if (gold > winner.gold) winner = { gold, picks: run };
-    }
-  }
+  const winner = best(0, 0);
   return winner.gold > 0 ? winner.picks : null;
 }
 

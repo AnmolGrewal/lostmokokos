@@ -112,7 +112,7 @@ export default function GoldPage() {
           )}
           {top.some((t) => t.summary.mixed) && (
             <p className="mt-1 text-xs text-ink-500">
-              Mixed runs: you can drop to a lower difficulty after any gate (never back up), so you can take Hard on the gates your item level allows and
+              Mixed runs: you can drop to any lower difficulty after a gate (Hard → Normal → Solo, never back up), so you can take Hard on the gates your item level allows and
               Normal for the rest.
             </p>
           )}
