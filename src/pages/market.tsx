@@ -1,9 +1,12 @@
-import { useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useMemo, useState } from 'react';
 import clsx from 'clsx';
 import Seo from '@/components/Seo';
 import { Gold, ItemIcon, PageHeader, Section, Stat, Tabs } from '@/components/ui';
 import { sheet } from '@/data/sheet';
 import { fmt } from '@/lib/format';
+import { usePrices } from '@/lib/PricesContext';
+import { convKey, directUnits, isDerivedConversion, listingKey, unitKey } from '@/lib/prices';
 
 const { market, mari } = sheet;
 
@@ -36,19 +39,82 @@ function Name({ name }: { name: string }) {
 
 type Tab = 'mari' | 'prices';
 
+const DIRECT_UNITS = new Set(directUnits(market));
+const fmtUnit = (n: number | null | undefined) => (n === null || n === undefined ? '—' : n.toLocaleString('en-US', { maximumFractionDigits: n < 10 ? 3 : 2 }));
+
+/**
+ * Editable price cell. Shows the sheet's value until edited; edits are saved right away and an
+ * empty field (or the reset button) goes back to the sheet's value.
+ */
+function PriceInput({ k, sheetValue, label }: { k: string; sheetValue: number | null; label: string }) {
+  const { overrides, set, isEdited } = usePrices();
+  const edited = isEdited(k);
+  const current = edited ? overrides[k] : sheetValue;
+  const [draft, setDraft] = useState<string | null>(null);
+
+  const commit = (text: string) => {
+    setDraft(text);
+    const cleaned = text.replace(/,/g, '').trim();
+    if (cleaned === '') return set(k, null);
+    const n = Number(cleaned);
+    if (!Number.isFinite(n) || n < 0) return;
+    set(k, sheetValue !== null && n === sheetValue ? null : n);
+  };
+
+  return (
+    <span className="inline-flex items-center justify-end gap-1">
+      <input
+        className={clsx(
+          'input num w-28 py-1 text-right',
+          edited ? 'border-amber-500/70 bg-amber-500/10 text-amber-200' : 'text-gold-300'
+        )}
+        inputMode="decimal"
+        aria-label={label}
+        title={edited ? `Sheet value: ${fmtUnit(sheetValue)}` : 'Sheet value — type to use your own price'}
+        value={draft ?? (current === null ? '' : String(current))}
+        placeholder={sheetValue === null ? '—' : fmtUnit(sheetValue)}
+        onChange={(e) => commit(e.target.value)}
+        onBlur={() => setDraft(null)}
+      />
+      <button
+        type="button"
+        className={clsx('w-5 text-xs text-ink-500 hover:text-amber-300', !edited && 'invisible')}
+        onClick={() => {
+          setDraft(null);
+          set(k, null);
+        }}
+        aria-label={`Reset ${label} to the sheet value`}
+        title={`Back to sheet value (${fmtUnit(sheetValue)})`}
+      >
+        ↺
+      </button>
+    </span>
+  );
+}
+
 export default function MarketPage() {
-  const [tab, setTab] = useState<Tab>('mari');
-  const blueCrystal = market.conversions.find((c) => c.label === '1 Blue Crystal')?.value ?? null;
-  const royalCrystal = market.conversions.find((c) => c.label === '1 Royal Crystal')?.value ?? null;
+  const router = useRouter();
+  const [tab, setTabState] = useState<Tab>('prices');
+  const pricing = usePrices();
+  const { prices, editedCount, reset } = pricing;
+  const blueCrystal = prices.blueCrystal;
+  const royalCrystal = prices.royalCrystal;
+
+  useEffect(() => {
+    if (router.isReady && (router.query.tab === 'mari' || router.query.tab === 'prices')) setTabState(router.query.tab);
+  }, [router.isReady, router.query.tab]);
+  const setTab = (t: Tab) => {
+    setTabState(t);
+    router.replace({ pathname: router.pathname, query: { tab: t } }, undefined, { shallow: true, scroll: false });
+  };
 
   const deals = useMemo(
     () =>
       mari.map((d) => {
-        const comparable = d.marketGold !== null && d.goldEquivalent !== null;
-        const savings = comparable ? d.marketGold! - d.goldEquivalent! : null;
-        return { ...d, comparable, savings };
+        const v = pricing.mariValue(d);
+        return { ...v, comparable: v.marketGold !== null && v.goldEquivalent !== null };
       }),
-    []
+    [pricing]
   );
   const mariWins = deals.filter((d) => d.cheaper === 'Mari');
 
@@ -63,21 +129,22 @@ export default function MarketPage() {
             value={tab}
             onChange={setTab}
             options={[
-              { value: 'mari', label: "Mari's shop" },
               { value: 'prices', label: 'Market prices' },
+              { value: 'mari', label: "Mari's shop" },
             ]}
           />
         }
       >
-        Prices the rest of the site uses to value chests, chaos runs and shop packs.
+        Prices the rest of the site uses to value chests, chaos runs, Mari&apos;s shop and F4 packs. Put in your own server&apos;s prices — they&apos;re saved in
+        this browser and every calculation updates. Anything you don&apos;t edit uses the sheet&apos;s price.
       </PageHeader>
 
       <div className="mb-6 grid gap-3 sm:grid-cols-3">
         <Stat label="1 Blue Crystal" hint="Gold → Blue Crystal exchange">
-          <Gold value={blueCrystal} size={20} />
+          <Gold value={Math.round(blueCrystal * 100) / 100} size={20} />
         </Stat>
         <Stat label="1 Royal Crystal" hint="Royal Crystal → Gold">
-          <Gold value={royalCrystal} size={20} />
+          <Gold value={Math.round(royalCrystal * 100) / 100} size={20} />
         </Stat>
         <Stat label="Mari deals worth it" hint="Cheaper than buying on the market">
           <span className={clsx(mariWins.length ? 'text-good' : 'text-ink-300')}>
@@ -134,69 +201,112 @@ export default function MarketPage() {
           </div>
         </Section>
       ) : (
-        <div className="grid gap-6 xl:grid-cols-[1.4fr_1fr]">
-          <Section title="Market listings" subtitle={market.title ?? undefined}>
-            <div className="overflow-x-auto">
-              <table className="table-base">
-                <thead>
-                  <tr>
-                    <th>Listing</th>
-                    <th className="text-right">T4.1</th>
-                    <th className="text-right">T4</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {market.listings.map((l) => (
-                    <tr key={l.name}>
-                      <td>
-                        <Name name={l.name} />
-                      </td>
-                      <td className="text-right">
-                        <Gold value={l.t41} />
-                      </td>
-                      <td className="text-right">{l.note ? <span className="text-xs text-ink-500">{l.note}</span> : <Gold value={l.t4} tone="light" />}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Section>
-          <div className="space-y-6">
-            <Section title="Per-unit prices" subtitle="Used to value raid chests and packs">
+        <div className="space-y-4">
+          <div
+            className={clsx(
+              'card flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-sm',
+              editedCount ? 'border-amber-500/40 bg-amber-500/5 text-amber-200' : 'text-ink-400'
+            )}
+          >
+            <span>
+              {editedCount
+                ? `Using your prices for ${editedCount} value${editedCount === 1 ? '' : 's'} — chest values, chaos, Mari and F4 packs all use them.`
+                : `Showing the sheet's ${market.region ?? ''} prices${market.date ? ` from ${market.date}` : ''}. Edit any gold field to use your own.`}
+            </span>
+            {editedCount > 0 && (
+              <button className="btn text-xs" onClick={reset}>
+                Reset all to sheet
+              </button>
+            )}
+          </div>
+
+          <div className="grid gap-6 xl:grid-cols-[1.3fr_1fr]">
+            <Section title="Market listings" subtitle="What things cost on the auction house. Editable.">
               <div className="overflow-x-auto">
                 <table className="table-base">
                   <thead>
                     <tr>
-                      <th>Unit</th>
+                      <th>Listing</th>
                       <th className="text-right">T4.1</th>
                       <th className="text-right">T4</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {market.units.map((u) => (
-                      <tr key={u.name}>
-                        <td className="text-ink-200">{u.name}</td>
-                        <td className="num text-right text-gold-300">{fmt(u.t41)}</td>
-                        <td className="num text-right text-ink-300">{fmt(u.t4)}</td>
+                    {market.listings.map((l) => (
+                      <tr key={l.name}>
+                        <td>
+                          <Name name={l.name} />
+                          {l.note && <span className="ml-8 block text-[11px] text-ink-500">{l.note}</span>}
+                        </td>
+                        <td className="text-right">
+                          {l.t41 === null ? <span className="text-ink-700">—</span> : <PriceInput k={listingKey(l.name, 't41')} sheetValue={l.t41} label={`${l.name} T4.1 price`} />}
+                        </td>
+                        <td className="text-right">
+                          {l.t4 === null ? <span className="text-ink-700">—</span> : <PriceInput k={listingKey(l.name, 't4')} sheetValue={l.t4} label={`${l.name} T4 price`} />}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
             </Section>
-            <Section title="Currency">
-              <ul className="divide-y divide-ink-800 text-sm">
-                {market.conversions.map((c) => (
-                  <li key={c.label + c.section} className="flex items-center justify-between px-4 py-2">
-                    <span className="text-ink-300">
-                      <span className="block text-[11px] uppercase tracking-wide text-ink-500">{c.section}</span>
-                      {c.label}
-                    </span>
-                    {c.unit === 'gold' ? <Gold value={c.value} /> : <span className="num font-semibold text-ink-100">{c.unit === 'USD' ? `$${c.value.toFixed(2)}` : `${fmt(c.value)} ${c.unit}`}</span>}
-                  </li>
-                ))}
-              </ul>
-            </Section>
+            <div className="space-y-6">
+              <Section title="Currency" subtitle="Exchange rates. Editable.">
+                <ul className="divide-y divide-ink-800 text-sm">
+                  {market.conversions.map((c) => {
+                    const derived = isDerivedConversion(c.label);
+                    const value = prices.conversions[c.label];
+                    return (
+                      <li key={c.label + c.section} className="flex items-center justify-between gap-3 px-4 py-2">
+                        <span className="text-ink-300">
+                          <span className="block text-[11px] uppercase tracking-wide text-ink-500">{c.section}</span>
+                          {c.label}
+                        </span>
+                        {derived ? (
+                          <span className="num font-semibold text-ink-300">
+                            {c.unit === 'USD' ? `$${fmtUnit(value)}` : `${fmtUnit(value)} ${c.unit}`}
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1">
+                            {c.unit === 'USD' && <span className="text-ink-500">$</span>}
+                            <PriceInput k={convKey(c.label)} sheetValue={c.value} label={`${c.label} (${c.unit})`} />
+                            {c.unit !== 'USD' && <span className="text-xs text-ink-500">{c.unit}</span>}
+                          </span>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </Section>
+              <Section title="Per-unit prices" subtitle="Worked out from the listings. Items not sold on the market can be edited here.">
+                <div className="overflow-x-auto">
+                  <table className="table-base">
+                    <thead>
+                      <tr>
+                        <th>Unit</th>
+                        <th className="text-right">T4.1</th>
+                        <th className="text-right">T4</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {market.units.map((u) => {
+                        const cur = prices.units[u.name];
+                        const direct = DIRECT_UNITS.has(u.name);
+                        return (
+                          <tr key={u.name}>
+                            <td className="text-ink-200">{u.name}</td>
+                            <td className="num text-right text-gold-300">
+                              {direct ? <PriceInput k={unitKey(u.name)} sheetValue={u.t41} label={`${u.name} price`} /> : fmtUnit(cur?.t41)}
+                            </td>
+                            <td className="num text-right text-ink-300">{direct ? null : fmtUnit(cur?.t4)}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </Section>
+            </div>
           </div>
         </div>
       )}

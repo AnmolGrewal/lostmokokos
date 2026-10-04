@@ -3,43 +3,48 @@ import { useMemo, useState } from 'react';
 import clsx from 'clsx';
 import Seo from '@/components/Seo';
 import { Gold, PageHeader, PctBar, Section, TierBadge } from '@/components/ui';
-import { allModes, bestRaidsFor, isAltEntry, modeSlug, type RaidModeRef } from '@/data/sheet';
+import { allModes, isAltEntry, modeSlug, type Gate, type RaidModeRef } from '@/data/sheet';
+import { usePrices } from '@/lib/PricesContext';
+import { bestRunsFor, runHref } from '@/lib/runs';
 import { useStoredState } from '@/lib/useStoredState';
 
 type SortKey = 'raid' | 'itemLevel' | 'total' | 'tradable' | 'bound' | 'chestCost' | 'value';
 
-const avgValue = (ref: RaidModeRef) => {
-  const vals = ref.mode.gates.map((g) => g.value.atItemLevel).filter((v): v is number => v !== null);
+type ValueFn = (gate: Gate, tier: string) => Gate['value'];
+const avgValue = (ref: RaidModeRef, value: ValueFn) => {
+  const vals = ref.mode.gates.map((g) => value(g, ref.mode.tier).atItemLevel).filter((v): v is number => v !== null);
   return vals.length ? Math.round(vals.reduce((s, v) => s + v, 0) / vals.length) : null;
 };
 
-const SORTERS: Record<SortKey, (r: RaidModeRef) => number | string> = {
+const sorters = (value: ValueFn): Record<SortKey, (r: RaidModeRef) => number | string> => ({
   raid: (r) => r.raid.name,
   itemLevel: (r) => r.mode.itemLevel ?? 0,
   total: (r) => r.mode.gold.total,
   tradable: (r) => r.mode.gold.tradable,
   bound: (r) => r.mode.gold.bound,
   chestCost: (r) => r.mode.gold.chestCost,
-  value: (r) => avgValue(r) ?? -1,
-};
+  value: (r) => avgValue(r, value) ?? -1,
+});
 
 export default function GoldPage() {
   const [ilvl, setIlvl] = useStoredState<number | ''>('lm.gold.ilvl', '');
   const [includeSolo, setIncludeSolo] = useStoredState('lm.gold.solo', false);
   const [sort, setSort] = useState<{ key: SortKey; dir: 1 | -1 }>({ key: 'total', dir: -1 });
 
-  const top = useMemo(() => (ilvl ? bestRaidsFor(ilvl, 3, { includeSolo }) : []), [ilvl, includeSolo]);
-  const topKeys = new Set(top.map((t) => t.key));
+  const { gateValue } = usePrices();
+  const top = useMemo(() => (ilvl ? bestRunsFor(ilvl, 3, { includeAlt: includeSolo }) : []), [ilvl, includeSolo]);
+  // Highlight the table row each top run starts on.
+  const topKeys = new Set(top.map((t) => `${t.raid.slug}:${t.modes[0]}`));
 
   const rows = useMemo(() => {
     const list = allModes().filter((r) => (includeSolo || !isAltEntry(r.mode.difficulty)) && (!ilvl || (r.mode.itemLevel ?? 0) <= ilvl));
-    const fn = SORTERS[sort.key];
+    const fn = sorters(gateValue)[sort.key];
     return list.sort((a, b) => {
       const x = fn(a);
       const y = fn(b);
       return (typeof x === 'string' ? x.localeCompare(y as string) : (x as number) - (y as number)) * sort.dir;
     });
-  }, [ilvl, includeSolo, sort]);
+  }, [ilvl, includeSolo, sort, gateValue]);
 
   const header = (key: SortKey, label: string, right = true) => (
     <th className={clsx(right && 'text-right')}>
@@ -53,7 +58,7 @@ export default function GoldPage() {
     </th>
   );
 
-  const topTotal = top.reduce((s, t) => s + t.mode.gold.total, 0);
+  const topTotal = top.reduce((s, t) => s + t.summary.total, 0);
 
   return (
     <>
@@ -86,13 +91,14 @@ export default function GoldPage() {
           {top.length ? (
             <div className="mt-3 grid gap-3 sm:grid-cols-3">
               {top.map((t, i) => (
-                <Link key={t.key} href={`/raids/${t.raid.slug}?mode=${modeSlug(t.mode.difficulty)}`} className="rounded-lg border border-gold-500/30 bg-gold-500/5 p-3 hover:border-gold-500/60">
+                <Link key={t.raid.slug} href={runHref(t)} className="rounded-lg border border-gold-500/30 bg-gold-500/5 p-3 hover:border-gold-500/60">
                   <p className="text-xs text-ink-400">#{i + 1}</p>
                   <p className="font-semibold text-ink-100">{t.raid.name}</p>
                   <p className="text-xs text-ink-400">
-                    {t.mode.difficulty} · {t.mode.itemLevel}
+                    {t.summary.label}
+                    {t.summary.mixed && <span className="chip ml-1 border-amber-500/40 bg-amber-500/10 px-1.5 py-0 text-[10px] text-amber-300">mixed</span>}
                   </p>
-                  <Gold value={t.mode.gold.total} className="mt-1" />
+                  <Gold value={t.summary.total} className="mt-1" />
                 </Link>
               ))}
             </div>
@@ -102,6 +108,12 @@ export default function GoldPage() {
           {top.length > 0 && (
             <p className="mt-3 text-sm text-ink-400">
               Weekly total: <Gold value={topTotal} /> per character
+            </p>
+          )}
+          {top.some((t) => t.summary.mixed) && (
+            <p className="mt-1 text-xs text-ink-500">
+              Mixed runs: you can drop to a lower difficulty after any gate (never back up), so you can take Hard on the gates your item level allows and
+              Normal for the rest.
             </p>
           )}
         </div>
@@ -152,7 +164,7 @@ export default function GoldPage() {
                   </td>
                   <td>
                     <div className="flex justify-end">
-                      <PctBar value={avgValue(r)} max={600} />
+                      <PctBar value={avgValue(r, gateValue)} max={600} />
                     </div>
                   </td>
                 </tr>

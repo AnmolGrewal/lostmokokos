@@ -4,6 +4,7 @@ import { Gold, ItemIcon, PageHeader, Section, TierBadge } from '@/components/ui'
 import { DAILY_ICONS } from '@/data/rewards';
 import { sheet } from '@/data/sheet';
 import { fmt } from '@/lib/format';
+import { usePrices } from '@/lib/PricesContext';
 
 const Head = ({ k }: { k: keyof typeof DAILY_ICONS }) => (
   <th className="text-right">
@@ -17,6 +18,7 @@ const Head = ({ k }: { k: keyof typeof DAILY_ICONS }) => (
 const Val = ({ v }: { v: number | string | null }) => <td className="num text-right text-ink-100">{v === null ? <span className="text-ink-700">—</span> : typeof v === 'number' ? fmt(v) : v}</td>;
 
 export default function DailyPage() {
+  const pricing = usePrices();
   const chaosGroups = useMemo(() => {
     const groups: { type: string; rows: typeof sheet.chaos }[] = [];
     for (const row of sheet.chaos) {
@@ -38,7 +40,7 @@ export default function DailyPage() {
         {chaosGroups.map((g) => {
           const hasMats = g.rows.some((r) => r.destructionStones !== null);
           return (
-            <Section key={g.type} title={g.type} subtitle={hasMats ? 'Per run · market value uses current market prices' : 'Silver per run'}>
+            <Section key={g.type} title={g.type} subtitle={hasMats ? pricing.editedCount ? 'Per run · valued at your market prices' : 'Per run · valued at current market prices' : 'Silver per run'}>
               <div className="overflow-x-auto">
                 <table className="table-base">
                   <thead>
@@ -83,10 +85,10 @@ export default function DailyPage() {
                         {hasMats && (
                           <>
                             <td className="text-right">
-                              <Gold value={r.valueNormal} />
+                              <Gold value={pricing.chaosValue(r).normal} />
                             </td>
                             <td className="text-right">
-                              <Gold value={r.valueRested} />
+                              <Gold value={pricing.chaosValue(r).rested} />
                             </td>
                           </>
                         )}

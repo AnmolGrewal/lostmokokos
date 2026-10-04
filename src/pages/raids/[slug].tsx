@@ -1,13 +1,16 @@
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import clsx from 'clsx';
 import Seo from '@/components/Seo';
 import { Gold, ItemIcon, PageHeader, PctBar, Section, Stat, Tabs, TierBadge } from '@/components/ui';
 import { CHEST_REWARDS, CLEAR_REWARDS, EXTRA_LOOT, FIRST_CLEAR, type RewardMeta } from '@/data/rewards';
+import { RunPlanner } from '@/components/RunPlanner';
 import { getRaid, modeSlug, sheet, type Gate, type RaidMode } from '@/data/sheet';
 import { fmt } from '@/lib/format';
+import { usePrices } from '@/lib/PricesContext';
+import { difficultyLadder, uniformRun, type RunModes } from '@/lib/runs';
 
 interface Row {
   meta: RewardMeta;
@@ -85,7 +88,8 @@ function RewardTable({ gates, rows, showTotal = true }: { gates: Gate[]; rows: R
   );
 }
 
-function ModeView({ mode }: { mode: RaidMode }) {
+function ModeView({ mode, planner }: { mode: RaidMode; planner?: ReactNode }) {
+  const { gateValue, editedCount } = usePrices();
   const gates = mode.gates;
   const clearRows = buildRows(gates, CLEAR_REWARDS, (g) => g.clear);
   const bidRows = buildRows(gates, { mainMaterials: { label: 'Main materials (bid)', icon: '/icons/main-materials.png' } }, (g) => g.bid);
@@ -101,7 +105,7 @@ function ModeView({ mode }: { mode: RaidMode }) {
       fiveToOne: { label: '5:1 into T4.1 mats', icon: '/icons/destruction-stone.png' },
       fiveToOneNoShards: { label: '5:1 into T4.1, no shards', icon: '/icons/shards.png' },
     },
-    (g) => g.value,
+    (g) => gateValue(g, mode.tier),
     'pct'
   );
   const extraClear = buildRows(gates, EXTRA_LOOT, (g) => g.extra?.clear);
@@ -130,6 +134,8 @@ function ModeView({ mode }: { mode: RaidMode }) {
         </Stat>
       </div>
 
+      {planner}
+
       <Section title="Clear rewards" subtitle="What every party member gets for clearing each gate.">
         <RewardTable gates={gates} rows={[...clearRows, ...bidRows]} />
       </Section>
@@ -138,7 +144,10 @@ function ModeView({ mode }: { mode: RaidMode }) {
         <Section title="Bonus chest" subtitle="Optional chest you can buy after each gate.">
           <RewardTable gates={gates} rows={chestRows} />
         </Section>
-        <Section title="Is the chest worth it?" subtitle="Market value of the chest's contents vs. its cost. Above 100% means profit.">
+        <Section
+          title="Is the chest worth it?"
+          subtitle={`Market value of the chest's contents vs. its cost${editedCount ? ', at your prices' : ''}. Above 100% means profit.`}
+        >
           <RewardTable gates={gates} rows={valueRows} showTotal={false} />
         </Section>
       </div>
@@ -193,6 +202,10 @@ export default function RaidPage({ slug }: { slug: string }) {
   };
 
   const mode = raid.modes.find((m) => modeSlug(m.difficulty) === active) ?? raid.modes[0];
+  const canMix = difficultyLadder(raid).length > 1;
+  const [plan, setPlan] = useState<RunModes>(() => uniformRun(raid, active));
+  // Start the planner from whichever difficulty tab is open.
+  useEffect(() => setPlan(uniformRun(raid, active)), [raid, active]);
   const idx = sheet.raids.findIndex((r) => r.slug === slug);
   const prev = sheet.raids[idx - 1];
   const next = sheet.raids[idx + 1];
@@ -226,7 +239,7 @@ export default function RaidPage({ slug }: { slug: string }) {
         </span>
       </PageHeader>
 
-      <ModeView mode={mode} />
+      <ModeView mode={mode} planner={canMix ? <RunPlanner raid={raid} modes={plan} onChange={setPlan} /> : null} />
 
       <div className="mt-10 flex justify-between gap-4 text-sm">
         {prev ? (

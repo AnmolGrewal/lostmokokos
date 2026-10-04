@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useState, type ReactNode } from 'react';
 import clsx from 'clsx';
 import { sheet } from '@/data/sheet';
+import { usePrices } from '@/lib/PricesContext';
 import { formatCountdown, nextDailyReset, nextWeeklyReset, useNow } from '@/lib/resets';
 
 const NAV = [
@@ -14,6 +15,22 @@ const NAV = [
   { href: '/market', label: 'Market' },
   { href: '/shop', label: 'F4 Shop' },
 ];
+
+/** Shown everywhere while someone's own market prices are in use. */
+function CustomPricesChip() {
+  const { editedCount, reset } = usePrices();
+  if (!editedCount) return null;
+  return (
+    <span className="chip hidden items-center gap-2 border-amber-500/40 bg-amber-500/10 text-amber-300 sm:inline-flex">
+      <Link href="/market?tab=prices" className="hover:underline" title="Values across the site use your prices">
+        Your prices ({editedCount})
+      </Link>
+      <button className="text-amber-400/80 hover:text-amber-200" onClick={reset} title="Go back to the sheet's prices">
+        reset
+      </button>
+    </span>
+  );
+}
 
 function ResetClock() {
   const now = useNow();
@@ -58,6 +75,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               </Link>
             ))}
           </nav>
+          <CustomPricesChip />
           <ResetClock />
           <button className="btn ml-auto md:hidden" aria-label="Toggle menu" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
             Menu

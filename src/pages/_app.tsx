@@ -5,6 +5,7 @@ import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import Layout from '@/components/Layout';
+import { PricesProvider } from '@/lib/PricesContext';
 import '@/styles/globals.css';
 
 const sans = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
@@ -17,9 +18,11 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Lost Mokokos</title>
       </Head>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <PricesProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </PricesProvider>
       <Analytics />
       <SpeedInsights />
       <GoogleAnalytics gaId="G-Z3BL4HXK7M" />

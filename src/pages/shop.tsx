@@ -5,6 +5,7 @@ import { Gold, ItemIcon, PageHeader, PctBar, Tabs } from '@/components/ui';
 import { F4_ITEMS } from '@/data/rewards';
 import { sheet, type F4Pack } from '@/data/sheet';
 import { fmt, fmtCompact, fmtUsd } from '@/lib/format';
+import { usePrices } from '@/lib/PricesContext';
 
 type Sort = 'efficiency' | 'price';
 
@@ -75,13 +76,14 @@ function PackCard({ pack, rank, removed }: { pack: F4Pack; rank?: number; remove
 
 export default function ShopPage() {
   const [sort, setSort] = useState<Sort>('efficiency');
+  const pricing = usePrices();
   const sections = useMemo(
     () =>
       sheet.f4.map((s) => ({
         ...s,
-        packs: [...s.packs].sort((a, b) => (sort === 'efficiency' ? (b.efficiency ?? 0) - (a.efficiency ?? 0) : (a.usd ?? 0) - (b.usd ?? 0))),
+        packs: s.packs.map(pricing.f4Value).sort((a, b) => (sort === 'efficiency' ? (b.efficiency ?? 0) - (a.efficiency ?? 0) : (a.usd ?? 0) - (b.usd ?? 0))),
       })),
-    [sort]
+    [sort, pricing]
   );
 
   return (
@@ -103,6 +105,7 @@ export default function ShopPage() {
       >
         Pack contents valued at current market prices, divided by what the pack costs in gold (via Royal Crystals). 100% means you break even versus
         buying gold.
+        {pricing.editedCount > 0 && <span className="text-amber-300"> Using your market prices.</span>}
       </PageHeader>
       <div className="space-y-10">
         {sections.map((s) => {

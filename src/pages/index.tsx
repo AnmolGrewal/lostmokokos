@@ -2,7 +2,9 @@ import Link from 'next/link';
 import { useMemo } from 'react';
 import Seo from '@/components/Seo';
 import { Gold, ItemIcon, PctBar, TierBadge } from '@/components/ui';
-import { bestRaidsFor, modeSlug, sheet } from '@/data/sheet';
+import { modeSlug, sheet } from '@/data/sheet';
+import { usePrices } from '@/lib/PricesContext';
+import { bestRunsFor, runHref } from '@/lib/runs';
 import { useStoredState } from '@/lib/useStoredState';
 
 const SECTIONS = [
@@ -16,13 +18,13 @@ const SECTIONS = [
 
 export default function Home() {
   const [ilvl, setIlvl] = useStoredState<number | ''>('lm.gold.ilvl', '');
-  const top = useMemo(() => (ilvl ? bestRaidsFor(ilvl, 3) : []), [ilvl]);
+  const top = useMemo(() => (ilvl ? bestRunsFor(ilvl, 3) : []), [ilvl]);
+  const pricing = usePrices();
 
   const newest = sheet.raids[0];
   // Royal Crystal packs only — one-off real-money founder packs would always win.
-  const bestPack = [...(sheet.f4[0]?.packs ?? [])]
-    .sort((a, b) => (b.efficiency ?? 0) - (a.efficiency ?? 0))[0];
-  const mariWins = sheet.mari.filter((d) => d.cheaper === 'Mari');
+  const bestPack = (sheet.f4[0]?.packs ?? []).map(pricing.f4Value).sort((a, b) => (b.efficiency ?? 0) - (a.efficiency ?? 0))[0];
+  const mariWins = sheet.mari.map(pricing.mariValue).filter((d) => d.cheaper === 'Mari');
   const topRaid = [...sheet.raids.flatMap((r) => r.modes.map((m) => ({ r, m })))].sort((a, b) => b.m.gold.total - a.m.gold.total)[0];
 
   return (
@@ -53,22 +55,16 @@ export default function Home() {
               value={ilvl}
               onChange={(e) => setIlvl(e.target.value === '' ? '' : Number(e.target.value))}
             />
-            <p className="mt-2 text-xs text-ink-500">We&apos;ll pick your three best gold raids.</p>
+            <p className="mt-2 text-xs text-ink-500">We&apos;ll pick your three best gold raids — mixing difficulties per gate when that pays more.</p>
           </div>
           <div className="grid gap-3 sm:grid-cols-3">
             {top.length
               ? top.map((t, i) => (
-                  <Link
-                    key={t.key}
-                    href={`/raids/${t.raid.slug}?mode=${modeSlug(t.mode.difficulty)}`}
-                    className="rounded-xl border border-ink-700 bg-ink-950/60 p-4 transition hover:border-gold-500/50"
-                  >
+                  <Link key={t.raid.slug} href={runHref(t)} className="rounded-xl border border-ink-700 bg-ink-950/60 p-4 transition hover:border-gold-500/50">
                     <p className="text-xs text-ink-500">#{i + 1}</p>
                     <p className="font-semibold text-ink-100">{t.raid.name}</p>
-                    <p className="text-xs text-ink-400">
-                      {t.mode.difficulty} · {t.mode.itemLevel}
-                    </p>
-                    <Gold value={t.mode.gold.total} className="mt-2" />
+                    <p className="text-xs text-ink-400">{t.summary.label}</p>
+                    <Gold value={t.summary.total} className="mt-2" />
                   </Link>
                 ))
               : [0, 1, 2].map((i) => <div key={i} className="hidden rounded-xl border border-dashed border-ink-700 sm:block" />)}

@@ -2,16 +2,20 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import clsx from 'clsx';
 import Seo from '@/components/Seo';
+import { GateSelect } from '@/components/RunPlanner';
 import { Empty, Gold, PageHeader, Stat, TierBadge } from '@/components/ui';
-import { allModes, bestRaidsFor, findMode, modeSlug, sheet, type Gate, type RaidModeRef } from '@/data/sheet';
+import { getRaid, modeSlug, sheet } from '@/data/sheet';
 import { fmt } from '@/lib/format';
 import { formatCountdown, lastWeeklyReset, nextWeeklyReset, useNow } from '@/lib/resets';
+import { bestRun, bestRunsFor, difficultyLadder, gateChoices, gateCount, gateGold, normalizeRun, summarizeRun, uniformRun, type PlannedRun, type RunModes } from '@/lib/runs';
 import { useStoredState } from '@/lib/useStoredState';
 
 const GOLD_RAIDS_PER_CHARACTER = 3;
 
+/** One raid on a character: a difficulty per gate (can step down after any gate) plus this week's ticks. */
 interface RaidPick {
-  key: string; // raidSlug:modeSlug
+  raid: string;
+  modes: RunModes;
   cleared: boolean[];
   chests: boolean[];
 }
@@ -28,17 +32,29 @@ interface Roster {
 
 const EMPTY: Roster = { weekOf: 0, characters: [] };
 const uid = () => Math.random().toString(36).slice(2, 10);
-const gateGold = (g: Gate) => (g.clear.gold ?? 0) + (g.clear.rosterBoundGold ?? 0) + (g.clear.characterBoundGold ?? 0);
-const pickFor = (ref: RaidModeRef): RaidPick => ({ key: ref.key, cleared: ref.mode.gates.map(() => false), chests: ref.mode.gates.map(() => false) });
+
+const pickForRun = (raidSlug: string, modes: RunModes): RaidPick => ({ raid: raidSlug, modes, cleared: modes.map(() => false), chests: modes.map(() => false) });
+const pickFromPlanned = (run: PlannedRun) => pickForRun(run.raid.slug, run.modes);
+
+/** Older saves stored one difficulty per raid as `raid:mode` — convert them to per-gate picks. */
+function migratePick(p: RaidPick | { key: string; cleared: boolean[]; chests: boolean[] }): RaidPick {
+  if ('raid' in p && Array.isArray(p.modes)) return p;
+  const [slug, mode] = (p as { key: string }).key.split(':');
+  const raid = getRaid(slug);
+  const modes = raid ? uniformRun(raid, mode) : [];
+  return { raid: slug, modes, cleared: modes.map((_, i) => !!p.cleared?.[i]), chests: modes.map((_, i) => !!p.chests?.[i]) };
+}
+const needsMigration = (r: Roster) => r.characters.some((c) => c.raids.some((p) => !Array.isArray((p as Partial<RaidPick>).modes)));
+const migrateRoster = (r: Roster): Roster => ({ ...r, characters: r.characters.map((c) => ({ ...c, raids: c.raids.map(migratePick) })) });
 
 function pickStats(pick: RaidPick) {
-  const ref = findMode(pick.key);
-  if (!ref) return { potential: 0, earned: 0, spent: 0 };
-  const gates = ref.mode.gates;
+  const raid = getRaid(pick.raid);
+  if (!raid) return { potential: 0, earned: 0, spent: 0 };
+  const { gates } = summarizeRun(raid, pick.modes);
   return {
-    potential: gates.reduce((s, g) => s + gateGold(g), 0),
-    earned: gates.reduce((s, g, i) => s + (pick.cleared[i] ? gateGold(g) : 0), 0),
-    spent: gates.reduce((s, g, i) => s + (pick.chests[i] ? (g.chest.cost ?? 0) : 0), 0),
+    potential: gates.reduce((s, g) => s + gateGold(g.gate), 0),
+    earned: gates.reduce((s, g) => s + (pick.cleared[g.index] ? gateGold(g.gate) : 0), 0),
+    spent: gates.reduce((s, g) => s + (pick.chests[g.index] ? (g.gate.chest.cost ?? 0) : 0), 0),
   };
 }
 
@@ -47,8 +63,8 @@ function characterStats(c: Character) {
 }
 
 function RaidRow({ pick, itemLevel, onChange, onRemove }: { pick: RaidPick; itemLevel: number; onChange: (p: RaidPick) => void; onRemove: () => void }) {
-  const ref = findMode(pick.key);
-  if (!ref) {
+  const raid = getRaid(pick.raid);
+  if (!raid) {
     return (
       <div className="flex items-center justify-between rounded-lg border border-bad/30 bg-bad/5 px-3 py-2 text-sm text-bad">
         This raid is no longer in the sheet.
@@ -58,33 +74,37 @@ function RaidRow({ pick, itemLevel, onChange, onRemove }: { pick: RaidPick; item
       </div>
     );
   }
-  const { raid, mode } = ref;
-  const modes = raid.modes.filter((m) => (m.itemLevel ?? 0) <= itemLevel || modeSlug(m.difficulty) === modeSlug(mode.difficulty));
+  const summary = summarizeRun(raid, pick.modes);
   const stats = pickStats(pick);
+  const first = summary.gates[0]?.mode;
+  const canMix = difficultyLadder(raid).length > 1;
+  // Item level only limits what you can *pick*; an existing plan is shown as saved.
+  const ilvl = itemLevel || undefined;
   const toggle = (field: 'cleared' | 'chests', i: number) => onChange({ ...pick, [field]: pick[field].map((v, j) => (j === i ? !v : v)) });
+  const setModes = (modes: RunModes) => onChange({ ...pick, modes, cleared: modes.map((m, i) => !!m && !!pick.cleared[i]), chests: modes.map((m, i) => !!m && !!pick.chests[i]) });
+  const allGates = gateChoices(raid, 0, null, ilvl);
 
   return (
     <div className="rounded-lg border border-ink-800 bg-ink-850/60 p-3">
       <div className="flex flex-wrap items-center gap-2">
-        <Link href={`/raids/${raid.slug}?mode=${modeSlug(mode.difficulty)}`} className="font-semibold text-ink-100 hover:text-gold-300">
+        <Link href={`/raids/${raid.slug}?mode=${pick.modes[0] ?? ''}`} className="font-semibold text-ink-100 hover:text-gold-300">
           {raid.name}
         </Link>
-        <TierBadge tier={mode.tier} />
+        {first && <TierBadge tier={first.tier} />}
         <select
           className="input py-1 text-xs"
-          value={modeSlug(mode.difficulty)}
-          aria-label={`${raid.name} difficulty`}
-          onChange={(e) => {
-            const next = findMode(`${raid.slug}:${e.target.value}`);
-            if (next) onChange(pickFor(next));
-          }}
+          value={summary.mixed ? '' : (pick.modes[0] ?? '')}
+          aria-label={`${raid.name}: all gates`}
+          onChange={(e) => e.target.value && setModes(normalizeRun(raid, uniformRun(raid, e.target.value), ilvl))}
         >
-          {modes.map((m) => (
+          {summary.mixed && <option value="">Mixed</option>}
+          {allGates.map((m) => (
             <option key={m.difficulty} value={modeSlug(m.difficulty)}>
               {m.difficulty} ({m.itemLevel})
             </option>
           ))}
         </select>
+        {summary.mixed && <span className="text-xs text-amber-300">{summary.label}</span>}
         <span className="ml-auto text-xs text-ink-400">
           <Gold value={stats.earned} /> / {fmt(stats.potential)}
         </span>
@@ -93,21 +113,28 @@ function RaidRow({ pick, itemLevel, onChange, onRemove }: { pick: RaidPick; item
         </button>
       </div>
       <div className="mt-2 flex flex-wrap gap-2">
-        {mode.gates.map((g, i) => (
-          <div key={g.gate} className={clsx('flex items-center gap-1 rounded-lg border px-2 py-1 text-xs', pick.cleared[i] ? 'border-good/40 bg-good/10' : 'border-ink-700')}>
-            <label className="flex cursor-pointer items-center gap-1.5">
-              <input type="checkbox" className="accent-emerald-500" checked={!!pick.cleared[i]} onChange={() => toggle('cleared', i)} />
-              <span className="text-ink-200">{g.gate.replace('Gate ', 'G')}</span>
-              <span className="num text-gold-300">{fmt(gateGold(g))}</span>
-            </label>
-            {g.chest.cost ? (
-              <label className="ml-1 flex cursor-pointer items-center gap-1 border-l border-ink-700 pl-2 text-ink-400" title="Bought the bonus chest">
-                <input type="checkbox" className="accent-amber-500" checked={!!pick.chests[i]} onChange={() => toggle('chests', i)} />
-                chest <span className="num">−{fmt(g.chest.cost)}</span>
+        {Array.from({ length: gateCount(raid) }, (_, i) => {
+          const g = summary.gates.find((x) => x.index === i);
+          return (
+            <div
+              key={i}
+              className={clsx('flex items-center gap-1.5 rounded-lg border px-2 py-1 text-xs', pick.cleared[i] && g ? 'border-good/40 bg-good/10' : 'border-ink-700', !g && 'opacity-60')}
+            >
+              <label className="flex cursor-pointer items-center gap-1.5">
+                <input type="checkbox" className="accent-emerald-500" disabled={!g} checked={!!g && !!pick.cleared[i]} onChange={() => toggle('cleared', i)} />
+                <span className="text-ink-200">G{i + 1}</span>
               </label>
-            ) : null}
-          </div>
-        ))}
+              {canMix && <GateSelect raid={raid} modes={pick.modes} index={i} itemLevel={ilvl} onChange={setModes} className="max-w-[7.5rem] px-1.5 py-0.5" />}
+              {g && <span className="num text-gold-300">{fmt(gateGold(g.gate))}</span>}
+              {g?.gate.chest.cost ? (
+                <label className="ml-1 flex cursor-pointer items-center gap-1 border-l border-ink-700 pl-2 text-ink-400" title="Bought the bonus chest">
+                  <input type="checkbox" className="accent-amber-500" checked={!!pick.chests[i]} onChange={() => toggle('chests', i)} />
+                  chest <span className="num">−{fmt(g.gate.chest.cost)}</span>
+                </label>
+              ) : null}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -116,16 +143,9 @@ function RaidRow({ pick, itemLevel, onChange, onRemove }: { pick: RaidPick; item
 function CharacterCard({ c, onChange, onRemove }: { c: Character; onChange: (c: Character) => void; onRemove: () => void }) {
   const [adding, setAdding] = useState('');
   const stats = characterStats(c);
-  const taken = new Set(c.raids.map((r) => r.key.split(':')[0]));
   const options = useMemo(() => {
-    const seen = new Map<string, RaidModeRef>();
-    for (const ref of allModes()) {
-      if ((ref.mode.itemLevel ?? 0) > c.itemLevel || taken.has(ref.raid.slug)) continue;
-      const cur = seen.get(ref.raid.slug);
-      if (!cur || ref.mode.gold.total > cur.mode.gold.total) seen.set(ref.raid.slug, ref);
-    }
-    return [...seen.values()].sort((a, b) => b.mode.gold.total - a.mode.gold.total);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const taken = new Set(c.raids.map((r) => r.raid));
+    return bestRunsFor(c.itemLevel, Infinity).filter((run) => !taken.has(run.raid.slug));
   }, [c.itemLevel, c.raids]);
   const full = c.raids.length >= GOLD_RAIDS_PER_CHARACTER;
 
@@ -151,7 +171,7 @@ function CharacterCard({ c, onChange, onRemove }: { c: Character; onChange: (c: 
           Earned <Gold value={stats.earned} /> of {fmt(stats.potential)}
           {stats.spent ? <span className="text-bad"> · chests −{fmt(stats.spent)}</span> : null}
         </span>
-        <button className="btn btn-primary text-xs" onClick={() => onChange({ ...c, raids: bestRaidsFor(c.itemLevel, GOLD_RAIDS_PER_CHARACTER).map(pickFor) })} disabled={!c.itemLevel}>
+        <button className="btn btn-primary text-xs" onClick={() => onChange({ ...c, raids: bestRunsFor(c.itemLevel, GOLD_RAIDS_PER_CHARACTER).map(pickFromPlanned) })} disabled={!c.itemLevel}>
           Auto-pick top {GOLD_RAIDS_PER_CHARACTER}
         </button>
       </div>
@@ -163,7 +183,7 @@ function CharacterCard({ c, onChange, onRemove }: { c: Character; onChange: (c: 
       <div className="space-y-2">
         {c.raids.map((pick, i) => (
           <RaidRow
-            key={pick.key}
+            key={pick.raid}
             pick={pick}
             itemLevel={c.itemLevel}
             onChange={(p) => onChange({ ...c, raids: c.raids.map((r, j) => (j === i ? p : r)) })}
@@ -178,8 +198,8 @@ function CharacterCard({ c, onChange, onRemove }: { c: Character; onChange: (c: 
           <select className="input flex-1 text-sm" value={adding} onChange={(e) => setAdding(e.target.value)} aria-label="Add raid">
             <option value="">{options.length ? 'Add a raid…' : 'No more raids at this item level'}</option>
             {options.map((o) => (
-              <option key={o.key} value={o.key}>
-                {o.raid.name} — {o.mode.difficulty} ({fmt(o.mode.gold.total)}g)
+              <option key={o.raid.slug} value={o.raid.slug}>
+                {o.raid.name} — {o.summary.label} ({fmt(o.summary.total)}g)
               </option>
             ))}
           </select>
@@ -187,8 +207,9 @@ function CharacterCard({ c, onChange, onRemove }: { c: Character; onChange: (c: 
             className="btn"
             disabled={!adding}
             onClick={() => {
-              const ref = findMode(adding);
-              if (ref) onChange({ ...c, raids: [...c.raids, pickFor(ref)] });
+              const raid = getRaid(adding);
+              const modes = raid ? bestRun(raid, c.itemLevel) : null;
+              if (raid && modes) onChange({ ...c, raids: [...c.raids, pickForRun(raid.slug, modes)] });
               setAdding('');
             }}
           >
@@ -201,20 +222,29 @@ function CharacterCard({ c, onChange, onRemove }: { c: Character; onChange: (c: 
 }
 
 export default function CharactersPage() {
-  const [roster, setRoster, loaded] = useStoredState<Roster>('lm.roster.v1', EMPTY);
+  const [stored, setRoster, loaded] = useStoredState<Roster>('lm.roster.v1', EMPTY);
+  const roster = useMemo(() => (needsMigration(stored) ? migrateRoster(stored) : stored), [stored]);
   const [name, setName] = useState('');
   const [ilvl, setIlvl] = useState('');
   const now = useNow();
+
+  // Convert rosters saved before per-gate difficulties existed.
+  useEffect(() => {
+    if (loaded && needsMigration(stored)) setRoster(migrateRoster);
+  }, [loaded, stored, setRoster]);
 
   // Wipe weekly checkmarks after the Wednesday reset.
   useEffect(() => {
     if (!loaded || !now) return;
     const week = lastWeeklyReset(now).getTime();
     if (roster.weekOf !== week) {
-      setRoster((r) => ({
-        weekOf: week,
-        characters: r.characters.map((c) => ({ ...c, raids: c.raids.map((p) => ({ ...p, cleared: p.cleared.map(() => false), chests: p.chests.map(() => false) })) })),
-      }));
+      setRoster((prev) => {
+        const r = migrateRoster(prev);
+        return {
+          weekOf: week,
+          characters: r.characters.map((c) => ({ ...c, raids: c.raids.map((p) => ({ ...p, cleared: p.cleared.map(() => false), chests: p.chests.map(() => false) })) })),
+        };
+      });
     }
   }, [loaded, now, roster.weekOf, setRoster]);
 
@@ -225,7 +255,10 @@ export default function CharactersPage() {
     const itemLevel = Number(ilvl) || 0;
     setRoster((r) => ({
       ...r,
-      characters: [...r.characters, { id: uid(), name: name.trim() || `Character ${r.characters.length + 1}`, itemLevel, raids: itemLevel ? bestRaidsFor(itemLevel, GOLD_RAIDS_PER_CHARACTER).map(pickFor) : [] }],
+      characters: [
+        ...r.characters,
+        { id: uid(), name: name.trim() || `Character ${r.characters.length + 1}`, itemLevel, raids: itemLevel ? bestRunsFor(itemLevel, GOLD_RAIDS_PER_CHARACTER).map(pickFromPlanned) : [] },
+      ],
     }));
     setName('');
     setIlvl('');
@@ -235,7 +268,8 @@ export default function CharactersPage() {
     <>
       <Seo title="Roster gold tracker" description="Track weekly Lost Ark raid gold across your roster. Checkmarks reset every Wednesday." />
       <PageHeader eyebrow={sheet.lastUpdated ?? 'Weekly'} title="Roster gold tracker">
-        Add your characters, pick up to {GOLD_RAIDS_PER_CHARACTER} gold raids each, and tick gates off as you clear them. Saved in this browser; checkmarks reset
+        Add your characters, pick up to {GOLD_RAIDS_PER_CHARACTER} gold raids each, and tick gates off as you clear them. Each gate can use its own difficulty
+        (e.g. Hard G1, then Normal) — you can step down after a gate but not back up. Saved in this browser; checkmarks reset
         at the weekly reset{now ? ` (in ${formatCountdown(nextWeeklyReset(now).getTime() - now.getTime())})` : ''}.
       </PageHeader>
 
